@@ -37,7 +37,10 @@ const getListHandler = async (req, res) => {
   const order = req.query.order === "ASC" ? "ASC" : "DESC"; // DESC || ASC
   const orderSql = `ORDER BY ${orderBy} ${order}`;
 
-  const filterSql = `WHERE ${typeSql} AND ${searchSql} AND ${hashTagSql}`;
+  const sidVal = Number(req.query.sid);
+  const sidSql = sidVal ?  `sid = ${sidVal}` : "1";
+
+  const filterSql = `WHERE ${typeSql} AND ${searchSql} AND ${hashTagSql} AND ${sidSql}`;
 
   // const sql01 = `SELECT COUNT(1) totalRows FROM product WHERE ${typeSql} LIKE `  ;
   const sql01 = `SELECT COUNT(1) totalRows FROM product ${filterSql}`;
