@@ -1,8 +1,8 @@
 const express = require("express");
 const db = require(__dirname + "/../modules/mysql-connect");
 const router = express.Router();
-const { toDateString, toDatetimeString } = require(__dirname +
-  "/../modules/date-tool");
+// const { toDateString, toDatetimeString } = require(__dirname +
+//   "/../modules/date-tool");
 
 const getListHandler = async (req, res) => {
   let output = {
@@ -69,45 +69,45 @@ const getListHandler = async (req, res) => {
   return output;
 };
 
-router.route("/test").get(async (req, res) => {
-  let output = {
-    perPage: 12,
-    page: 1,
-    totalRows: 0,
-    totalPage: 0,
-    rows: []
-  };
+// router.route("/test").get(async (req, res) => {
+//   let output = {
+//     perPage: 12,
+//     page: 1,
+//     totalRows: 0,
+//     totalPage: 0,
+//     rows: []
+//   };
 
-  let page = +req.query.page || 1;
-  if (page < 1) {
-    return res.redirect("?page=1");
-  }
+//   let page = +req.query.page || 1;
+//   if (page < 1) {
+//     return res.redirect("?page=1");
+//   }
 
-  const sql01 = `SELECT COUNT(1) totalRows FROM product `;
-  const [[{ totalRows }]] = await db.query(sql01);
-  let totalPage = 0;
-  if (totalRows) {
-    totalPage = Math.ceil(totalRows / output.perPage);
-    if (page > totalPage) {
-      return res.redirect(`?page=${totalPage}`);
-    }
-  }
-  const sql02 = `SELECT * FROM product ORDER BY sid DESC LIMIT ${
-    (page - 1) * output.perPage
-  },${output.perPage}`;
-  const [r2] = await db.query(sql02);
-  output.rows = r2.map((el) => {
-    return {
-      ...el,
-      product_img: JSON.parse(el.product_img),
-      product_hashtag: JSON.parse(el.product_hashtag)
-    };
-  });
+//   const sql01 = `SELECT COUNT(1) totalRows FROM product `;
+//   const [[{ totalRows }]] = await db.query(sql01);
+//   let totalPage = 0;
+//   if (totalRows) {
+//     totalPage = Math.ceil(totalRows / output.perPage);
+//     if (page > totalPage) {
+//       return res.redirect(`?page=${totalPage}`);
+//     }
+//   }
+//   const sql02 = `SELECT * FROM product ORDER BY sid DESC LIMIT ${
+//     (page - 1) * output.perPage
+//   },${output.perPage}`;
+//   const [r2] = await db.query(sql02);
+//   output.rows = r2.map((el) => {
+//     return {
+//       ...el,
+//       product_img: JSON.parse(el.product_img),
+//       product_hashtag: JSON.parse(el.product_hashtag)
+//     };
+//   });
 
-  output = { ...output, page, totalRows, totalPage };
+//   output = { ...output, page, totalRows, totalPage };
 
-  res.json(output);
-});
+//   res.json(output);
+// });
 // .post((req,res)=>{
 
 // })
