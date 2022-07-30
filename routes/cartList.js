@@ -103,7 +103,7 @@ router.put('/changenum', async (req, res) => {
         output.success = true;
     }
 
-    output.cart = await getUserCart(req.body.member_id);
+    output.cart = await getUserCart(1);
     res.json(output);
     //sid qty
 });
@@ -112,7 +112,7 @@ router.delete('/delete', async (req, res) => {
     const sql = 'DELETE FROM order_details_tobuy WHERE sid=?';
     await db.query(sql, [req.body.sid]);
 
-    res.json(await getUserCart(req.body.sid));
+    res.json(await getUserCart(1));
 });
 
 module.exports = router;
