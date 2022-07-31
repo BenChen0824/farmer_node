@@ -103,16 +103,94 @@ router.put('/changenum', async (req, res) => {
         output.success = true;
     }
 
-    output.cart = await getUserCart(req.body.member_id);
+    output.cart = await getUserCart(1);
     res.json(output);
     //sid qty
 });
+
+router.put('/readytobuy', async (req, res) => {
+    // body:sid,check
+    console.log(req.body);
+    const output = {
+        success: false,
+        error: '',
+    };
+    if (!req.body.sid) {
+        output.error = '參數不足';
+        return res.json(output);
+    }
+
+    // 判斷該商品是否已經加入購物車
+    const sql3 = `SELECT COUNT(1) num FROM order_details_tobuy WHERE sid=?`;
+    const [[{ num }]] = await db.query(sql3, [req.body.sid]);
+    if (num <= 0) {
+        output.error = '購物車內沒有這項商品';
+        return res.json(output);
+    }
+
+    const sql2 =
+        'UPDATE `order_details_tobuy` SET `ready_to_buy`=? WHERE sid=?';
+    const [r2] = await db.query(sql2, [req.body.check, req.body.sid]);
+    output.r2 = r2;
+
+    if (r2.affectedRows && r2.changedRows) {
+        output.success = true;
+    }
+
+    output.cart = await getUserCart(1);
+    res.json(output);
+    //sid qty
+});
+
+//cart那邊刪除資料
 router.delete('/delete', async (req, res) => {
     // sid
     const sql = 'DELETE FROM order_details_tobuy WHERE sid=?';
     await db.query(sql, [req.body.sid]);
 
-    res.json(await getUserCart(req.body.sid));
+    res.json(await getUserCart(1));
+});
+
+//進入購物車後要結帳
+router.delete('/carttobuy', async (req, res) => {
+    // sid
+    const sql = 'DELETE FROM order_details_tobuy WHERE sid=?';
+    await db.query(sql, [req.body.sid]);
+
+    res.json(await getUserCart(1));
+});
+
+router.post('/orderlist', async (req, res) => {
+    const output = {
+        success: false,
+        error: '',
+    };
+    if (!req.body.sid || !req.body.member_id) {
+        output.error = '參數不足';
+        return res.json(output);
+    }
+
+    const sql2 =
+        'INSERT INTO `order_details`(`order_no`, `product_id`, `order_type`, `product_price`, `product_count`, `discount_amount`, `subtotal`, `created_time`, `customer_remark`) VALUES (?,?,?,?,?,?,?,NOW(),?) ';
+
+    const [r2] = await db.query(sql2, [
+        req.body.order_no,
+        req.body.product_id,
+        req.body.order_type,
+        req.body.product_price,
+        req.body.product_price,
+        req.body.product_price,
+        req.body.product_price,
+    ]);
+
+    // console.log(r2.affectedRows);
+    if (r2.affectedRows) {
+        output.success = true;
+    }
+
+    output.cart = await getUserCart(req.body.member_id);
+    res.json(output);
+    //sid qty
 });
 
 module.exports = router;
