@@ -14,6 +14,8 @@ const corsOptions = {
     },
 };
 
+
+
 app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extends: false }));
