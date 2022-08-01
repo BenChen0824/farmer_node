@@ -34,7 +34,7 @@ app.use(express.json());
 
 app.use('/product', require(__dirname + '/routes/product'));
 app.use('/cart', require(__dirname + '/routes/cartList'));
-
+app.use('/game', require(__dirname + '/routes/game'));
 app.use(express.static('public'));
 
 app.listen(process.env.PORT, () => {
