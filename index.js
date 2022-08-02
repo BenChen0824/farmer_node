@@ -56,10 +56,11 @@ let linePay = new LinePay({
 });
 
 app.post('/linepay', async (req, mainResp) => {
+    // console.log(req.body);
     linePay
         .request(req.body)
         .then((res) => {
-            // console.log(res);
+            console.log(res);
             const lineOutput = {
                 redirectURL: res.info.paymentUrl.web,
                 transitionID: JSON.stringify(res.info.transactionId),
