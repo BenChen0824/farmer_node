@@ -16,6 +16,8 @@ const db = require(__dirname + '/modules/mysql-connect');
 
 const cors = require('cors');
 
+const jwt = require('jsonwebtoken');
+
 const app = express();
 const corsOptions = {
     credentials: true,
@@ -25,12 +27,23 @@ const corsOptions = {
     },
 };
 
+app.use((req,res,next)=>{
+    const auth = req.get('Authorization')
+    res.locals.loginUser = null
+    if(auth && auth.indexOf('Bearer ')===0){
+        const token = auth.slice(7)
+        res.locals.loginUser = jwt.verify(token, process.env.JWT_SECRET)
+    }
+    next()
+  })
+
 app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extends: false }));
 app.use(express.json());
 
 app.use('/product', require(__dirname + '/routes/product'));
+app.use('/member', require(__dirname + '/routes/member'));
 app.use('/cart', require(__dirname + '/routes/cartList'));
 app.use('/game', require(__dirname + '/routes/game'));
 app.use(express.static('public'));
