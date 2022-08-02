@@ -157,37 +157,37 @@ router.delete('/delete', async (req, res) => {
 
         res.json(await getUserCart(1));
     });
-
-    router.post('/orderlist', async (req, res) => {
-        const output = {
-            success: false,
-            error: '',
-        };
-        if (!req.body.sid || !req.body.member_id) {
-            output.error = '參數不足';
-            return res.json(output);
-        }
-
-        const sql2 =
-            'INSERT INTO `order_details`(`order_no`, `product_id`, `order_type`, `product_price`, `product_count`, `discount_amount`, `subtotal`, `created_time`, `customer_remark`) VALUES (?,?,?,?,?,?,?,NOW(),?) ';
-
-        const [r2] = await db.query(sql2, [
-            req.body.order_no,
-            req.body.product_id,
-            req.body.order_type,
-            req.body.product_price,
-            req.body.product_price,
-            req.body.product_price,
-            req.body.product_price,
-        ]);
-
-        // console.log(r2.affectedRows);
-        if (r2.affectedRows) {
-            output.success = true;
-        }
-
-        output.cart = await getUserCart(req.body.member_id);
-        res.json(output);
-        //sid qty
-    });
 });
+router.post('/orderlist', async (req, res) => {
+    const output = {
+        success: false,
+        error: '',
+    };
+    if (!req.body.sid || !req.body.member_id) {
+        output.error = '參數不足';
+        return res.json(output);
+    }
+
+    const sql2 =
+        'INSERT INTO `order_details`(`order_no`, `product_id`, `order_type`, `product_price`, `product_count`, `discount_amount`, `subtotal`, `created_time`, `customer_remark`) VALUES (?,?,?,?,?,?,?,NOW(),?) ';
+
+    const [r2] = await db.query(sql2, [
+        req.body.order_no,
+        req.body.product_id,
+        req.body.order_type,
+        req.body.product_price,
+        req.body.product_price,
+        req.body.product_price,
+        req.body.product_price,
+    ]);
+
+    // console.log(r2.affectedRows);
+    if (r2.affectedRows) {
+        output.success = true;
+    }
+
+    output.cart = await getUserCart(req.body.member_id);
+    res.json(output);
+    //sid qty
+});
+module.exports = router;

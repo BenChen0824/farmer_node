@@ -27,15 +27,15 @@ const corsOptions = {
     },
 };
 
-app.use((req,res,next)=>{
-    const auth = req.get('Authorization')
-    res.locals.loginUser = null
-    if(auth && auth.indexOf('Bearer ')===0){
-        const token = auth.slice(7)
-        res.locals.loginUser = jwt.verify(token, process.env.JWT_SECRET)
+app.use((req, res, next) => {
+    const auth = req.get('Authorization');
+    res.locals.loginUser = null;
+    if (auth && auth.indexOf('Bearer ') === 0) {
+        const token = auth.slice(7);
+        res.locals.loginUser = jwt.verify(token, process.env.JWT_SECRET);
     }
-    next()
-  })
+    next();
+});
 
 app.use(cors(corsOptions));
 
@@ -82,7 +82,7 @@ app.post('/linepay-check', async (req, successResp) => {
     //const result = await check(req.body.transitionID);
 
     const confirm = {
-        amount: 300,
+        amount: req.body.amount,
         currency: 'TWD',
     };
 
