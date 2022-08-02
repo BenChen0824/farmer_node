@@ -11,7 +11,7 @@ require('dotenv').config();
 // import { findMessagesForUser, saveMessage } from './src/xin/messageStorage.js';
 
 const express = require('express');
-
+const LinePay = require('line-pay-v3');
 const db = require(__dirname + '/modules/mysql-connect');
 
 const cors = require('cors');
@@ -25,8 +25,6 @@ const corsOptions = {
     },
 };
 
-
-
 app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extends: false }));
@@ -36,6 +34,54 @@ app.use('/product', require(__dirname + '/routes/product'));
 app.use('/cart', require(__dirname + '/routes/cartList'));
 app.use('/game', require(__dirname + '/routes/game'));
 app.use(express.static('public'));
+
+//linePay
+let linePay = new LinePay({
+    channelId: 1657216441,
+    channelSecret: '407efe35caedc7c572db5306540986bf',
+    uri: 'https://sandbox-api-pay.line.me',
+});
+
+app.post('/linepay', async (req, mainResp) => {
+    linePay
+        .request(req.body)
+        .then((res) => {
+            // console.log(res);
+            const lineOutput = {
+                redirectURL: res.info.paymentUrl.web,
+                transitionID: JSON.stringify(res.info.transactionId),
+            };
+            return lineOutput;
+        })
+        .then((obj) => {
+            mainResp.send(JSON.stringify(obj));
+            console.log(obj);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.post('/linepay-check', async (req, successResp) => {
+    // console.log("req.body:" + req.body.transitionID);
+
+    //const result = await check(req.body.transitionID);
+
+    const confirm = {
+        amount: 300,
+        currency: 'TWD',
+    };
+
+    linePay
+        .confirm(confirm, req.body.transitionID)
+        .then((res) => {
+            successResp.send(JSON.stringify(res));
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+//linePay
 
 app.listen(process.env.PORT, () => {
     console.log(`server started: ${process.env.PORT}`);
