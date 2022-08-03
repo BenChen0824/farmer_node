@@ -36,6 +36,16 @@ const corsOptions = {
     },
 };
 
+app.use((req, res, next) => {
+    const auth = req.get('Authorization');
+    res.locals.loginUser = null;
+    if (auth && auth.indexOf('Bearer ') === 0) {
+        const token = auth.slice(7);
+        res.locals.loginUser = jwt.verify(token, process.env.JWT_SECRET);
+    }
+    next();
+});
+
 app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extends: false }));
@@ -47,6 +57,59 @@ app.use('/customized_lunch', require(__dirname + '/routes/customized_lunch'));
 
 app.use(express.static('public'));
 
+//linePay
+let linePay = new LinePay({
+    channelId: 1657216441,
+    channelSecret: '407efe35caedc7c572db5306540986bf',
+    uri: 'https://sandbox-api-pay.line.me',
+});
+
+app.post('/linepay', async (req, mainResp) => {
+    // console.log(req.body);
+    linePay
+        .request(req.body)
+        .then((res) => {
+            console.log(res);
+            const lineOutput = {
+                redirectURL: res.info.paymentUrl.web,
+                transitionID: JSON.stringify(res.info.transactionId),
+            };
+            return lineOutput;
+        })
+        .then((obj) => {
+            mainResp.send(JSON.stringify(obj));
+            console.log(obj);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+app.post('/linepay-check', async (req, successResp) => {
+    // console.log("req.body:" + req.body.transitionID);
+
+    //const result = await check(req.body.transitionID);
+
+    const confirm = {
+        amount: req.body.amount,
+        currency: 'TWD',
+    };
+
+    linePay
+        .confirm(confirm, req.body.transitionID)
+        .then((res) => {
+            successResp.send(JSON.stringify(res));
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
+//linePay
+
+app.listen(process.env.PORT, () => {
+    console.log(`server started: ${process.env.PORT}`);
+    console.log({ NODE_ENV: process.env.NODE_ENV });
+});
 
 // -------------阿鑫聊天室node-------------
 

@@ -149,17 +149,15 @@ router.delete('/delete', async (req, res) => {
     await db.query(sql, [req.body.sid]);
 
     res.json(await getUserCart(1));
+    //進入購物車後要結帳
+    router.delete('/carttobuy', async (req, res) => {
+        // sid
+        const sql = 'DELETE FROM order_details_tobuy WHERE sid=?';
+        await db.query(sql, [req.body.sid]);
+
+        res.json(await getUserCart(1));
+    });
 });
-
-//進入購物車後要結帳
-router.delete('/carttobuy', async (req, res) => {
-    // sid
-    const sql = 'DELETE FROM order_details_tobuy WHERE sid=?';
-    await db.query(sql, [req.body.sid]);
-
-    res.json(await getUserCart(1));
-});
-
 router.post('/orderlist', async (req, res) => {
     const output = {
         success: false,
@@ -192,5 +190,4 @@ router.post('/orderlist', async (req, res) => {
     res.json(output);
     //sid qty
 });
-
 module.exports = router;
