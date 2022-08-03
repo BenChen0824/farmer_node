@@ -46,6 +46,7 @@ app.use('/product', require(__dirname + '/routes/product'));
 app.use('/member', require(__dirname + '/routes/member'));
 app.use('/cart', require(__dirname + '/routes/cartList'));
 app.use('/game', require(__dirname + '/routes/game'));
+app.use('/cartemail', require(__dirname + '/routes/cartemail'));
 app.use(express.static('public'));
 
 //linePay
