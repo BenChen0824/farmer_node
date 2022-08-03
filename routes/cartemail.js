@@ -4,15 +4,15 @@ const router = express.Router();
 const nodemailer = require('nodemailer');
 
 router.post('/', (req, res) => {
-    console.log(req.body.getFreshItems);
+    // console.log(req.body.getFreshItems);
     const freshItems = req.body.getFreshItems.map((v, i) => {
         return `<li>${v.product_name}
         ${v.product_price}元 *
         ${v.product_count}個<li/>`;
     });
     const customizedItems = req.body.getCustomizedItems.map((v, i) => {
-        return `<li>${v.product_name}
-        ${v.product_price}元 *
+        return `<li>${v.lunch_name}
+        ${v.total_price}元 *
         ${v.product_count}個<li/>`;
     });
     let transporter = nodemailer.createTransport({
