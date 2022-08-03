@@ -8,12 +8,12 @@ router.post('/', (req, res) => {
     const freshItems = req.body.getFreshItems.map((v, i) => {
         return `<li>${v.product_name}
         ${v.product_price}元 *
-        ${v.product_count}<li/>`;
+        ${v.product_count}個<li/>`;
     });
     const customizedItems = req.body.getCustomizedItems.map((v, i) => {
         return `<li>${v.product_name}
         ${v.product_price}元 *
-        ${v.product_count}<li/>`;
+        ${v.product_count}個<li/>`;
     });
     let transporter = nodemailer.createTransport({
         service: 'Gmail', // 使用了內建傳輸傳送郵件 檢視支援列表：https://nodemailer.com/smtp/well-known/
