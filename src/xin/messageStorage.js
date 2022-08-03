@@ -1,9 +1,11 @@
 const messages = [];
 
-export function saveMessage(message) {
+const saveMessage = (message) => {
     messages.push(message);
-}
+};
 
-export function findMessagesForUser(userId) {
+ const findMessagesForUser = (userId) => {
     return messages.filter(({ from, to }) => from === userId || to === userId);
-}
+};
+
+module.exports = { findMessagesForUser, saveMessage };

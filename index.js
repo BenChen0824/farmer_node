@@ -1,24 +1,33 @@
-require('dotenv').config();
-// import { createServer } from 'http';
-// import { Server } from 'socket.io';
-// import { v4 as uuidv4 } from 'uuid';
-// import { setupWorker } from '@socket.io/sticky';
-// import {
-//     saveSession,
-//     findSession,
-//     findAllSessions,
-// } from './src/xin/sessionStorage.js';
-// import { findMessagesForUser, saveMessage } from './src/xin/messageStorage.js';
-
 const express = require('express');
-const LinePay = require('line-pay-v3');
+const app = express();
+const cors = require('cors');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
+const httpServer = createServer(app);
+const { v4:uuidv4 } = require('uuid');
+const { setupWorker } = require('@socket.io/sticky');
+const io = new Server(httpServer, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+    },
+});
+    
+const {
+    saveSession,
+    findSession,
+    findAllSessions,
+} = require('./src/xin/sessionStorage');
+
+const {
+    findMessagesForUser,
+    saveMessage,
+} = require('./src/xin/messageStorage');
+
+
 const db = require(__dirname + '/modules/mysql-connect');
 
-const cors = require('cors');
 
-const jwt = require('jsonwebtoken');
-
-const app = express();
 const corsOptions = {
     credentials: true,
     origin: (origin, cb) => {
@@ -27,210 +36,144 @@ const corsOptions = {
     },
 };
 
-app.use((req,res,next)=>{
-    const auth = req.get('Authorization')
-    res.locals.loginUser = null
-    if(auth && auth.indexOf('Bearer ')===0){
-        const token = auth.slice(7)
-        res.locals.loginUser = jwt.verify(token, process.env.JWT_SECRET)
-    }
-    next()
-  })
-
 app.use(cors(corsOptions));
 
 app.use(express.urlencoded({ extends: false }));
 app.use(express.json());
 
 app.use('/product', require(__dirname + '/routes/product'));
-app.use('/member', require(__dirname + '/routes/member'));
 app.use('/cart', require(__dirname + '/routes/cartList'));
-app.use('/game', require(__dirname + '/routes/game'));
+app.use('/customized_lunch', require(__dirname + '/routes/customized_lunch'));
+
 app.use(express.static('public'));
 
-//linePay
-let linePay = new LinePay({
-    channelId: 1657216441,
-    channelSecret: '407efe35caedc7c572db5306540986bf',
-    uri: 'https://sandbox-api-pay.line.me',
-});
-
-app.post('/linepay', async (req, mainResp) => {
-    linePay
-        .request(req.body)
-        .then((res) => {
-            // console.log(res);
-            const lineOutput = {
-                redirectURL: res.info.paymentUrl.web,
-                transitionID: JSON.stringify(res.info.transactionId),
-            };
-            return lineOutput;
-        })
-        .then((obj) => {
-            mainResp.send(JSON.stringify(obj));
-            console.log(obj);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-app.post('/linepay-check', async (req, successResp) => {
-    // console.log("req.body:" + req.body.transitionID);
-
-    //const result = await check(req.body.transitionID);
-
-    const confirm = {
-        amount: 300,
-        currency: 'TWD',
-    };
-
-    linePay
-        .confirm(confirm, req.body.transitionID)
-        .then((res) => {
-            successResp.send(JSON.stringify(res));
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-});
-//linePay
-
-app.listen(process.env.PORT, () => {
-    console.log(`server started: ${process.env.PORT}`);
-    console.log({ NODE_ENV: process.env.NODE_ENV });
-});
 
 // -------------阿鑫聊天室node-------------
-// const httpServer = createServer();
-// const clientUrl = 'http://localhost:3001';
 
-// const io = new Server(httpServer, {
-//     cors: {
-//         origin: clientUrl,
-//         methods: ['GET', 'POST'],
-//     },
-// });
+io.use((socket, next) => {
+    // 檢查session是否存在
+    const sessionId = socket.handshake.auth.sessionId;
+    if (sessionId) {
+        const session = findSession(sessionId);
+        if (session) {
+            socket.sessionId = sessionId;
+            socket.userId = session.userId;
+            socket.username = session.username;
+            return next();
+        } else {
+            return next(new Error('Invalid session'));
+        }
+    }
 
-// io.use((socket, next) => {
-//     // 檢查session是否存在
-//     const sessionId = socket.handshake.auth.sessionId;
-//     if (sessionId) {
-//         const session = findSession(sessionId);
-//         if (session) {
-//             socket.sessionId = sessionId;
-//             socket.userId = session.userId;
-//             socket.username = session.username;
-//             return next();
-//         } else {
-//             return next(new Error('Invalid session'));
-//         }
-//     }
+    const username = socket.handshake.auth.username;
+    if (!username) {
+        return next(new Error('Invalid username'));
+    }
+    socket.username = username;
+    socket.userId = uuidv4();
+    socket.sessionId = uuidv4();
+    next();
+});
+// 存訊息
+function getMessagesForUser(userId) {
+    const messagesPerUser = new Map();
+    findMessagesForUser(userId).forEach((message) => {
+        const { from, to } = message;
+        const otherUser = userId === from ? to : from;
+        if (messagesPerUser.has(otherUser)) {
+            messagesPerUser.get(otherUser).push(message);
+        } else {
+            messagesPerUser.set(otherUser, [message]);
+        }
+    });
+    return messagesPerUser;
+}
 
-//     const username = socket.handshake.auth.username;
-//     if (!username) {
-//         return next(new Error('Invalid username'));
-//     }
-//     socket.username = username;
-//     socket.userId = uuidv4();
-//     socket.sessionId = uuidv4();
-//     next();
-// });
-// // 存訊息
-// function getMessagesForUser(userId) {
-//     const messagesPerUser = new Map();
-//     findMessagesForUser(userId).forEach((message) => {
-//         const { from, to } = message;
-//         const otherUser = userId === from ? to : from;
-//         if (messagesPerUser.has(otherUser)) {
-//             messagesPerUser.get(otherUser).push(message);
-//         } else {
-//             messagesPerUser.set(otherUser, [message]);
-//         }
-//     });
-//     return messagesPerUser;
-// }
+io.on('connection', async (socket) => {
+    saveSession(socket.sessionId, {
+        userId: socket.userId,
+        username: socket.username,
+        connected: true,
+    });
 
-// io.on('connection', async (socket) => {
-//     saveSession(socket.sessionId, {
-//         userId: socket.userId,
-//         username: socket.username,
-//         connected: true,
-//     });
+    socket.join(socket.userId);
 
-//     socket.join(socket.userId);
+    //get all connected users
+    //取得所有已連線的使用者
+    const users = [];
+    const userMessages = getMessagesForUser(socket.userId);
+    findAllSessions().forEach((session) => {
+        if (session.userId !== socket.userId) {
+            users.push({
+                userId: session.userId,
+                username: session.username,
+                connected: session.connected,
+                messages: userMessages.get(session.userId) || [],
+            });
+        }
+    });
 
-//     //get all connected users
-//     //取得所有已連線的使用者
-//     const users = [];
-//     const userMessages = getMessagesForUser(socket.userId);
-//     findAllSessions().forEach((session) => {
-//         if (session.userId !== socket.userId) {
-//             users.push({
-//                 userId: session.userId,
-//                 username: session.username,
-//                 connected: session.connected,
-//                 messages: userMessages.get(session.userId) || [],
-//             });
-//         }
-//     });
+    //all users event
+    socket.emit('users', users);
 
-//     //all users event
-//     socket.emit('users', users);
+    // connected user details event
+    socket.emit('session', {
+        sessionId: socket.sessionId,
+        userId: socket.userId,
+        username: socket.username,
+    });
+    // new user event
+    socket.broadcast.emit('user connected', {
+        userId: socket.userId,
+        username: socket.username,
+    });
+    //私訊event
+    socket.on('private message', ({ content, to }) => {
+        const message = {
+            from: socket.userId,
+            to,
+            content,
+        };
+        socket.to(to).emit('private message', message);
+        saveMessage(message);
+    });
 
-//     // connected user details event
-//     socket.emit('session', {
-//         sessionId: socket.sessionId,
-//         userId: socket.userId,
-//         username: socket.username,
-//     });
-//     // new user event
-//     socket.broadcast.emit('user connected', {
-//         userId: socket.userId,
-//         username: socket.username,
-//     });
-//     //私訊event
-//     socket.on('private message', ({ content, to }) => {
-//         const message = {
-//             from: socket.userId,
-//             to,
-//             content,
-//         };
-//         socket.to(to).emit('private message', message);
-//         saveMessage(message);
-//     });
+    socket.on('user messages', ({ userId, username }) => {
+        const userMessages = getMessagesForUser(socket.userId);
+        socket.emit('user messages', {
+            userId,
+            username,
+            messages: userMessages.get(userId) || [],
+        });
+    });
 
-//     socket.on('user messages', ({ userId, username }) => {
-//         const userMessages = getMessagesForUser(socket.userId);
-//         socket.emit('user messages', {
-//             userId,
-//             username,
-//             messages: userMessages.get(userId) || [],
-//         });
-//     });
+    socket.on('disconnect', async () => {
+        const matchingSockets = await io.in(socket.userId).allSockets();
+        const isDisconnected = matchingSockets.size === 0;
+        if (isDisconnected) {
+            // 通知其他用戶
+            socket.broadcast.emit('user disconnected', {
+                userId: socket.userId,
+                username: socket.username,
+            });
+            // 更新session的連接狀態
+            saveSession(socket.sessionId, {
+                userId: socket.userId,
+                username: socket.username,
+                connected: socket.connected,
+            });
+        }
+    });
+});
 
-//     socket.on('disconnect', async () => {
-//         const matchingSockets = await io.in(socket.userId).allSockets();
-//         const isDisconnected = matchingSockets.size === 0;
-//         if (isDisconnected) {
-//             // 通知其他用戶
-//             socket.broadcast.emit('user disconnected', {
-//                 userId: socket.userId,
-//                 username: socket.username,
-//             });
-//             // 更新session的連接狀態
-//             saveSession(socket.sessionId, {
-//                 userId: socket.userId,
-//                 username: socket.username,
-//                 connected: socket.connected,
-//             });
-//         }
-//     });
-// });
+console.log('Listening to port...');
+httpServer.listen(process.env.PORT,()=>{
+    console.log('listening on *:3600');
+});
 
-// console.log('Listening to port...');
-// httpServer.listen(process.env.PORT || 4000);
+function start() {
+    setupWorker(io);
+}
 
-// export function start() {
-//     setupWorker(io);
-// }
+module.exports = { start };
+// -------------阿鑫聊天室node-------------
