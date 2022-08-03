@@ -1,10 +1,10 @@
 const messages = [];
 
-const saveMessage = (message) => {
+function saveMessage (message){
     messages.push(message);
 };
 
- const findMessagesForUser = (userId) => {
+function findMessagesForUser(userId) {
     return messages.filter(({ from, to }) => from === userId || to === userId);
 };
 
