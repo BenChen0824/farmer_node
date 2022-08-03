@@ -7,11 +7,21 @@ const getUserCart = async (member_id) => {
   FROM order_details_tobuy odt 
   JOIN product p 
   ON odt.product_id=p.sid 
-  WHERE member_id=?
+  WHERE member_id=? && odt.cart_product_type=1
+  ORDER BY odt.created_time`;
+
+    const sqlcus = `SELECT cusp.*, odt.* 
+  FROM order_details_tobuy odt 
+  JOIN customized_lunch cusp 
+  ON odt.customized_id=cusp.sid 
+  WHERE member_id=? && odt.cart_product_type=2
   ORDER BY odt.created_time`;
 
     const [r] = await db.query(sql, [member_id]);
-    return r;
+    // console.log(r);
+    const [r2] = await db.query(sqlcus, [member_id]);
+    // console.log(r2);
+    return [...r, ...r2];
 };
 
 router.post('/', async (req, res) => {
@@ -64,6 +74,7 @@ router.post('/', async (req, res) => {
     res.json(output);
     //sid qty
 });
+
 router.get('/', async (req, res) => {
     res.json(await getUserCart(1));
 });
@@ -158,36 +169,69 @@ router.delete('/delete', async (req, res) => {
         res.json(await getUserCart(1));
     });
 });
-router.post('/orderlist', async (req, res) => {
+
+router.route('/addtoorderlist').post(async (req, res) => {
     const output = {
         success: false,
         error: '',
     };
-    if (!req.body.sid || !req.body.member_id) {
+    console.log(JSON.parse(JSON.stringify(req.body.freshItems))[0].product_id);
+    if (!req.body.member_id) {
         output.error = '參數不足';
         return res.json(output);
     }
 
+    //req.body=={member_id:num,totalPrice:num,customerRemark:"...",freshItems:[...],customizedItems:[...]}
+
+    const sqltotal =
+        'INSERT INTO `orderlist`( `customer_id`, `order_status`, `product_amount_total`, `created_time`, `customer_remark`) VALUES (?,?,?,NOW(),?) ';
+
+    const [rTotal] = await db.query(sqltotal, [
+        req.body.member_id,
+        '已完成付款',
+        req.body.totalPrice,
+        req.body.customerRemark,
+    ]);
+    // console.log(rTotal);
+    const orderNo = rTotal.insertId;
+
     const sql2 =
-        'INSERT INTO `order_details`(`order_no`, `product_id`, `order_type`, `product_price`, `product_count`, `discount_amount`, `subtotal`, `created_time`, `customer_remark`) VALUES (?,?,?,?,?,?,?,NOW(),?) ';
+        'INSERT INTO `order_details`(`order_no`, `product_id`, `customized_id`, `order_type`, `product_price`, `product_count`, `subtotal`, `created_time`) VALUES (?,?,?,?,?,?,?,NOW()) ';
 
     const [r2] = await db.query(sql2, [
-        req.body.order_no,
-        req.body.product_id,
-        req.body.order_type,
-        req.body.product_price,
-        req.body.product_price,
-        req.body.product_price,
-        req.body.product_price,
+        orderNo,
+        req.body.freshItems[0].product_id,
+        0,
+        1,
+        req.body.freshItems[0].product_price,
+        req.body.freshItems[0].product_count,
+        req.body.totalPrice,
+    ]);
+
+    const sql3 =
+        'INSERT INTO `order_details`(`order_no`, `product_id`, `customized_id`, `order_type`, `product_price`, `product_count`, `subtotal`, `created_time`) VALUES (?,?,?,?,?,?,?,NOW()) ';
+
+    const [r3] = await db.query(sql3, [
+        orderNo,
+        0,
+        req.body.customizedItems[0].customized_id,
+        2,
+        req.body.customizedItems[0].total_price,
+        req.body.customizedItems[0].product_count,
+        req.body.totalPrice,
     ]);
 
     // console.log(r2.affectedRows);
-    if (r2.affectedRows) {
+    if (r2.affectedRows && r3.affectedRows) {
         output.success = true;
     }
 
-    output.cart = await getUserCart(req.body.member_id);
+    const sqlDEL = 'DELETE FROM order_details_tobuy WHERE sid=?';
+    const [rDEL] = await db.query(sqlDEL, [258]);
+
     res.json(output);
+
     //sid qty
 });
+
 module.exports = router;
