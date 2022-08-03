@@ -22,7 +22,7 @@ const router = express.Router();
 //   return r;
 // };
 
-//抓全部資料
+//抓全部資料.
 router.get("/", async (req, res) => {
  const sql1= 'SELECT * FROM `comment` WHERE 1'
  const [r1] = await db.query(sql1);
