@@ -4,7 +4,8 @@ const cors = require('cors');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 const httpServer = createServer(app);
-const { v4:uuidv4 } = require('uuid');
+const LinePay = require('line-pay-v3');
+const { v4: uuidv4 } = require('uuid');
 const { setupWorker } = require('@socket.io/sticky');
 const io = new Server(httpServer, {
     cors: {
@@ -12,7 +13,7 @@ const io = new Server(httpServer, {
         methods: ['GET', 'POST'],
     },
 });
-    
+
 const {
     saveSession,
     findSession,
@@ -24,9 +25,7 @@ const {
     saveMessage,
 } = require('./src/xin/messageStorage');
 
-
 const db = require(__dirname + '/modules/mysql-connect');
-
 
 const corsOptions = {
     credentials: true,
@@ -108,10 +107,10 @@ app.post('/linepay-check', async (req, successResp) => {
 });
 //linePay
 
-app.listen(process.env.PORT, () => {
-    console.log(`server started: ${process.env.PORT}`);
-    console.log({ NODE_ENV: process.env.NODE_ENV });
-});
+// app.listen(process.env.PORT, () => {
+//     console.log(`server started: ${process.env.PORT}`);
+//     console.log({ NODE_ENV: process.env.NODE_ENV });
+// });
 
 // -------------阿鑫聊天室node-------------
 
@@ -232,8 +231,8 @@ io.on('connection', async (socket) => {
 });
 
 console.log('Listening to port...');
-httpServer.listen(process.env.PORT,()=>{
-    console.log('listening on *:3600');
+httpServer.listen(process.env.PORT, () => {
+    console.log('listening on :3600');
 });
 
 function start() {
