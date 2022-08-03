@@ -21,7 +21,7 @@ if (cluster.isPrimary){
       loadBalancingMethod: "least-connection", //隨機 robin-robin
     });
 
-    const PORT = process.env.PORT || 4000;
+    const PORT = 3600;
 
     httpServer.listen(PORT, () => {
       console.log(`Server listening at port ${PORT}`);
