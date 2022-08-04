@@ -4,20 +4,19 @@ const db = require(__dirname + '/../modules/mysql-connect');
 const upload = require(__dirname + '/../modules/upload_img');
 const Joi = require('joi');
 const router = express.Router();
-
-const getUserCart1 = async (member_id) => {
+const getUserCart = async (member_id) => {
     const sql = `SELECT p.*, odt.* 
   FROM order_details_tobuy odt 
   JOIN product p 
   ON odt.product_id=p.sid 
-  WHERE member_id=? && odt.cart_product_type=1
+  WHERE odt.member_id=? && odt.cart_product_type=1
   ORDER BY odt.created_time`;
 
     const sqlcus = `SELECT cusp.*, odt.* 
   FROM order_details_tobuy odt 
   JOIN customized_lunch cusp 
   ON odt.customized_id=cusp.sid 
-  WHERE member_id=? && odt.cart_product_type=2
+  WHERE odt.member_id=? && odt.cart_product_type=2
   ORDER BY odt.created_time`;
 
     const [r] = await db.query(sql, [member_id]);
@@ -26,7 +25,6 @@ const getUserCart1 = async (member_id) => {
     // console.log(r2);
     return [...r, ...r2];
 };
-
 const getListHandler = async (req, res) => {
     let output = {
         perPage: 20,
@@ -110,7 +108,6 @@ router.post('/add', upload.none(), async (req, res) => {
         custom_remark,
         member_id,
     } = req.body;
-
     const [result] = await db.query(sql, [
         lunch_pic,
         lunch_name,
@@ -124,23 +121,24 @@ router.post('/add', upload.none(), async (req, res) => {
         custom_remark,
         member_id,
     ]);
-    res.json(result);
-// console.log(req.body);
-    // const newLunchOrderSid = result.inserId;
+    const orderNo = result.insertId;
+    const sql2 =
+        'INSERT INTO `order_details_tobuy`(`ready_to_buy`, `member_id`, `product_id`, `customized_id`, `cart_product_type`, `product_count`, `created_time`) VALUES (?,?,?,?,?,?,NOW())';
 
-    // const sql2 =
-    //     'INSERT INTO `order_details_tobuy`(`ready_to_buy`, `member_id`, `product_id`, `customized_id`, `cart_product_type`, `product_count`, `created_time`) VALUES (?,?,?,?,?,?,NOW())';
+    const [r2] = await db.query(sql2, [
+        0,
+        member_id,
+        0,
+        orderNo,
+        2,
+        lunchbox_stock,
+    ]);
 
-    // const [r2] = await db.query(sql2, [
-    //     0,
-    //     req.body.member_id,
-    //     0,
-    //     newLunchOrderSid,
-    //     2,
-    //     lunchbox_stock,
-    // ]);
-    // output.cart = await getUserCart1(req.body.member_id);
-    // res.json(await getUserCart1(req.body.member_id));
+    // console.log(r2.affectedRows);
+
+
+
+    res.json(await getUserCart(req.body.member_id));
 });
 
 router.get('/api', async (req, res) => {
