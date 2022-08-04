@@ -24,7 +24,8 @@ const getUserCart = async (member_id) => {
     return [...r, ...r2];
 };
 
-router.post('/', async (req, res) => {
+//生鮮商品加入購物車 如果已經有了改成更新
+router.post('/addfresh', async (req, res) => {
     const output = {
         success: false,
         error: '',
@@ -33,13 +34,13 @@ router.post('/', async (req, res) => {
         output.error = '參數不足';
         return res.json(output);
     }
-    const sql = `SELECT * FROM products WHERE sid=?`;
+    const sql = `SELECT * FROM product WHERE sid=?`;
     const [r1] = await db.query(sql, [req.body.product_id]);
     if (!r1.length) {
         output.error = '沒有這個商品';
         return res.json(output);
     }
-    if (+req.body.quantity < 1) {
+    if (+req.body.product_count < 1) {
         output.error = '請確認數量並重新加入購物車';
         return res.json(output);
     }
@@ -51,17 +52,33 @@ router.post('/', async (req, res) => {
         req.body.member_id,
     ]);
     if (num > 0) {
-        output.error = '購物車內已經有這項商品';
+        const sqlUpdate =
+            'UPDATE `order_details_tobuy` SET `product_count`=? WHERE product_id=? AND member_id=?';
+        const [rUpdate] = await db.query(sqlUpdate, [
+            req.body.product_count,
+            req.body.product_id,
+            req.body.member_id,
+        ]);
+        output.r2 = rUpdate;
+
+        if (rUpdate.affectedRows && rUpdate.changedRows) {
+            output.success = true;
+        }
+
+        output.cart = await getUserCart(req.body.member_id);
+
         return res.json(output);
     }
 
     const sql2 =
-        'INSERT INTO `order_details_tobuy`(`member_id`, `product_id`, `product_type`, `product_count`, `created_time`) VALUES (?,?,?,?,NOW())';
+        'INSERT INTO `order_details_tobuy`(`ready_to_buy`, `member_id`, `product_id`, `customized_id`, `cart_product_type`, `product_count`, `created_time`) VALUES (?,?,?,?,?,?,NOW())';
 
     const [r2] = await db.query(sql2, [
+        0,
         req.body.member_id,
         req.body.product_id,
-        req.body.product_type,
+        0,
+        1,
         req.body.product_count,
     ]);
 
@@ -75,6 +92,45 @@ router.post('/', async (req, res) => {
     //sid qty
 });
 
+//客製化商品加入購物車
+router.post('/addcustomized', async (req, res) => {
+    const output = {
+        success: false,
+        error: '',
+    };
+    if (!req.body.customized_id || !req.body.member_id) {
+        output.error = '參數不足';
+        return res.json(output);
+    }
+
+    if (+req.body.product_count < 1) {
+        output.error = '請確認數量並重新加入購物車';
+        return res.json(output);
+    }
+
+    const sql2 =
+        'INSERT INTO `order_details_tobuy`(`ready_to_buy`, `member_id`, `product_id`, `customized_id`, `cart_product_type`, `product_count`, `created_time`) VALUES (?,?,?,?,?,?,NOW())';
+
+    const [r2] = await db.query(sql2, [
+        0,
+        req.body.member_id,
+        0,
+        req.body.customized_id,
+        2,
+        req.body.product_count,
+    ]);
+
+    // console.log(r2.affectedRows);
+    if (r2.affectedRows) {
+        output.success = true;
+    }
+
+    output.cart = await getUserCart(req.body.member_id);
+    res.json(await getUserCart(req.body.member_id));
+    //sid qty
+});
+
+//讀出畫面
 router.get('/', async (req, res) => {
     res.json(await getUserCart(1));
 });
@@ -175,7 +231,7 @@ router.route('/addtoorderlist').post(async (req, res) => {
         success: false,
         error: '',
     };
-    console.log(JSON.parse(JSON.stringify(req.body.freshItems))[0].product_id);
+    // console.log(JSON.parse(JSON.stringify(req.body.freshItems))[0].product_id);
     if (!req.body.member_id) {
         output.error = '參數不足';
         return res.json(output);
@@ -198,38 +254,47 @@ router.route('/addtoorderlist').post(async (req, res) => {
     const sql2 =
         'INSERT INTO `order_details`(`order_no`, `product_id`, `customized_id`, `order_type`, `product_price`, `product_count`, `subtotal`, `created_time`) VALUES (?,?,?,?,?,?,?,NOW()) ';
 
-    const [r2] = await db.query(sql2, [
-        orderNo,
-        req.body.freshItems[0].product_id,
-        0,
-        1,
-        req.body.freshItems[0].product_price,
-        req.body.freshItems[0].product_count,
-        req.body.totalPrice,
-    ]);
+    for (let i of req.body.freshItems) {
+        const [r2] = await db.query(sql2, [
+            orderNo,
+            i.product_id,
+            0,
+            1,
+            i.product_price,
+            i.product_count,
+            req.body.totalPrice,
+        ]);
+    }
 
     const sql3 =
         'INSERT INTO `order_details`(`order_no`, `product_id`, `customized_id`, `order_type`, `product_price`, `product_count`, `subtotal`, `created_time`) VALUES (?,?,?,?,?,?,?,NOW()) ';
 
-    const [r3] = await db.query(sql3, [
-        orderNo,
-        0,
-        req.body.customizedItems[0].customized_id,
-        2,
-        req.body.customizedItems[0].total_price,
-        req.body.customizedItems[0].product_count,
-        req.body.totalPrice,
-    ]);
+    for (let i of req.body.customizedItems) {
+        const [r3] = await db.query(sql3, [
+            orderNo,
+            0,
+            i.customized_id,
+            2,
+            i.total_price,
+            i.product_count,
+            req.body.totalPrice,
+        ]);
+    }
 
     // console.log(r2.affectedRows);
-    if (r2.affectedRows && r3.affectedRows) {
+    if (rTotal.affectedRows) {
         output.success = true;
     }
 
     const sqlDEL = 'DELETE FROM order_details_tobuy WHERE sid=?';
-    const [rDEL] = await db.query(sqlDEL, [258]);
+    for (let i of req.body.freshItems) {
+        const [rDEL] = await db.query(sqlDEL, [i.sid]);
+    }
+    for (let i of req.body.customizedItems) {
+        const [rDEL] = await db.query(sqlDEL, [i.sid]);
+    }
 
-    res.json(output);
+    res.json(await getUserCart(1));
 
     //sid qty
 });
