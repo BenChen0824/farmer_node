@@ -7,13 +7,6 @@ const httpServer = createServer(app);
 const LinePay = require('line-pay-v3');
 const { v4: uuidv4 } = require('uuid');
 const { setupWorker } = require('@socket.io/sticky');
-const io = new Server(httpServer, {
-    cors: {
-        origin: '*',
-        methods: ['GET', 'POST'],
-    },
-});
-
 const {
     saveSession,
     findSession,
@@ -24,6 +17,16 @@ const {
     findMessagesForUser,
     saveMessage,
 } = require('./src/xin/messageStorage');
+
+const io = new Server(httpServer, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST'],
+    },
+});
+
+
+
 
 const db = require(__dirname + '/modules/mysql-connect');
 
@@ -126,13 +129,13 @@ io.use((socket, next) => {
             socket.username = session.username;
             return next();
         } else {
-            return next(new Error('Invalid session'));
+            return next(new Error("Invalid session"));
         }
     }
 
     const username = socket.handshake.auth.username;
     if (!username) {
-        return next(new Error('Invalid username'));
+        return next(new Error("Invalid username"));
     }
     socket.username = username;
     socket.userId = uuidv4();
@@ -154,7 +157,7 @@ function getMessagesForUser(userId) {
     return messagesPerUser;
 }
 
-io.on('connection', async (socket) => {
+io.on("connection", async (socket) => {
     saveSession(socket.sessionId, {
         userId: socket.userId,
         username: socket.username,
@@ -233,7 +236,7 @@ io.on('connection', async (socket) => {
 
 console.log('Listening to port...');
 httpServer.listen(process.env.PORT, () => {
-    console.log('listening on :3600');
+    console.log(`listening on ${process.env.PORT}`);
 });
 
 function start() {
