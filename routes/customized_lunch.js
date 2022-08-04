@@ -5,7 +5,7 @@ const upload = require(__dirname + '/../modules/upload_img');
 const Joi = require('joi');
 const router = express.Router();
 
-const getUserCart = async (member_id) => {
+const getUserCart1 = async (member_id) => {
     const sql = `SELECT p.*, odt.* 
   FROM order_details_tobuy odt 
   JOIN product p 
@@ -124,8 +124,8 @@ router.post('/add', upload.none(), async (req, res) => {
         custom_remark,
         member_id,
     ]);
-    res.json(result);
-
+    // res.json(result);
+console.log(req.body);
     // const newLunchOrderSid = result.inserId;
 
     // const sql2 =
@@ -139,8 +139,8 @@ router.post('/add', upload.none(), async (req, res) => {
     //     2,
     //     lunchbox_stock,
     // ]);
-    // output.cart = await getUserCart(req.body.member_id);
-    // res.json(await getUserCart(req.body.member_id));
+    // output.cart = await getUserCart1(req.body.member_id);
+    // res.json(await getUserCart1(req.body.member_id));
 });
 
 router.get('/api', async (req, res) => {
