@@ -104,6 +104,12 @@ router.get('/collections',async(req,res)=>{
   res.json(r4);
 });
 
+router.delete('/deleteproduct', async (req,res)=>{
+  const sql06 = "DELETE FROM customer_mycollections_product WHERE customer_id=? AND product_id=?";
+  const [r6] = await db.query(sql06, [req.header('customer_id'), req.header('product_id')]);
+  res.json(r6)
+});
+
 router.post('/profile', upload.single('file'), async (req, res)=>{
   const data = await res.json(req.file);
   console.log(data)
