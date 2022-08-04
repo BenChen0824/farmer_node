@@ -60,6 +60,7 @@ const getRecipeHandler = async (req, res) => {
         return output;
       }
     }
+    
     const sql02 = `SELECT * FROM recipe WHERE 1 ORDER BY sid DESC LIMIT ${
       (page - 1) * output.perPage
     },${output.perPage}`;
@@ -79,11 +80,17 @@ const getRecipeHandler = async (req, res) => {
   };
 
 
+  // 分隔線
+
+
   router.route("/").get(async (req, res) => {
     const output = await getRecipeHandler(req, res);
     res.json(output);
   });
-  
+
+
+  module.exports = router;
+
 
 
   // const sqlInsert = "INSERT INTO `recipe`(`recipes_sid`, `recipes_name`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_description`, `recipes_img`, `cooking_create_member_Id`, `recipes_collection`, `recipes_like`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())"
@@ -97,61 +104,25 @@ const getRecipeHandler = async (req, res) => {
 
 
 
+  // 第67行 output.rows = r2.map((el) => {} 的用意，大誇號裡的product_img: JSON.parse(el.product_img) el.product_img 是把一個JSON字串轉換成 JavaScript的數值或是物件
 
 
 
 
+  // 第18行 +req.query.page || 1; +?
 
-  // router.route("/hot_sale").get(async (req, res) => {
-  //   let output = {
-  //     code: 0,
-  //     error: "",
-  //     rows: []
-  //   };
-  
-  //   const sql = `SELECT * FROM recipe WHERE hot_sale = 1 LIMIT 10`;
-  //   const [rows,fields] = await db.query(sql);
-  
-  //   output.rows = rows.map((el) => {
-  //     return {
-  //       ...el,
-  //       product_img: JSON.parse(el.product_img),
-  //      product_hashtag: JSON.parse(el.product_hashtag)
-  //     };
-  //   });
-  
-  //   output.code = 200;
-  
-  //   res.json(output);
-  // });
-
-
-
-
-  
-  module.exports = router;
-  
-  //TODO: search 沒有東西
-
-
-
-
-
-
-  // 第25行 const typeVal = Number(req.query.type) 的 Number(req.query.type)是從哪邊抓資料
+  // 第25行 const typeVal = Number(req.query.type) 的 Number(req.query.type)是哪邊的type抓資料
 
   // 第26行 const typeSql = typeVal ? `product_type = ${typeVal}` : "1" 的三元運算子
 
   // 第33行 const searchVal = req.query.search 為何不用 Number
 
-  // 第36行 const orderBy = req.query.orderBy === "price" ? "product_price" : "recipes_sid" 的 price 是連結到哪裡
+  // 第36行 const orderBy = req.query.orderBy === "price" ? "product_price" : "sid" 的 price 跟 sid 是連結到哪裡
 
   // 第49行 const filterSql = `WHERE ${typeSql} AND ${searchSql} AND ${hashTagSql} AND ${sidSql}` SQL語法的 WHERE、AND、AND、AND 的功用，之後會輸出到哪裡
 
-  // 第453行 const [[{ totalRows }]] = await db.query(sql01) 的 await db.query意思
-
-  // 第67行 output.rows = r2.map((el) => {} 的用意，大誇號裡的product_img: JSON.parse(el.product_img) el.product_img 是甚麼意思
+  // 第53行 const [[{ totalRows }]] = await db.query(sql01) 的 await db.query意思
 
   // 第75、76行 output.code = 200  跟  output = { ...output, page, totalRows, totalPage } 的意思
 
-  // 如何連接
+  // 如何連接到前端
