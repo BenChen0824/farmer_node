@@ -124,8 +124,8 @@ router.post('/add', upload.none(), async (req, res) => {
         custom_remark,
         member_id,
     ]);
-    // res.json(result);
-console.log(req.body);
+    res.json(result);
+// console.log(req.body);
     // const newLunchOrderSid = result.inserId;
 
     // const sql2 =

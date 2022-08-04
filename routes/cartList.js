@@ -2,27 +2,27 @@ const express = require('express');
 const db = require(__dirname + '/../modules/mysql-connect');
 const router = express.Router();
 
-const getUserCart = async (member_id) => {
-    const sql = `SELECT p.*, odt.* 
-  FROM order_details_tobuy odt 
-  JOIN product p 
-  ON odt.product_id=p.sid 
-  WHERE member_id=? && odt.cart_product_type=1
-  ORDER BY odt.created_time`;
+// const getUserCart = async (member_id) => {
+//     const sql = `SELECT p.*, odt.* 
+//   FROM order_details_tobuy odt 
+//   JOIN product p 
+//   ON odt.product_id=p.sid 
+//   WHERE member_id=? && odt.cart_product_type=1
+//   ORDER BY odt.created_time`;
 
-    const sqlcus = `SELECT cusp.*, odt.* 
-  FROM order_details_tobuy odt 
-  JOIN customized_lunch cusp 
-  ON odt.customized_id=cusp.sid 
-  WHERE member_id=? && odt.cart_product_type=2
-  ORDER BY odt.created_time`;
+//     const sqlcus = `SELECT cusp.*, odt.* 
+//   FROM order_details_tobuy odt 
+//   JOIN customized_lunch cusp 
+//   ON odt.customized_id=cusp.sid 
+//   WHERE member_id=? && odt.cart_product_type=2
+//   ORDER BY odt.created_time`;
 
-    const [r] = await db.query(sql, [member_id]);
-    // console.log(r);
-    const [r2] = await db.query(sqlcus, [member_id]);
-    // console.log(r2);
-    return [...r, ...r2];
-};
+//     const [r] = await db.query(sql, [member_id]);
+//     // console.log(r);
+//     const [r2] = await db.query(sqlcus, [member_id]);
+//     // console.log(r2);
+//     return [...r, ...r2];
+// };
 
 //生鮮商品加入購物車 如果已經有了改成更新
 router.post('/addfresh', async (req, res) => {
@@ -131,9 +131,9 @@ router.post('/addcustomized', async (req, res) => {
 });
 
 //讀出畫面
-router.get('/', async (req, res) => {
-    res.json(await getUserCart(1));
-});
+// router.get('/', async (req, res) => {
+//     res.json(await getUserCart(1));
+// });
 
 //U
 router.put('/changenum', async (req, res) => {
