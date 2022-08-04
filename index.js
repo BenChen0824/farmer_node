@@ -56,6 +56,7 @@ app.use('/member', require(__dirname + '/routes/member'));
 app.use('/game', require(__dirname + '/routes/game'));
 app.use('/cartemail', require(__dirname + '/routes/cartemail'));
 app.use('/comment', require(__dirname + '/routes/comment'));
+app.use('/recipe', require(__dirname + '/routes/recipe'));
 
 app.use('/customized_lunch', require(__dirname + '/routes/customized_lunch'));
 
