@@ -215,15 +215,8 @@ router.delete('/delete', async (req, res) => {
     const sql = 'DELETE FROM order_details_tobuy WHERE sid=?';
     await db.query(sql, [req.body.sid]);
 
-    res.json(await getUserCart(1));
+    res.json(await getUserCart(req.body.member_id));
     //進入購物車後要結帳
-    router.delete('/carttobuy', async (req, res) => {
-        // sid
-        const sql = 'DELETE FROM order_details_tobuy WHERE sid=?';
-        await db.query(sql, [req.body.sid]);
-
-        res.json(await getUserCart(req.body.member_id));
-    });
 });
 
 router.route('/addtoorderlist').post(async (req, res) => {
