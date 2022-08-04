@@ -34,8 +34,7 @@ const getRecipeHandler = async (req, res) => {
     const searchSql = searchVal ? `product_name LIKE '%${searchVal}%'` : "1";
 
     const orderBy = req.query.orderBy === "price" ? "product_price" : "recipes_sid";
-    const order = req.query.order === "ASC" ? "ASC" : "DESC"; 
-    // DESC || ASC
+    const order = req.query.order === "ASC" ? "ASC" : "DESC"; // DESC || ASC
     // ASC 遞增(由小到大)
     // DESC 遞減(由大到小)
 
@@ -80,55 +79,79 @@ const getRecipeHandler = async (req, res) => {
   };
 
 
-
-
   router.route("/").get(async (req, res) => {
     const output = await getRecipeHandler(req, res);
     res.json(output);
   });
   
-  router.route("/hot_sale").get(async (req, res) => {
-    let output = {
-      code: 0,
-      error: "",
-      rows: []
-    };
+
+
+  // const sqlInsert = "INSERT INTO `recipe`(`recipes_sid`, `recipes_name`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_description`, `recipes_img`, `cooking_create_member_Id`, `recipes_collection`, `recipes_like`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())"
+
+  // const sqlSelect = "SELECT * FROM recipe WHERE customer_id=?";
+
+  // const sqlUpdate = "UPDATE `recipe` SET `recipes_sid`=? ,`recipes_name`=? ,`recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_cooking_method`=? ,`recipes_description`=? ,`recipes_img`=? ,`cooking_create_member_Id`=? ,`recipes_collection`=? ,`recipes_like`=? ,`created_at`=? WHERE `recipes_sid` = $recipes_sid "
+
+  // const sqlDelete = "DELETE FROM `recipe` WHERE 0"
+
+
+
+
+
+
+
+
+
+  // router.route("/hot_sale").get(async (req, res) => {
+  //   let output = {
+  //     code: 0,
+  //     error: "",
+  //     rows: []
+  //   };
   
-    const sql = `SELECT * FROM recipe WHERE hot_sale = 1 LIMIT 10`;
-    const [rows,fields] = await db.query(sql);
+  //   const sql = `SELECT * FROM recipe WHERE hot_sale = 1 LIMIT 10`;
+  //   const [rows,fields] = await db.query(sql);
   
-    output.rows = rows.map((el) => {
-      return {
-        ...el,
-        product_img: JSON.parse(el.product_img),
-       product_hashtag: JSON.parse(el.product_hashtag)
-      };
-    });
+  //   output.rows = rows.map((el) => {
+  //     return {
+  //       ...el,
+  //       product_img: JSON.parse(el.product_img),
+  //      product_hashtag: JSON.parse(el.product_hashtag)
+  //     };
+  //   });
   
-    output.code = 200;
+  //   output.code = 200;
   
-    res.json(output);
-  });
+  //   res.json(output);
+  // });
+
+
+
+
   
   module.exports = router;
   
   //TODO: search 沒有東西
 
 
-  // 第25行 const typeVal = Number(req.query.type) 的 Number(req.query.type)是甚麼
+
+
+
+
+  // 第25行 const typeVal = Number(req.query.type) 的 Number(req.query.type)是從哪邊抓資料
 
   // 第26行 const typeSql = typeVal ? `product_type = ${typeVal}` : "1" 的三元運算子
 
-  // 第34行 const searchVal = req.query.search 為何不用 Number
+  // 第33行 const searchVal = req.query.search 為何不用 Number
 
   // 第36行 const orderBy = req.query.orderBy === "price" ? "product_price" : "recipes_sid" 的 price 是連結到哪裡
 
-  // 第43行 const filterSql = `WHERE ${typeSql} AND ${searchSql} AND ${hashTagSql} AND ${sidSql}` SQL語法的 WHERE、AND、AND、AND 的功用
+  // 第49行 const filterSql = `WHERE ${typeSql} AND ${searchSql} AND ${hashTagSql} AND ${sidSql}` SQL語法的 WHERE、AND、AND、AND 的功用，之後會輸出到哪裡
 
-  // 第47行 const [[{ totalRows }]] = await db.query(sql01) 的 await db.query意思
+  // 第453行 const [[{ totalRows }]] = await db.query(sql01) 的 await db.query意思
 
-  // 第61行 output.rows = r2.map((el) => {} 的用意，大誇號裡的product_img: JSON.parse(el.product_img) el.product_img 是甚麼意思
+  // 第67行 output.rows = r2.map((el) => {} 的用意，大誇號裡的product_img: JSON.parse(el.product_img) el.product_img 是甚麼意思
 
-  // 第69、70行 output.code = 200  跟  output = { ...output, page, totalRows, totalPage } 的意思
+  // 第75、76行 output.code = 200  跟  output = { ...output, page, totalRows, totalPage } 的意思
 
   // 如何連接
