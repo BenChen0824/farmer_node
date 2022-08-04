@@ -7,14 +7,14 @@ const getUserCart = async (member_id) => {
   FROM order_details_tobuy odt 
   JOIN product p 
   ON odt.product_id=p.sid 
-  WHERE member_id=? && odt.cart_product_type=1
+  WHERE odt.member_id=? && odt.cart_product_type=1
   ORDER BY odt.created_time`;
 
     const sqlcus = `SELECT cusp.*, odt.* 
   FROM order_details_tobuy odt 
   JOIN customized_lunch cusp 
   ON odt.customized_id=cusp.sid 
-  WHERE member_id=? && odt.cart_product_type=2
+  WHERE odt.member_id=? && odt.cart_product_type=2
   ORDER BY odt.created_time`;
 
     const [r] = await db.query(sql, [member_id]);
@@ -132,7 +132,7 @@ router.post('/addcustomized', async (req, res) => {
 
 //讀出畫面
 router.get('/', async (req, res) => {
-    res.json(await getUserCart(1));
+    res.json(await getUserCart(530));
 });
 
 //U
@@ -170,7 +170,7 @@ router.put('/changenum', async (req, res) => {
         output.success = true;
     }
 
-    output.cart = await getUserCart(1);
+    output.cart = await getUserCart(req.body.member_id);
     res.json(output);
     //sid qty
 });
@@ -204,7 +204,7 @@ router.put('/readytobuy', async (req, res) => {
         output.success = true;
     }
 
-    output.cart = await getUserCart(1);
+    output.cart = await getUserCart(req.body.member_id);
     res.json(output);
     //sid qty
 });
@@ -222,7 +222,7 @@ router.delete('/delete', async (req, res) => {
         const sql = 'DELETE FROM order_details_tobuy WHERE sid=?';
         await db.query(sql, [req.body.sid]);
 
-        res.json(await getUserCart(1));
+        res.json(await getUserCart(req.body.member_id));
     });
 });
 
