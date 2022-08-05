@@ -2,10 +2,10 @@
 -- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Aug 03, 2022 at 11:03 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 7.4.29
+-- 主機： 127.0.0.1
+-- 產生時間： 2022-08-05 11:24:27
+-- 伺服器版本： 10.4.24-MariaDB
+-- PHP 版本： 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `farmer26`
+-- 資料庫: `farmer26`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `changeproduct_01`
+-- 資料表結構 `changeproduct_01`
 --
 
 CREATE TABLE `changeproduct_01` (
@@ -35,7 +35,7 @@ CREATE TABLE `changeproduct_01` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `changeproduct_01`
+-- 傾印資料表的資料 `changeproduct_01`
 --
 
 INSERT INTO `changeproduct_01` (`product_sid`, `product_name`, `product_point`, `change_img`) VALUES
@@ -49,7 +49,7 @@ INSERT INTO `changeproduct_01` (`product_sid`, `product_name`, `product_point`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `change_01`
+-- 資料表結構 `change_01`
 --
 
 CREATE TABLE `change_01` (
@@ -63,7 +63,7 @@ CREATE TABLE `change_01` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `change_01`
+-- 傾印資料表的資料 `change_01`
 --
 
 INSERT INTO `change_01` (`change_sid`, `change_nameid`, `change_name`, `change_product`, `change_point`, `change_quantity`, `change_time`) VALUES
@@ -250,7 +250,7 @@ INSERT INTO `change_01` (`change_sid`, `change_nameid`, `change_name`, `change_p
 -- --------------------------------------------------------
 
 --
--- Table structure for table `change_product`
+-- 資料表結構 `change_product`
 --
 
 CREATE TABLE `change_product` (
@@ -267,7 +267,7 @@ CREATE TABLE `change_product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `change_product`
+-- 傾印資料表的資料 `change_product`
 --
 
 INSERT INTO `change_product` (`change_sid`, `login_id`, `change_point`, `change_supplier`, `change_name`, `change_detail`, `change_type`, `change_img`, `exp_expire`, `change_stock`) VALUES
@@ -283,7 +283,65 @@ INSERT INTO `change_product` (`change_sid`, `login_id`, `change_point`, `change_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `contact_us`
+-- 資料表結構 `company`
+--
+
+CREATE TABLE `company` (
+  `company_id` int(11) NOT NULL,
+  `farm_type` varchar(255) NOT NULL,
+  `farm_name` varchar(255) NOT NULL,
+  `farm_tax_id` varchar(255) NOT NULL,
+  `company_name` varchar(255) NOT NULL,
+  `company_id_number` varchar(255) NOT NULL,
+  `company_phone` varchar(255) NOT NULL,
+  `farm_tel` varchar(255) NOT NULL,
+  `farm_fax` varchar(255) NOT NULL,
+  `farm_address` varchar(255) NOT NULL,
+  `company_email` varchar(255) NOT NULL,
+  `company_password` varchar(255) NOT NULL,
+  `creat_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- 傾印資料表的資料 `company`
+--
+
+INSERT INTO `company` (`company_id`, `farm_type`, `farm_name`, `farm_tax_id`, `company_name`, `company_id_number`, `company_phone`, `farm_tel`, `farm_fax`, `farm_address`, `company_email`, `company_password`, `creat_at`) VALUES
+(1, '個人(非公司)', '勝洋休閒農場', '', '陳韻達', 'I233416490', '0918108780', '03-9222487', '03-9231814', '宜蘭縣員山鄉八甲路15-6號', 'test01@gmail.com', '$2a$10$klP5qbu6l9cO6Nvv5.N8u.n2IAfceMTQe34W6fmoVTzXu84hQ7aGi', '2022-08-01 09:17:10'),
+(2, '農戶', '東螺溪休閒農場', '', '陳協齊', 'k178652590', '0918241293', '0985-699700', '', '彰化縣二林鎮二溪路七段2巷臨1201號', 'test02@gmail.com', '$2a$10$klP5qbu6l9cO6Nvv5.N8u.n2IAfceMTQe34W6fmoVTzXu84hQ7aGi', '2022-08-01 09:17:10'),
+(3, '小型商戶(免用發票)', '廣興休閒農場', '', '陳武茂', 'O210221030', '0918564588', '03-9513236', '03-9513946', '宜蘭縣冬山鄉柯林村光華三路132巷12號', 'test03@gmail.com', '$2a$10$klP5qbu6l9cO6Nvv5.N8u.n2IAfceMTQe34W6fmoVTzXu84hQ7aGi', '2022-08-01 09:17:10'),
+(4, '個人(非公司)', '阿里磅生態休閒農場', '', '曹慧娟', 'J276218010', '0918583354', '02-26382745', '02-26232016', '新北市石門區阿里磅84號', 'test04@gmail.com', '$2a$10$klP5qbu6l9cO6Nvv5.N8u.n2IAfceMTQe34W6fmoVTzXu84hQ7aGi', '2022-08-01 09:17:10'),
+(5, '農戶', '武岫休閒農場', '', '楊曜宇', 'Q101199690', '0918619748', '0492676262', '0492677117', '南投縣鹿谷鄉竹林村田頭巷35-66號', 'test05@gmail.com', '$2a$10$klP5qbu6l9cO6Nvv5.N8u.n2IAfceMTQe34W6fmoVTzXu84hQ7aGi', '2022-08-01 09:17:10'),
+(6, '小型商戶(免用發票)', '台一生態休閒農場', '', '陳如萱', 'N153448120', '0918575738', '04-92997848', '049-2900037', '南投縣埔里鎮蜈蚣里中山路1段176', 'test06@gmail.com', '$2a$10$klP5qbu6l9cO6Nvv5.N8u.n2IAfceMTQe34W6fmoVTzXu84hQ7aGi', '2022-08-01 09:17:10'),
+(7, '法人(公司)', '沐心泉休閒農場', '39328672', '王佳怡', 'I261687010', '0918644744', '04-25931201', '', '臺中市新社區中和里中興街60號', 'test07@gmail.com', '$2a$10$klP5qbu6l9cO6Nvv5.N8u.n2IAfceMTQe34W6fmoVTzXu84hQ7aGi', '2022-08-01 09:17:10'),
+(8, '法人(公司)', '大菁休閒農場', '45498079', '謝海儒', 'H281586970', '0918276638', '02-24572869', '', '基隆市暖暖區東勢街100-1號', '', '', '2022-08-01 09:17:10'),
+(9, '小型商戶(免用發票)', '蓮荷園休閒農場', '', '林博文', 'C102745170', '0918325186', '03-4776972', '', '桃園市觀音區藍埔里金華路690號', '', '', '2022-08-01 09:17:10'),
+(10, '小型商戶(免用發票)', '花露休閒農場', '', '陳世光', 'S116815180', '0918295934', '04-25891589', '', '苗栗縣卓蘭鎮西坪里43-3號', '', '', '2022-08-01 09:17:10'),
+(11, '農戶', '林家古厝休閒農場', '', '陳君富', 'C297954460', '0918296250', '03-4980753', '03-4982274', '桃園市觀音區大富路221號', '', '', '2022-08-01 09:17:10'),
+(12, '農戶', '香格里拉休閒農場', '', '趙淑娟', 'B138225550', '0918822435', '03-9511456', '03-9515222', '宜蘭縣冬山鄉大進村梅山路168號', '', '', '2022-08-01 09:17:10'),
+(13, '小型商戶(免用發票)', '台南鴨莊休閒農場', '', '王曉麟', 'V219377840', '0918746096', '06-6901101', '06-690-3901', '臺南市官田區渡拔里三塊厝178-1號', '', '', '2022-08-01 09:17:10'),
+(14, '小型商戶(免用發票)', '奈米休閒農場', '', '胡之陽', 'X281420440', '0918571868', '0919-327075', '', '彰化縣大村鄉南勢村南二橫巷8號', '', '', '2022-08-01 09:17:10'),
+(15, '法人(公司)', '鴻旗有機休閒農場', '45923953', '鄧采吟', 'D202749970', '0918400878', '08-7967301', '', '屏東縣高樹鄉泰山村產業路330號', '', '', '2022-08-01 09:17:10'),
+(16, '法人(公司)', '魔菇部落休閒農場', '49915632', '林亞', 'U167985650', '0918652042', '04-8521898', '04-8525288', '彰化縣埔心鄉柳橋東路829號', '', '', '2022-08-01 09:17:10'),
+(17, '個人(非公司)', '雲也居一休閒農場', '', '林文強', 'T140800300', '0918998427', '03-7951530', '037-951396', '苗栗縣大湖鄉薑麻園九鄰六號', '', '', '2022-08-01 09:17:10'),
+(18, '個人(非公司)', '雪霸休閒農場', '', '楊修冰', 'W149222720', '0918824351', '03-5856192', '03-5857182', '新竹縣五峰鄉桃山村民石380號', '', '', '2022-08-01 09:17:10'),
+(19, '個人(非公司)', '菊園休閒農場', '', '詹逸伶', 'D158992540', '0918580067', '03-7951522', '', '苗栗縣大湖鄉栗林村薑麻園13號', '', '', '2022-08-01 09:17:10'),
+(20, '小型商戶(免用發票)', '白石森活休閒農場', '', '方雅惠', 'D153525330', '0918259338', '02-27943131', '', '臺北市內湖區碧山路58號', '', '', '2022-08-01 09:17:10'),
+(21, '小型商戶(免用發票)', '花泉休閒農場', '', '李國華', 'H129348030', '0918432009', '0919-221506', '', '宜蘭縣員山鄉尚德村八甲路15-1號', '', '', '2022-08-01 09:17:10'),
+(22, '小型商戶(免用發票)', '清香休閒農場', '', '林淑如', 'O159113720', '0918755534', '0928-534383', '0227903466', '臺北市內湖區大湖街206號', '', '', '2022-08-01 09:17:10'),
+(23, '農戶', '大坑休閒農場', '', '林慧玲', 'Q285204720', '0918853803', '06-5941555', '06-5940266', '臺南市新化區大坑里82號', '', '', '2022-08-01 09:17:10'),
+(24, '個人(非公司)', '三富休閒農場', '', '翁尹妃', 'L296466400', '0918120622', '03-9588690', '03-9588753', '宜蘭縣冬山鄉中山村新寮二路161巷88號', '', '', '2022-08-01 09:17:10'),
+(25, '法人(公司)', '仙湖休閒農場', '68112631', '連秀鴻', 'Z215006860', '0918226844', '06-6863635', '06-6863662', '臺南市東山區南勢里大洋6', '', '', '2022-08-01 09:17:10'),
+(26, '個人(非公司)', '旺山休閒農場', '', '劉姿伶', 'D244373110', '0918737811', '0932-088992', '03-9382870', '宜蘭縣壯圍鄉新南村新南路106-11號', '', '', '2022-08-01 09:17:10'),
+(27, '農戶', '好時節休閒農場', '', '黃函順', 'W144103830', '0918966517', '03-3889689', '03-3887489', '桃園市大溪區康莊路三段225號', '', '', '2022-08-01 09:17:10'),
+(28, '農戶', '大塭休閒農場', '', '林麗卿', 'J166606060', '0918504342', '03-9870558', '', '宜蘭縣礁溪鄉玉龍路二段497號', '', '', '2022-08-01 09:17:10'),
+(29, '小型商戶(免用發票)', '天山休閒農場', '', '陳世昇', 'M188959990', '0918634376', '0922-894037', '', '宜蘭縣三星鄉天山村下湖路1號', '', '', '2022-08-01 09:17:10'),
+(30, '小型商戶(免用發票)', '不一樣鱷魚生態休閒農場', '', '黃于凌', 'V217002560', '0918104625', '0911-746860', '08-7881707', '屏東縣潮州鎮太平路600巷108號', '', '', '2022-08-01 09:17:10');
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `contact_us`
 --
 
 CREATE TABLE `contact_us` (
@@ -297,7 +355,7 @@ CREATE TABLE `contact_us` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `contact_us`
+-- 傾印資料表的資料 `contact_us`
 --
 
 INSERT INTO `contact_us` (`sid`, `member_name`, `member_id`, `nickname`, `picture`, `comment`, `created_at`) VALUES
@@ -457,7 +515,7 @@ INSERT INTO `contact_us` (`sid`, `member_name`, `member_id`, `nickname`, `pictur
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customer_data`
+-- 資料表結構 `customer_data`
 --
 
 CREATE TABLE `customer_data` (
@@ -473,7 +531,7 @@ CREATE TABLE `customer_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `customer_data`
+-- 傾印資料表的資料 `customer_data`
 --
 
 INSERT INTO `customer_data` (`customer_id`, `name`, `mobile`, `email`, `birthday`, `address`, `account`, `password`, `creat_at`) VALUES
@@ -1013,7 +1071,7 @@ INSERT INTO `customer_data` (`customer_id`, `name`, `mobile`, `email`, `birthday
 -- --------------------------------------------------------
 
 --
--- Table structure for table `customized_lunch`
+-- 資料表結構 `customized_lunch`
 --
 
 CREATE TABLE `customized_lunch` (
@@ -1031,7 +1089,7 @@ CREATE TABLE `customized_lunch` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `customized_lunch`
+-- 傾印資料表的資料 `customized_lunch`
 --
 
 INSERT INTO `customized_lunch` (`sid`, `lunch_pic`, `lunch_name`, `lunch_1`, `lunch_2`, `lunch_3`, `lunch_4`, `lunch_5`, `total_price`, `lunchbox_stock`, `custom_remark`) VALUES
@@ -1094,7 +1152,7 @@ INSERT INTO `customized_lunch` (`sid`, `lunch_pic`, `lunch_name`, `lunch_1`, `lu
 -- --------------------------------------------------------
 
 --
--- Table structure for table `firm`
+-- 資料表結構 `firm`
 --
 
 CREATE TABLE `firm` (
@@ -1112,7 +1170,7 @@ CREATE TABLE `firm` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `firm`
+-- 傾印資料表的資料 `firm`
 --
 
 INSERT INTO `firm` (`firm_id`, `type`, `tax_id_number`, `idcard`, `firm_name`, `name`, `phone`, `email`, `password`, `address`, `creat_at`) VALUES
@@ -1148,7 +1206,7 @@ INSERT INTO `firm` (`firm_id`, `type`, `tax_id_number`, `idcard`, `firm_name`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `firm_type`
+-- 資料表結構 `firm_type`
 --
 
 CREATE TABLE `firm_type` (
@@ -1157,7 +1215,7 @@ CREATE TABLE `firm_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `firm_type`
+-- 傾印資料表的資料 `firm_type`
 --
 
 INSERT INTO `firm_type` (`firm_type_id`, `firm_type`) VALUES
@@ -1169,7 +1227,7 @@ INSERT INTO `firm_type` (`firm_type_id`, `firm_type`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `foodlist`
+-- 資料表結構 `foodlist`
 --
 
 CREATE TABLE `foodlist` (
@@ -1181,7 +1239,7 @@ CREATE TABLE `foodlist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `foodlist`
+-- 傾印資料表的資料 `foodlist`
 --
 
 INSERT INTO `foodlist` (`id`, `name`, `category`, `image`, `price`) VALUES
@@ -1204,7 +1262,7 @@ INSERT INTO `foodlist` (`id`, `name`, `category`, `image`, `price`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orderlist`
+-- 資料表結構 `orderlist`
 --
 
 CREATE TABLE `orderlist` (
@@ -1217,7 +1275,7 @@ CREATE TABLE `orderlist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `orderlist`
+-- 傾印資料表的資料 `orderlist`
 --
 
 INSERT INTO `orderlist` (`order_no`, `customer_id`, `order_status`, `product_amount_total`, `created_time`, `customer_remark`) VALUES
@@ -1461,7 +1519,7 @@ INSERT INTO `orderlist` (`order_no`, `customer_id`, `order_status`, `product_amo
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_details`
+-- 資料表結構 `order_details`
 --
 
 CREATE TABLE `order_details` (
@@ -1477,7 +1535,7 @@ CREATE TABLE `order_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `order_details`
+-- 傾印資料表的資料 `order_details`
 --
 
 INSERT INTO `order_details` (`sid`, `order_no`, `product_id`, `customized_id`, `order_type`, `product_price`, `product_count`, `subtotal`, `created_time`) VALUES
@@ -1798,7 +1856,7 @@ INSERT INTO `order_details` (`sid`, `order_no`, `product_id`, `customized_id`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_details_tobuy`
+-- 資料表結構 `order_details_tobuy`
 --
 
 CREATE TABLE `order_details_tobuy` (
@@ -1813,7 +1871,7 @@ CREATE TABLE `order_details_tobuy` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `order_details_tobuy`
+-- 傾印資料表的資料 `order_details_tobuy`
 --
 
 INSERT INTO `order_details_tobuy` (`sid`, `ready_to_buy`, `member_id`, `product_id`, `customized_id`, `cart_product_type`, `product_count`, `created_time`) VALUES
@@ -2114,7 +2172,7 @@ INSERT INTO `order_details_tobuy` (`sid`, `ready_to_buy`, `member_id`, `product_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product`
+-- 資料表結構 `product`
 --
 
 CREATE TABLE `product` (
@@ -2136,7 +2194,7 @@ CREATE TABLE `product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `product`
+-- 傾印資料表的資料 `product`
 --
 
 INSERT INTO `product` (`sid`, `product_name`, `product_type`, `product_img`, `product_price`, `product_unit`, `product_details`, `product_expire`, `product_inventory`, `product_supplier`, `hot_sale`, `product_status`, `product_hashtag`, `sale_time`, `created_at`) VALUES
@@ -2235,7 +2293,7 @@ INSERT INTO `product` (`sid`, `product_name`, `product_type`, `product_img`, `pr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_management`
+-- 資料表結構 `product_management`
 --
 
 CREATE TABLE `product_management` (
@@ -2249,7 +2307,7 @@ CREATE TABLE `product_management` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_type`
+-- 資料表結構 `product_type`
 --
 
 CREATE TABLE `product_type` (
@@ -2258,7 +2316,7 @@ CREATE TABLE `product_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `product_type`
+-- 傾印資料表的資料 `product_type`
 --
 
 INSERT INTO `product_type` (`product_type_sid`, `product_type`) VALUES
@@ -2272,7 +2330,7 @@ INSERT INTO `product_type` (`product_type_sid`, `product_type`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `recipe`
+-- 資料表結構 `recipe`
 --
 
 CREATE TABLE `recipe` (
@@ -2294,7 +2352,7 @@ CREATE TABLE `recipe` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `recipe`
+-- 傾印資料表的資料 `recipe`
 --
 
 INSERT INTO `recipe` (`recipes_sid`, `recipes_name`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_description`, `recipes_img`, `cooking_create_member_Id`, `recipes_collection`, `recipes_like`, `created_at`) VALUES
@@ -2342,7 +2400,7 @@ INSERT INTO `recipe` (`recipes_sid`, `recipes_name`, `recipes_time_cost`, `recip
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sightseeing_activity_order`
+-- 資料表結構 `sightseeing_activity_order`
 --
 
 CREATE TABLE `sightseeing_activity_order` (
@@ -2361,7 +2419,7 @@ CREATE TABLE `sightseeing_activity_order` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sightseeing_order_details`
+-- 資料表結構 `sightseeing_order_details`
 --
 
 CREATE TABLE `sightseeing_order_details` (
@@ -2382,7 +2440,7 @@ CREATE TABLE `sightseeing_order_details` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `statement_of_account`
+-- 資料表結構 `statement_of_account`
 --
 
 CREATE TABLE `statement_of_account` (
@@ -2398,7 +2456,7 @@ CREATE TABLE `statement_of_account` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `supervisor_list`
+-- 資料表結構 `supervisor_list`
 --
 
 CREATE TABLE `supervisor_list` (
@@ -2410,7 +2468,7 @@ CREATE TABLE `supervisor_list` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `supervisor_list`
+-- 傾印資料表的資料 `supervisor_list`
 --
 
 INSERT INTO `supervisor_list` (`supervisor_id`, `name`, `email`, `password`, `creat_at`) VALUES
@@ -2420,83 +2478,89 @@ INSERT INTO `supervisor_list` (`supervisor_id`, `name`, `email`, `password`, `cr
 (5, 'farmer', 'farmer26@farmer26.com', 'd9ba32f9b0dbd1561607ccab6f998ef6dffe4f6b', '2022-06-07 14:52:12');
 
 --
--- Indexes for dumped tables
+-- 已傾印資料表的索引
 --
 
 --
--- Indexes for table `changeproduct_01`
+-- 資料表索引 `changeproduct_01`
 --
 ALTER TABLE `changeproduct_01`
   ADD PRIMARY KEY (`product_sid`);
 
 --
--- Indexes for table `change_01`
+-- 資料表索引 `change_01`
 --
 ALTER TABLE `change_01`
   ADD PRIMARY KEY (`change_sid`);
 
 --
--- Indexes for table `change_product`
+-- 資料表索引 `change_product`
 --
 ALTER TABLE `change_product`
   ADD PRIMARY KEY (`change_sid`);
 
 --
--- Indexes for table `contact_us`
+-- 資料表索引 `company`
+--
+ALTER TABLE `company`
+  ADD PRIMARY KEY (`company_id`);
+
+--
+-- 資料表索引 `contact_us`
 --
 ALTER TABLE `contact_us`
   ADD PRIMARY KEY (`sid`);
 
 --
--- Indexes for table `customer_data`
+-- 資料表索引 `customer_data`
 --
 ALTER TABLE `customer_data`
   ADD PRIMARY KEY (`customer_id`);
 
 --
--- Indexes for table `customized_lunch`
+-- 資料表索引 `customized_lunch`
 --
 ALTER TABLE `customized_lunch`
   ADD PRIMARY KEY (`sid`);
 
 --
--- Indexes for table `firm`
+-- 資料表索引 `firm`
 --
 ALTER TABLE `firm`
   ADD PRIMARY KEY (`firm_id`);
 
 --
--- Indexes for table `firm_type`
+-- 資料表索引 `firm_type`
 --
 ALTER TABLE `firm_type`
   ADD PRIMARY KEY (`firm_type_id`);
 
 --
--- Indexes for table `foodlist`
+-- 資料表索引 `foodlist`
 --
 ALTER TABLE `foodlist`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `orderlist`
+-- 資料表索引 `orderlist`
 --
 ALTER TABLE `orderlist`
   ADD PRIMARY KEY (`order_no`);
 
 --
--- Indexes for table `order_details`
+-- 資料表索引 `order_details`
 --
 ALTER TABLE `order_details`
   ADD PRIMARY KEY (`sid`);
 
 --
--- Indexes for table `order_details_tobuy`
+-- 資料表索引 `order_details_tobuy`
 --
 ALTER TABLE `order_details_tobuy`
   ADD PRIMARY KEY (`sid`);
 
 --
--- Indexes for table `product`
+-- 資料表索引 `product`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`sid`),
@@ -2507,167 +2571,173 @@ ALTER TABLE `product`
   ADD KEY `product_inventory` (`product_inventory`);
 
 --
--- Indexes for table `product_management`
+-- 資料表索引 `product_management`
 --
 ALTER TABLE `product_management`
   ADD PRIMARY KEY (`sid`);
 
 --
--- Indexes for table `product_type`
+-- 資料表索引 `product_type`
 --
 ALTER TABLE `product_type`
   ADD PRIMARY KEY (`product_type_sid`);
 
 --
--- Indexes for table `recipe`
+-- 資料表索引 `recipe`
 --
 ALTER TABLE `recipe`
   ADD PRIMARY KEY (`recipes_sid`);
 
 --
--- Indexes for table `sightseeing_activity_order`
+-- 資料表索引 `sightseeing_activity_order`
 --
 ALTER TABLE `sightseeing_activity_order`
   ADD PRIMARY KEY (`order_no`);
 
 --
--- Indexes for table `sightseeing_order_details`
+-- 資料表索引 `sightseeing_order_details`
 --
 ALTER TABLE `sightseeing_order_details`
   ADD PRIMARY KEY (`sid`);
 
 --
--- Indexes for table `statement_of_account`
+-- 資料表索引 `statement_of_account`
 --
 ALTER TABLE `statement_of_account`
   ADD PRIMARY KEY (`sid`);
 
 --
--- Indexes for table `supervisor_list`
+-- 資料表索引 `supervisor_list`
 --
 ALTER TABLE `supervisor_list`
   ADD PRIMARY KEY (`supervisor_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- 在傾印的資料表使用自動遞增(AUTO_INCREMENT)
 --
 
 --
--- AUTO_INCREMENT for table `changeproduct_01`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `changeproduct_01`
 --
 ALTER TABLE `changeproduct_01`
   MODIFY `product_sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `change_01`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `change_01`
 --
 ALTER TABLE `change_01`
   MODIFY `change_sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=213;
 
 --
--- AUTO_INCREMENT for table `change_product`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `change_product`
 --
 ALTER TABLE `change_product`
   MODIFY `change_sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11532;
 
 --
--- AUTO_INCREMENT for table `contact_us`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `company`
+--
+ALTER TABLE `company`
+  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `contact_us`
 --
 ALTER TABLE `contact_us`
   MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 
 --
--- AUTO_INCREMENT for table `customer_data`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `customer_data`
 --
 ALTER TABLE `customer_data`
   MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=534;
 
 --
--- AUTO_INCREMENT for table `customized_lunch`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `customized_lunch`
 --
 ALTER TABLE `customized_lunch`
   MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
--- AUTO_INCREMENT for table `firm`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `firm`
 --
 ALTER TABLE `firm`
   MODIFY `firm_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
--- AUTO_INCREMENT for table `firm_type`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `firm_type`
 --
 ALTER TABLE `firm_type`
   MODIFY `firm_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `foodlist`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `foodlist`
 --
 ALTER TABLE `foodlist`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT for table `orderlist`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `orderlist`
 --
 ALTER TABLE `orderlist`
   MODIFY `order_no` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
 
 --
--- AUTO_INCREMENT for table `order_details`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `order_details`
 --
 ALTER TABLE `order_details`
   MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=314;
 
 --
--- AUTO_INCREMENT for table `order_details_tobuy`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `order_details_tobuy`
 --
 ALTER TABLE `order_details_tobuy`
   MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=301;
 
 --
--- AUTO_INCREMENT for table `product`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `product`
 --
 ALTER TABLE `product`
   MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
--- AUTO_INCREMENT for table `product_management`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `product_management`
 --
 ALTER TABLE `product_management`
   MODIFY `sid` int(50) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `product_type`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `product_type`
 --
 ALTER TABLE `product_type`
   MODIFY `product_type_sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `recipe`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `recipe`
 --
 ALTER TABLE `recipe`
   MODIFY `recipes_sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
--- AUTO_INCREMENT for table `sightseeing_activity_order`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `sightseeing_activity_order`
 --
 ALTER TABLE `sightseeing_activity_order`
   MODIFY `order_no` int(255) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `sightseeing_order_details`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `sightseeing_order_details`
 --
 ALTER TABLE `sightseeing_order_details`
   MODIFY `sid` int(50) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `statement_of_account`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `statement_of_account`
 --
 ALTER TABLE `statement_of_account`
   MODIFY `sid` int(50) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `supervisor_list`
+-- 使用資料表自動遞增(AUTO_INCREMENT) `supervisor_list`
 --
 ALTER TABLE `supervisor_list`
   MODIFY `supervisor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
