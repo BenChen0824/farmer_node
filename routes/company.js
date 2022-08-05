@@ -10,27 +10,6 @@ const upload = require(__dirname + '/../modules/upload_img');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
-// const getUserCart = async (member_id) => {
-//     const sql = `SELECT p.*, odt.* 
-// FROM order_details_tobuy odt 
-// JOIN product p 
-// ON odt.product_id=p.sid 
-// WHERE odt.member_id=? && odt.cart_product_type=1
-// ORDER BY odt.created_time`;
-
-//     const sqlcus = `SELECT cusp.*, odt.* 
-// FROM order_details_tobuy odt 
-// JOIN customized_lunch cusp 
-// ON odt.customized_id=cusp.sid 
-// WHERE odt.member_id=? && odt.cart_product_type=2
-// ORDER BY odt.created_time`;
-
-//     const [r] = await db.query(sql, [member_id]);
-//     console.log(r);
-//     const [r2] = await db.query(sqlcus, [member_id]);
-//     console.log(r2);
-//     return [...r, ...r2];
-// };
 
 router.route('/login').post(async (req, res) => {
     const output = {
@@ -47,12 +26,14 @@ router.route('/login').post(async (req, res) => {
         output.error = '帳號錯誤';
         return res.json(output);
     }
-
+    console.log(req.body.company_password);
+    console.log(r1[0].company_password);
     output.success = await bcrypt.compare(req.body.company_password, r1[0].company_password);
     // console.log(await bcrypt.compare(req.body.company_password, r1[0].company_password));
     if (!output.success) {
         output.code = 402;
         output.error = '密碼錯誤';
+        return res.json(output);
     } else {
         const token = jwt.sign(
             {
@@ -77,17 +58,15 @@ router.route('/login').post(async (req, res) => {
             farm_address: r1[0].farm_address,
             company_email: r1[0].company_email,
             company_password: r1[0].company_password,
-
-
-
+            creat_at:r1[0].creat_at
         };
-        output.cart = await getUserCart(r1[0].customer_id);
+        
     }
 
     res.json(await output);
 });
 
-router.post('/signup', async (req, res) => {
+router.post('/register', async (req, res) => {
     const output = {
         success: false,
         error: '',
@@ -96,9 +75,9 @@ router.post('/signup', async (req, res) => {
 
     const sql01 =
         'INSERT INTO `company`(`farm_name`, `farm_tax_id`, `company_name`,`company_id_number`,`company_phone`,`company_email`,company_password ,creat_at``) VALUES (?,?,?,?,?,?,?,NOW())';
-    const { company_name, company_email, password } = req.body;
+    const { company_name, company_email, company_password } = req.body;
     const pass_hash = bcrypt.hashSync(`${password}`, 10);
-    const [result] = await db.query(sql01, [username, email, pass_hash]);
+    const [result] = await db.query(sql01, [company_name, company_email, pass_hash]);
 
     if (result.affectedRows === 1) {
         output.success = true;
@@ -107,14 +86,14 @@ router.post('/signup', async (req, res) => {
     res.json(output);
 });
 
-router.get('/data', async (req, res) => {
+router.get('/home ', async (req, res) => {
     const sql02 = 'SSELECT * FROM company WHERE company_email=?';
     const [r2] = await db.query(sql, [req.body.company_email]);
-    r2.forEach((el) => (el.birthday = todateString(el.birthday)));
+    r2.forEach((el) => (el.creat_at = todateString(el.creat_at)));
     res.json(r2);
 });
 
-router.put('/data', async (req, res) => {
+router.put('/home', async (req, res) => {
     const output = {
         success: false,
         error: '',
@@ -122,7 +101,7 @@ router.put('/data', async (req, res) => {
     };
 
     const sql03 =
-        'UPDATE company SET farm_type=?, farm_name=?, farm_tax_id=?, company_name=?, company_id_number=?, company_phone=?, farm_tel=?, farm_fax=?, farm_address=?, company_email=?, company_password=?, WHERE company.customer_id=?';
+        'UPDATE company SET farm_type=?, farm_name=?, farm_tax_id=?, company_name=?, company_id_number=?, company_phone=?, farm_tel=?, farm_fax=?, farm_address=?, company_email=?, company_password=?, WHERE company.company_id=?';
 
     const {
         farm_type,
@@ -136,8 +115,9 @@ router.put('/data', async (req, res) => {
         farm_address,
         company_email,
         company_password,
-        customer_id,
+        company_id,
     } = req.body;
+
     const pass_hash = bcrypt.hashSync(`${password}`, 10);
     const [result] = await db.query(sql03, [
         farm_type,
@@ -150,8 +130,8 @@ router.put('/data', async (req, res) => {
         farm_fax,
         farm_address,
         company_email,
-        company_password,
-        customer_id,
+        pass_hash,
+        company_id,
     ]);
 
     if (result.affectedRows === 1) {
