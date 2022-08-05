@@ -13,16 +13,22 @@ router.post("/addpoints", async (req, res) => {
 });
 
 router.post("/coupon", async (req, res) => {
-    // const sql =
-    // 'UPDATE `coupon_01` SET `change_coupon`=? WHERE change_memberid=?';
-    const sql2 = 'UPDATE `coupon_01` SET `change_coupon`=? WHERE change_memberid=?';
-    const{change_points, change_memberid, change_coupon} = req.body
+    //const sql2 = 'UPDATE `coupon_01` SET `change_coupon`=? WHERE change_memberid=?';
+    //const sql2 = 'UPDATE `coupon_01` SET `change_coupon`=? `change_spainpoints`=? WHERE change_memberid=?';
+    const sql2 = 'UPDATE `coupon_01` SET `change_points`=?, `change_coupon`=? WHERE change_memberid=?';
+    const{change_memberid, change_coupon, change_spainpoints} = req.body
     //比對會員ID
-    const [result2] = await db.query(sql2, [change_coupon, change_memberid]);
+    const [result2] = await db.query(sql2, [change_coupon, change_spainpoints, change_memberid]);
     console.log(result2)
     res.json(result2);
 });
 
+//拿兌換紀錄資料
+// router.get("/gamedata", async (req, res) => {
+//     const sql1= 'SELECT * FROM `coupon_01` WHERE 1'
+//     const [r1] = await db.query(sql1);
+//     res.json(r1)
+//    });
 
 // // app.listen(process.env.PORT, () => {
 // //     console.log(`points started: ${process.env.PORT}`);

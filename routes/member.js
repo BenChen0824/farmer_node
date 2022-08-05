@@ -164,4 +164,38 @@ router.post('/profile', upload.single('file'), async (req, res) => {
     console.log(data);
 });
 
+router.get('/getintro', async (req,res)=>{
+    const sql10 = "SELECT * FROM customer_profile WHERE customer_id=?";
+    const [r10] = await db.query(sql10, req.header('loginUser'));
+    res.json(r10);
+})
+
+router.post('/editintro', async(req,res)=>{
+  const output = {
+    success: false,
+    error: '',
+    code:0
+  }
+
+  const {username, intro, customer_id} = req.body
+
+  const sql07 = "SELECT * FROM `customer_profile` WHERE customer_id=?"
+  const r7 = await db.query(sql07, [customer_id])
+  console.log(r7[0].length)
+
+  if(r7[0].length===0){
+    const sql08 = "INSERT INTO `customer_profile`(`customer_id`) VALUES (?)"
+    const [r8] = await db.query(sql08, [customer_id])
+  }
+
+  const sql09 = 'UPDATE customer_profile SET username=?, intro=? WHERE customer_profile.customer_id=?'
+  const [r9] = await db.query(sql09, [username, intro, customer_id])
+
+  if(r9.affectedRows === 1){
+    output.success = true
+  }
+
+  res.json([r9])
+})
+
 module.exports = router;

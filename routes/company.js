@@ -1,0 +1,185 @@
+//設定
+require('dotenv').config();
+// 1.引入 express
+const express = require('express');
+//SQL連線模組放進去
+const db = require(__dirname + '/../modules/mysql-connect');
+const bcrypt = require('bcryptjs');
+const todateString = require(__dirname + '/../modules/date_format');
+const upload = require(__dirname + '/../modules/upload_img');
+const jwt = require('jsonwebtoken');
+const router = express.Router();
+
+// const getUserCart = async (member_id) => {
+//     const sql = `SELECT p.*, odt.* 
+// FROM order_details_tobuy odt 
+// JOIN product p 
+// ON odt.product_id=p.sid 
+// WHERE odt.member_id=? && odt.cart_product_type=1
+// ORDER BY odt.created_time`;
+
+//     const sqlcus = `SELECT cusp.*, odt.* 
+// FROM order_details_tobuy odt 
+// JOIN customized_lunch cusp 
+// ON odt.customized_id=cusp.sid 
+// WHERE odt.member_id=? && odt.cart_product_type=2
+// ORDER BY odt.created_time`;
+
+//     const [r] = await db.query(sql, [member_id]);
+//     console.log(r);
+//     const [r2] = await db.query(sqlcus, [member_id]);
+//     console.log(r2);
+//     return [...r, ...r2];
+// };
+
+router.route('/login').post(async (req, res) => {
+    const output = {
+        success: false,
+        error: '',
+        code: 0,
+    };
+
+    const sql = "SELECT * FROM company WHERE company_email=?"; //
+        const [r1] = await db.query(sql, [req.body.company_email]);//
+
+    if (!r1.length) {
+        output.code = 401;
+        output.error = '帳號錯誤';
+        return res.json(output);
+    }
+
+    output.success = await bcrypt.compare(req.body.company_password, r1[0].company_password);
+    // console.log(await bcrypt.compare(req.body.company_password, r1[0].company_password));
+    if (!output.success) {
+        output.code = 402;
+        output.error = '密碼錯誤';
+    } else {
+        const token = jwt.sign(
+            {
+                company_id: r1[0].company_id,
+                company_email: r1[0].company_email,
+                farm_name: r1[0].farm_name,
+            },
+            process.env.JWT_SECRET
+        );
+
+        output.data = {
+            token,
+            company_id: r1[0].company_id,
+            farm_type: r1[0].farm_type,
+            farm_name: r1[0].farm_name,
+            farm_tax_id: r1[0].farm_tax_id,
+            company_name: r1[0].company_name,
+            company_id_number: r1[0].company_id_number,
+            company_phone: r1[0].company_phone,
+            farm_tel: r1[0].farm_tel,
+            farm_fax: r1[0].farm_fax,
+            farm_address: r1[0].farm_address,
+            company_email: r1[0].company_email,
+            company_password: r1[0].company_password,
+
+
+
+        };
+        output.cart = await getUserCart(r1[0].customer_id);
+    }
+
+    res.json(await output);
+});
+
+router.post('/signup', async (req, res) => {
+    const output = {
+        success: false,
+        error: '',
+        code: 0,
+    };
+
+    const sql01 =
+        'INSERT INTO `company`(`farm_name`, `farm_tax_id`, `company_name`,`company_id_number`,`company_phone`,`company_email`,company_password ,creat_at``) VALUES (?,?,?,?,?,?,?,NOW())';
+    const { company_name, company_email, password } = req.body;
+    const pass_hash = bcrypt.hashSync(`${password}`, 10);
+    const [result] = await db.query(sql01, [username, email, pass_hash]);
+
+    if (result.affectedRows === 1) {
+        output.success = true;
+    }
+
+    res.json(output);
+});
+
+router.get('/data', async (req, res) => {
+    const sql02 = 'SSELECT * FROM company WHERE company_email=?';
+    const [r2] = await db.query(sql, [req.body.company_email]);
+    r2.forEach((el) => (el.birthday = todateString(el.birthday)));
+    res.json(r2);
+});
+
+router.put('/data', async (req, res) => {
+    const output = {
+        success: false,
+        error: '',
+        code: 0,
+    };
+
+    const sql03 =
+        'UPDATE company SET farm_type=?, farm_name=?, farm_tax_id=?, company_name=?, company_id_number=?, company_phone=?, farm_tel=?, farm_fax=?, farm_address=?, company_email=?, company_password=?, WHERE company.customer_id=?';
+
+    const {
+        farm_type,
+        farm_name,
+        farm_tax_id,
+        company_name,
+        company_id_number,
+        company_phone,
+        farm_tel,
+        farm_fax,
+        farm_address,
+        company_email,
+        company_password,
+        customer_id,
+    } = req.body;
+    const pass_hash = bcrypt.hashSync(`${password}`, 10);
+    const [result] = await db.query(sql03, [
+        farm_type,
+        farm_name,
+        farm_tax_id,
+        company_name,
+        company_id_number,
+        company_phone,
+        farm_tel,
+        farm_fax,
+        farm_address,
+        company_email,
+        company_password,
+        customer_id,
+    ]);
+
+    if (result.affectedRows === 1) {
+        output.success = true;
+    }
+
+    res.json(output);
+});
+
+// router.get('/collections', async (req, res) => {
+//     const sql04 = `SELECT * FROM customer_mycollections_product WHERE customer_id=? ORDER BY product_id DESC`;
+//     const [r4] = await db.query(sql04, req.header('loginUser'));
+//     res.json(r4);
+// });
+
+// router.delete('/deleteproduct', async (req, res) => {
+//     const sql06 =
+//         'DELETE FROM customer_mycollections_product WHERE customer_id=? AND product_id=?';
+//     const [r6] = await db.query(sql06, [
+//         req.header('customer_id'),
+//         req.header('product_id'),
+//     ]);
+//     res.json(r6);
+// });
+
+router.post('/profile', upload.single('file'), async (req, res) => {
+    const data = await res.json(req.file);
+    console.log(data);
+});
+
+module.exports = router;
