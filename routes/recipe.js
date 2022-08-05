@@ -8,20 +8,22 @@ const router = express.Router();
 
 const getRecipeHandler = async (req, res) => {
     let output = {
-      perPage: 12,
-      page: 1,
-      totalRows: 0,
-      totalPage: 0,
-      code: 0,
-      error: "",
-      rows: []
+      perPage: 12, // 每頁有幾筆
+      page: 1, // 用戶看第幾頁
+      totalRows: 0, // 總筆數
+      totalPage: 0, // 總頁數
+      code: 0, // 
+      error: "", // 
+      rows: [] // 資料內容為陣列
     };
 
     let page = +req.query.page || 1;
+    // 讓使用者看選擇的頁數，或是第一頁，最前面的 "+"(正號) 是為了讓字串變數值
     if (page < 1) {
       output.code = 410;
       output.error = "頁面太小";
       return output;
+      // return res.redirect('?page=1')，轉向
     }
 
     const typeVal = Number(req.query.type);
@@ -60,6 +62,7 @@ const getRecipeHandler = async (req, res) => {
         output.code = 420;
         output.error = "頁面太大";
         return output;
+        // return res.redirect(`?page=${totalPages}`)，轉向
       }
     }
     
@@ -67,7 +70,9 @@ const getRecipeHandler = async (req, res) => {
       (page - 1) * output.perPage
     },${output.perPage}`;
     const [r2] = await db.query(sql02);
+    // 拿到的是分頁的資料，後放入output的資料陣列中
     output.rows = r2.map((el) => {
+      // 
       return {
         ...el,
         product_img: JSON.parse(el.product_img),
@@ -77,12 +82,54 @@ const getRecipeHandler = async (req, res) => {
 
     output.code = 200;
     output = { ...output, page, totalRows, totalPage };
+    // 先展開物件，放入output、page、totalRows、totalPage等變數，取代原來的資料內容
 
     return output;
   };
 
 
-  // 分隔線
+
+  // 分隔線，以下為C
+
+// router.get('/', async (req, res) => {
+// const sqlInsert = "INSERT INTO `recipe`(`recipes_sid`, `recipes_name`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_description`, `recipes_img`, `cooking_create_member_Id`, `recipes_collection`, `recipes_like`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
+// const [r1] = await db.query(sqlInsert, [req.body.recipes_sid ,req.body.recipes_name ,req.body.recipes_time_cost ,req.body.recipes_portion ,req.body.recipes_calories ,req.body.recipes_type ,req.body.recipes_cooking_degree ,req.body.recipes_ingredient ,req.body.recipes_cooking_method ,req.body.recipes_description ,req.body.recipes_img ,req.body.cooking_create_member_Id ,req.body.recipes_collection ,req.body.recipes_like ]);
+//   r1.forEach((el) => (el.recipes_sid = todateString(el.recipes_sid)));
+//   res.json(r1);
+// });
+
+
+
+  // 分隔線，以下為R
+
+// router.post('/', async (req, res) => {
+//   const sqlSelect = "SELECT * FROM recipe WHERE recipes_sid=?";
+//   const [r2] = await db.query(sql, [req.body.recipes_sid]);
+//   r2.forEach((el) => (el.creat_at = todateString(el.creat_at)));
+//   res.json(r2);
+// });
+
+
+  // 分隔線，以下為U
+
+// router.post('/', async (req, res) => {
+// const sqlUpdate = "UPDATE `recipe` SET `recipes_sid`=? ,`recipes_name`=? ,`recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_cooking_method`=? ,`recipes_description`=? ,`recipes_img`=? ,`cooking_create_member_Id`=? ,`recipes_collection`=? ,`recipes_like`=? ,`created_at`=? WHERE `recipes_sid?";
+//   const [r3] = await db.query(sql, [req.body.point, req.body.recipes_sid]);
+//   res.json('r3')
+// });
+
+
+
+  // 分隔線，以下為D
+
+// router.delete('/', async (req, res) => {
+// const sqlDelete = "DELETE FROM `recipe` WHERE recipes_sid=?"
+//   const [r4] = await db.query(sql, [req.body.point, req.body.recipes_sid]);
+//   res.json('r4')
+// });
+
+
+
 
 
   router.route("/").get(async (req, res) => {
@@ -94,26 +141,7 @@ const getRecipeHandler = async (req, res) => {
   module.exports = router;
 
 
-
-
-// router.post('/register', async (req, res) => {
-//   const output = {
-//       success: false,
-//       error: '',
-//       code: 0,
-//   };
-// const sqlInsert = "INSERT INTO `recipe`(`recipes_sid`, `recipes_name`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_description`, `recipes_img`, `cooking_create_member_Id`, `recipes_collection`, `recipes_like`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
-
-//   const { company_name, company_email, company_password } = req.body;
-//   const pass_hash = bcrypt.hashSync(`${password}`, 10);
-//   const [result] = await db.query(sqlInsert, [company_name, company_email, pass_hash]);
-
-//   if (result.affectedRows === 1) {
-//       output.success = true;
-//   }
-
-//   res.json(output);
-// });
+  // "SELECT COUNT(1) num FROM recipe"，計算資料筆數
 
 
 
@@ -179,7 +207,6 @@ const getRecipeHandler = async (req, res) => {
 // if (result.affectedRows === 1) {
 //     output.success = true;
 // }
-
 // res.json(output);
 // });
 
@@ -198,7 +225,6 @@ const getRecipeHandler = async (req, res) => {
 
 
 //   output.data = {
-//     token,
 //     recipes_sid: r1[0].recipes_sid,
 //     recipes_name: r1[0].recipes_name,
 //     recipes_time_cost: r1[0].recipes_time_cost,
@@ -214,14 +240,13 @@ const getRecipeHandler = async (req, res) => {
 //     recipes_collection:r1[0].recipes_collection
 //     recipes_like:r1[0].recipes_like
 //     created_at:r1[0].created_at
+//   };
 
 
 
 
 
   // 第67行 output.rows = r2.map((el) => {} 的用意，大誇號裡的product_img: JSON.parse(el.product_img) el.product_img 是把一個JSON字串轉換成 JavaScript的數值或是物件
-
-  // 第18行 +req.query.page || 1; +?
 
   // 第25行 const typeVal = Number(req.query.type) 的 Number(req.query.type)是哪邊的type抓資料
 
