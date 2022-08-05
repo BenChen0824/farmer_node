@@ -287,7 +287,7 @@ router.route('/addtoorderlist').post(async (req, res) => {
         const [rDEL] = await db.query(sqlDEL, [i.sid]);
     }
 
-    res.json(await getUserCart(1));
+    res.json(await getUserCart(req.body.member_id));
 
     //sid qty
 });
