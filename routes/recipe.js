@@ -1,8 +1,10 @@
+require('dotenv').config();
 const express = require("express");
 const db = require(__dirname + "/../modules/mysql-connect");
-const router = express.Router();
 const todateString = require(__dirname + '/../modules/date_format');
 const upload = require(__dirname + '/../modules/upload_img');
+const router = express.Router();
+
 
 const getRecipeHandler = async (req, res) => {
     let output = {
@@ -93,21 +95,131 @@ const getRecipeHandler = async (req, res) => {
 
 
 
-  // const sqlInsert = "INSERT INTO `recipe`(`recipes_sid`, `recipes_name`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_description`, `recipes_img`, `cooking_create_member_Id`, `recipes_collection`, `recipes_like`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())"
 
-  // const sqlSelect = "SELECT * FROM recipe WHERE customer_id=?";
+// router.post('/register', async (req, res) => {
+//   const output = {
+//       success: false,
+//       error: '',
+//       code: 0,
+//   };
+// const sqlInsert = "INSERT INTO `recipe`(`recipes_sid`, `recipes_name`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_description`, `recipes_img`, `cooking_create_member_Id`, `recipes_collection`, `recipes_like`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
 
-  // const sqlUpdate = "UPDATE `recipe` SET `recipes_sid`=? ,`recipes_name`=? ,`recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_cooking_method`=? ,`recipes_description`=? ,`recipes_img`=? ,`cooking_create_member_Id`=? ,`recipes_collection`=? ,`recipes_like`=? ,`created_at`=? WHERE `recipes_sid` = $recipes_sid "
+//   const { company_name, company_email, company_password } = req.body;
+//   const pass_hash = bcrypt.hashSync(`${password}`, 10);
+//   const [result] = await db.query(sqlInsert, [company_name, company_email, pass_hash]);
 
-  // const sqlDelete = "DELETE FROM `recipe` WHERE 0"
+//   if (result.affectedRows === 1) {
+//       output.success = true;
+//   }
+
+//   res.json(output);
+// });
+
+
+
+
+
+// const sqlSelect = "SELECT * FROM recipe WHERE customer_id=?";
+
+// router.get('/home ', async (req, res) => {
+//   const sqlSelect = "SELECT * FROM recipe WHERE customer_id=?";
+//   const [r2] = await db.query(sql, [req.body.company_email]);
+//   r2.forEach((el) => (el.creat_at = todateString(el.creat_at)));
+//   res.json(r2);
+// });
+
+
+
+// router.put('/home', async (req, res) => {
+//   const output = {
+//       success: false,
+//       error: '',
+//       code: 0,
+//   };
+
+// const sqlUpdate = "UPDATE `recipe` SET `recipes_sid`=? ,`recipes_name`=? ,`recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_cooking_method`=? ,`recipes_description`=? ,`recipes_img`=? ,`cooking_create_member_Id`=? ,`recipes_collection`=? ,`recipes_like`=? ,`created_at`=? WHERE `recipes_sid?";
+
+//   const {
+//     recipes_sid,
+//     recipes_name,
+//     recipes_time_cost,
+//     recipes_portion,
+//     recipes_calories,
+//     recipes_type,
+//     recipes_cooking_degree,
+//     recipes_ingredient,
+//     recipes_cooking_method,
+//     recipes_description,
+//     recipes_img,
+//     cooking_create_member_Id,
+//     recipes_collection,
+//     recipes_like,
+//     created_at,
+// } = req.body;
+
+// const pass_hash = bcrypt.hashSync(`${password}`, 10);
+// const [result] = await db.query(sqlUpdate, [
+//     recipes_sid,
+//     recipes_name,
+//     recipes_time_cost,
+//     recipes_portion,
+//     recipes_calories,
+//     recipes_type,
+//     recipes_cooking_degree,
+//     recipes_ingredient,
+//     recipes_cooking_method,
+//     recipes_description,
+//     recipes_img,
+//     cooking_create_member_Id,
+//     recipes_collection,
+//     recipes_like,
+//     created_at,
+// ]);
+
+// if (result.affectedRows === 1) {
+//     output.success = true;
+// }
+
+// res.json(output);
+// });
+
+
+
+// router.delete('/deleteproduct', async (req, res) => {
+// const sqlDelete = "DELETE FROM `recipe` WHERE recipes_sid=?"
+//     const [r6] = await db.query(sqlDelete, [
+//         req.header('customer_id'),
+//         req.header('product_id'),
+//     ]);
+//     res.json(r6);
+// });
+
+
+
+
+//   output.data = {
+//     token,
+//     recipes_sid: r1[0].recipes_sid,
+//     recipes_name: r1[0].recipes_name,
+//     recipes_time_cost: r1[0].recipes_time_cost,
+//     recipes_portion: r1[0].recipes_portion,
+//     recipes_calories: r1[0].recipes_calories,
+//     recipes_type: r1[0].recipes_type,
+//     recipes_cooking_degree: r1[0].recipes_cooking_degree,
+//     recipes_ingredient: r1[0].recipes_ingredient,
+//     recipes_cooking_method: r1[0].recipes_cooking_method,
+//     recipes_description: r1[0].recipes_description,
+//     recipes_img: r1[0].recipes_img,
+//     cooking_create_member_Id: r1[0].cooking_create_member_Id,
+//     recipes_collection:r1[0].recipes_collection
+//     recipes_like:r1[0].recipes_like
+//     created_at:r1[0].created_at
+
 
 
 
 
   // 第67行 output.rows = r2.map((el) => {} 的用意，大誇號裡的product_img: JSON.parse(el.product_img) el.product_img 是把一個JSON字串轉換成 JavaScript的數值或是物件
-
-
-
 
   // 第18行 +req.query.page || 1; +?
 
