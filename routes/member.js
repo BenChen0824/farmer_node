@@ -160,12 +160,15 @@ router.delete('/deleteproduct', async (req, res) => {
 });
 
 router.post('/profile', upload.single('file'), async (req, res) => {
-    const data = await res.json(req.file);
-    console.log(data);
+    const customer_id = req.header('customer_id')
+    const sql11 = 'UPDATE customer_data SET profile_img=? WHERE customer_data.customer_id=?'
+    const data = await res.json(req.body);
+    const [r11] = await db.query(sql11, [data.req.file.originalname, customer_id])
+    console.log(r11)
 });
 
 router.get('/getintro', async (req,res)=>{
-    const sql10 = "SELECT * FROM customer_profile WHERE customer_id=?";
+    const sql10 = "SELECT nickname, intro, profile_img FROM customer_data WHERE customer_id=?";
     const [r10] = await db.query(sql10, req.header('loginUser'));
     res.json(r10);
 })
@@ -177,19 +180,10 @@ router.post('/editintro', async(req,res)=>{
     code:0
   }
 
-  const {username, intro, customer_id} = req.body
+  const {nickname, intro, customer_id} = req.body
 
-  const sql07 = "SELECT * FROM `customer_profile` WHERE customer_id=?"
-  const r7 = await db.query(sql07, [customer_id])
-  console.log(r7[0].length)
-
-  if(r7[0].length===0){
-    const sql08 = "INSERT INTO `customer_profile`(`customer_id`) VALUES (?)"
-    const [r8] = await db.query(sql08, [customer_id])
-  }
-
-  const sql09 = 'UPDATE customer_profile SET username=?, intro=? WHERE customer_profile.customer_id=?'
-  const [r9] = await db.query(sql09, [username, intro, customer_id])
+  const sql09 = 'UPDATE customer_data SET nickname=?, intro=? WHERE customer_data.customer_id=?'
+  const [r9] = await db.query(sql09, [nickname, intro, customer_id])
 
   if(r9.affectedRows === 1){
     output.success = true
