@@ -12,8 +12,8 @@ const getRecipeHandler = async (req, res) => {
       page: 1, // 用戶看第幾頁
       totalRows: 0, // 總筆數
       totalPage: 0, // 總頁數
-      code: 0, // 
-      error: "", // 
+      code: 0, // 辨識狀態，初始值為0
+      error: "", // 錯誤
       rows: [] // 資料內容為陣列
     };
 
@@ -138,7 +138,7 @@ const getRecipeHandler = async (req, res) => {
   });
 
 
-  module.exports = router;
+
 
 
   // "SELECT COUNT(1) num FROM recipe"，計算資料筆數
@@ -260,6 +260,40 @@ const getRecipeHandler = async (req, res) => {
 
   // 第53行 const [[{ totalRows }]] = await db.query(sql01) 的 await db.query意思
 
-  // 第75、76行 output.code = 200  跟  output = { ...output, page, totalRows, totalPage } 的意思
-
   // 如何連接到前端
+
+  // JWT_SECRET=aq5f8s5g9h4hd826sf1f
+
+  router.get('/recipe', async (req, res) => {
+  const output = {
+      success: false,
+      error: '',
+      code: 0,
+    };
+
+    const sql = await db.query('SELECT * FROM `recipe` WHERE 1');
+
+    output.success=true;
+
+    res.json(sql[0])
+  })
+
+  router.get('/each/:recipes_sid', async (req, res) => {
+    if(!req.params.recipes_sid){
+      return
+    }
+    const sqleach = "SELECT * FROM `recipe` WHERE 1=1 and recipes_sid= " + req.params.recipes_sid;
+    const [recipesdata] = await db.query(sqleach);
+    res.json(recipesdata[0])
+    })
+
+    router.get('/updaterecipe/:recipes_sid', async (req, res) => {
+      if(!req.params.recipes_sid){
+        return
+      }
+      const sqleach = "SELECT * FROM `recipe` WHERE 1=1 and recipes_sid= " + req.params.recipes_sid;
+      const [recipesdata] = await db.query(sqleach);
+      res.json(recipesdata[0])
+      })
+  
+  module.exports=router;
