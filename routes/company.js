@@ -67,7 +67,7 @@ router.route('/login').post(async (req, res) => {
             farm_address: r1[0].farm_address,
             company_email: r1[0].company_email,
             company_password: r1[0].company_password,
-            creat_at:r1[0].creat_at
+            creat_at: r1[0].creat_at
         };
         
     }
@@ -83,7 +83,7 @@ router.post('/register', async (req, res) => {
     };
 
     const sql01 =
-        'INSERT INTO `company`(`farm_name`, `farm_tax_id`, `company_name`,`company_id_number`,`company_phone`,`company_email`,company_password ,creat_at``) VALUES (?,?,?,?,?,?,?,NOW())';
+        'INSERT INTO `company`(`farm_type`,`farm_name`, `farm_tax_id`, `company_name`,`company_id_number`,`company_phone`, `farm_tel`, `farm_fax`, `farm_address`,`company_email`,`company_password` ,`creat_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,NOW())';
     const { company_name, company_email, company_password } = req.body;
     const pass_hash = bcrypt.hashSync(`${company_password}`, 10);
     const [result] = await db.query(sql01, [company_name, company_email, pass_hash]);
@@ -110,7 +110,8 @@ router.put('/home', async (req, res) => {
     };
 
     const sql03 =
-        'UPDATE company SET farm_type=?, farm_name=?, farm_tax_id=?, company_name=?, company_id_number=?, company_phone=?, farm_tel=?, farm_fax=?, farm_address=?, company_email=?, company_password=?, WHERE company.company_id=?';
+    'UPDATE company SET farm_type=?, farm_name=?,farm_tax_id=?, company_name=?, company_id_number=?, company_phone=?, farm_tel=?, farm_fax=?, farm_address=?, company_email=?, company_password=?, creat_at=? WHERE company.company_id=?';
+
 
     const {
         farm_type,
@@ -124,6 +125,7 @@ router.put('/home', async (req, res) => {
         farm_address,
         company_email,
         company_password,
+        creat_at,
         company_id,
     } = req.body;
 
@@ -140,6 +142,7 @@ router.put('/home', async (req, res) => {
         farm_address,
         company_email,
         pass_hash,
+        creat_at,
         company_id,
     ]);
 
