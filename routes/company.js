@@ -10,6 +10,15 @@ const upload = require(__dirname + '/../modules/upload_img');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
+router.use((req, res, next) => {
+    const comAuth = req.get('Authorization');
+    res.locals.loginUser = null;
+    if (comAuth && comAuth.indexOf('Bearer ') === 0) {
+        const token = auth.slice(7);
+        res.locals.loginUser = jwt.verify(token, process.env.JWT_SECRET);
+    }
+    next();
+});
 
 router.route('/login').post(async (req, res) => {
     const output = {
@@ -76,7 +85,7 @@ router.post('/register', async (req, res) => {
     const sql01 =
         'INSERT INTO `company`(`farm_name`, `farm_tax_id`, `company_name`,`company_id_number`,`company_phone`,`company_email`,company_password ,creat_at``) VALUES (?,?,?,?,?,?,?,NOW())';
     const { company_name, company_email, company_password } = req.body;
-    const pass_hash = bcrypt.hashSync(`${password}`, 10);
+    const pass_hash = bcrypt.hashSync(`${company_password}`, 10);
     const [result] = await db.query(sql01, [company_name, company_email, pass_hash]);
 
     if (result.affectedRows === 1) {
@@ -86,9 +95,9 @@ router.post('/register', async (req, res) => {
     res.json(output);
 });
 
-router.get('/home ', async (req, res) => {
-    const sql02 = 'SSELECT * FROM company WHERE company_email=?';
-    const [r2] = await db.query(sql, [req.body.company_email]);
+router.get('/home', async (req, res) => {
+    const sql02 = 'SELECT * FROM company WHERE company_id=?';
+    const [r2] = await db.query(sql02, req.header('loginUser'));
     r2.forEach((el) => (el.creat_at = todateString(el.creat_at)));
     res.json(r2);
 });
@@ -118,7 +127,7 @@ router.put('/home', async (req, res) => {
         company_id,
     } = req.body;
 
-    const pass_hash = bcrypt.hashSync(`${password}`, 10);
+    const pass_hash = bcrypt.hashSync(`${company_password}`, 10);
     const [result] = await db.query(sql03, [
         farm_type,
         farm_name,
@@ -157,9 +166,9 @@ router.put('/home', async (req, res) => {
 //     res.json(r6);
 // });
 
-router.post('/profile', upload.single('file'), async (req, res) => {
-    const data = await res.json(req.file);
-    console.log(data);
-});
+// router.post('/profile', upload.single('file'), async (req, res) => {
+//     const data = await res.json(req.file);
+//     console.log(data);
+// });
 
 module.exports = router;
