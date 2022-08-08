@@ -1,55 +1,91 @@
-const express = require("express");
-const db = require(__dirname + "/../modules/mysql-connect");
+const express = require('express');
+const db = require(__dirname + '/../modules/mysql-connect');
 const router = express.Router();
 const moment = require('moment-timezone');
-
 
 // router.route("/").get(async (req, res) => {
 //     const output = 'hello'
 //     res.json(output);
 //   });
 
-
-
 // const getCommentProductSid = async (comment_sid) => {
-//   const sql = `SELECT p.*, c.quantity 
-//   FROM comment c 
-//   JOIN product p 
-//   ON c.product_sid=p.sid 
+//     const sql = `SELECT p.*, c.quantity
+//   FROM comment c
+//   JOIN product p
+//   ON c.product_sid=p.sid
 //   WHERE comment_sid=?
-//   ORDER BY c.created_at` ;
+//   ORDER BY c.created_at`;
 
-//   const [r] = await db.query(sql, [comment_sid]);
-//   return r;
+//     const [r] = await db.query(sql, [comment_sid]);
+//     return r;
 // };
 
+// const getMemberSid = async (account) => {
+//     const sql = `SELECT p.*, c.quantity
+//   FROM comment c
+//   JOIN product p
+//   ON c.product_sid=p.sid
+//   WHERE comment_sid=?
+//   ORDER BY c.created_at`;
 
+//     const [r] = await db.query(sql, [account]);
+//     return r;
+// };
 
-
-//抓全部資料.
-router.get("/", async (req, res) => {
- const sql1= 'SELECT * FROM `comment` WHERE 1'
- const [r1] = await db.query(sql1);
- res.json(await r1)
+//抓全部資料.(comment)
+router.get('/', async (req, res) => {
+    const sql1 = 'SELECT * FROM `comment` WHERE 1';
+    const [r1] = await db.query(sql1);
+    res.json(await r1);
 });
 
-
-router.post("/likes", async (req, res) => {
-  const sql =
-  "INSERT INTO `comment`(`account`, `nickname`,`comment`, `avatar	`, `rating`, `likes`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, NOW())";
-  const {} = req.body
-  const [result] = await db.query(sql, [`account`, `nickname`,`comment`, `avatar`, `rating`, `likes`, `created_at`]);
-  console.log(result);
-  res.json
+//抓全部資料.(product)
+router.get('/', async (req, res) => {
+    const sql1 = 'SELECT * FROM `product` WHERE 1';
+    const [r1] = await db.query(sql1);
+    res.json(await r1);
 });
 
+router.post('/likes', async (req, res) => {
+    const sql =
+        'INSERT INTO `comment`(`account`, `nickname`,`comment`, `avatar	`, `rating`, `likes`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, NOW())';
+    const {} = req.body;
+    const [result] = await db.query(sql, [
+        `account`,
+        `nickname`,
+        `comment`,
+        `avatar`,
+        `rating`,
+        `likes`,
+        `created_at`,
+    ]);
+    console.log(result);
+    res.json;
+});
+
+router.post('/commentcreate', async (req, res) => {
+    const sql =
+        'INSERT INTO `comment`(`account`, `nickname`,`comment`, `avatar	`, `rating`, `likes`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, NOW())';
+
+    const [commentCreate] = await db.query(sql, [
+        req.body.account,
+        req.body.nickname,
+        req.body.comment,
+        req.body.cooking_create_member_Id,
+    ]);
+
+    commentCreate.forEach(
+        (el) => (el.recipes_sid = todateString(el.comment_sid))
+    );
+
+    res.json(commentCreate[0]);
+});
 
 // const sql02 = `SELECT * FROM comment ${where} ORDER BY sid DESC LIMIT ${(page-1)*output.perPage}, ${output.perPage}`;
 // const [r2] = await db.query(sql02);
 // r2.forEach(el=> el.birthday = toDateString(el.birthday) );
 // output.rows = r2;
 // }
-
 
 // const getListHandler = async (req, res)=>{
 //   let output = {
@@ -71,7 +107,7 @@ router.post("/likes", async (req, res) => {
 //   if(search){
 //       where += ` AND name LIKE ${ db.escape('%'+search+'%') } `;
 //       output.query.search = search;
-      
+
 //   }
 //   if(beginDate){
 //       const mo = moment(beginDate);
@@ -126,9 +162,5 @@ router.post("/likes", async (req, res) => {
 //   */
 //   next();
 // });
-
-
-
-
 
 module.exports = router;
