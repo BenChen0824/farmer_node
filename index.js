@@ -20,6 +20,7 @@ const {
 const fileUpload = require('express-fileupload');
 const { nanoid } = require('nanoid');
 const _ = require('lodash');
+const sche = require('./schedule')
 
 const io = new Server(httpServer, {
     cors: {

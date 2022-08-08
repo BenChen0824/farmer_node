@@ -84,7 +84,7 @@ router.route("/").get(async (req, res) => {
     error: ""
   };
   const fields = [
-    'name', 'type', 'photo', 'price', 'unit','details', 'expire', 'inventory', 'supplier','status', 'hashtag'
+    'name', 'type', 'photo', 'price', 'unit','details', 'expire', 'inventory', 'supplier','status', 'hashtag','time'
   ]
 
   if (fields.some(k => !req.body[k]))  {
@@ -92,7 +92,7 @@ router.route("/").get(async (req, res) => {
     return res.json(output);
   }
 
-  const sql = "INSERT INTO `product`(`sid`, `product_name`, `product_type`, `product_img`, `product_price`, `product_unit`, `product_details`, `product_expire`, `product_inventory`, `product_supplier`, `hot_sale`, `product_status`, `product_hashtag`, `sale_time`, `created_at`) VALUES (null, ?, ?, ?, ?, ?, ?, ?,?, ?, 0,?,?,null, Now())"
+  const sql = "INSERT INTO `product`(`sid`, `product_name`, `product_type`, `product_img`, `product_price`, `product_unit`, `product_details`, `product_expire`, `product_inventory`, `product_supplier`, `hot_sale`, `product_status`, `product_hashtag`, `sale_time`, `created_at`) VALUES (null, ?, ?, ?, ?, ?, ?, ?,?, ?, 0,?,?,?, Now())"
 
   const values = fields.map((v,i)=> {
     const val = req.body[v]
@@ -119,7 +119,7 @@ router.route("/").get(async (req, res) => {
   // ]
   
   const fields = [
-    'name', 'type', 'photo', 'price', 'unit','details', 'expire', 'inventory', 'supplier','status', 'hashtag'
+    'name', 'type', 'photo', 'price', 'unit','details', 'expire', 'inventory', 'supplier','status', 'hashtag','time'
   ]
 
   // if (fields.some(k => !req.body[k]))  {
@@ -135,7 +135,7 @@ router.route("/").get(async (req, res) => {
     return res.json(output);
   }
 
-  const sql = "UPDATE `product` SET `product_name`=?,`product_type`=?,`product_img`=?,`product_price`=?,`product_unit`=?,`product_details`=?,`product_expire`=?,`product_inventory`=?,`product_supplier`=?,`product_status`=?,`product_hashtag`=? WHERE sid=?"
+  const sql = "UPDATE `product` SET `product_name`=?,`product_type`=?,`product_img`=?,`product_price`=?,`product_unit`=?,`product_details`=?,`product_expire`=?,`product_inventory`=?,`product_supplier`=?,`product_status`=?,`product_hashtag`=?,`sale_time`=? WHERE sid=?"
 
   const values = fields.map((v,i)=> {
     const val = req.body[v]
