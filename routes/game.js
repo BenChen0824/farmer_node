@@ -19,9 +19,10 @@ router.post('/addpoints', async (req, res) => {
 // fetch "http://localhost:3600/game/coupon"
 router.post('/coupon', async (req, res) => {
     const sql2 =
-        'INSERT INTO `coupon_01`(`change_memberid`, `change_coupon`, `change_spendpoints`, `coupon_isused`, `change_time`) VALUES (?,?,?,?,NOW())';
+        'INSERT INTO `coupon_01`(`change_img`, `change_memberid`, `change_coupon`, `change_spendpoints`, `coupon_isused`, `change_time`) VALUES (?,?,?,?,?,NOW())';
 
     const [result2] = await db.query(sql2, [
+        req.body.change_img,
         req.body.change_memberid,
         req.body.change_coupon,
         req.body.change_spendpoints,
@@ -32,9 +33,10 @@ router.post('/coupon', async (req, res) => {
 });
 
 //拿兌換紀錄資料
-router.get('/gamedata', async (req, res) => {
-    const sql1 = 'SELECT * FROM `change_01` WHERE change_nameid=?';
-    const [r1] = await db.query(sql1, req.header('change_nameid'));
+router.get('/coupon', async (req, res) => {
+    console.log(req.header('change_memberid'));
+    const sql1 = 'SELECT * FROM `coupon_01` WHERE change_memberid=?';
+    const [r1] = await db.query(sql1, req.header('change_memberid'));
     res.json(r1);
 });
 
