@@ -306,5 +306,9 @@ router.delete('/', async (req, res) => {
   res.json(recipesdelete[0])
 });
 
+  const dataquanity =  "SELECT COUNT(1) num FROM recipe"
+  // 計算資料筆數
+
+
   
   module.exports=router;
