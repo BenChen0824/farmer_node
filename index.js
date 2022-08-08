@@ -71,6 +71,7 @@ app.use('/cartemail', require(__dirname + '/routes/cartemail'));
 app.use('/comment', require(__dirname + '/routes/comment'));
 app.use('/recipe', require(__dirname + '/routes/recipe'));
 app.use('/company', require(__dirname + '/routes/company'));
+app.use('/activity', require(__dirname + '/routes/activity'));
 
 //---- 上傳照片
 app.use("/uploads", express.static("uploads"));
