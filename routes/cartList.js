@@ -132,7 +132,8 @@ router.post('/addcustomized', async (req, res) => {
 
 //讀出畫面
 router.get('/', async (req, res) => {
-    res.json(await getUserCart(530));
+    console.log(req.header('member_id'));
+    res.json(await getUserCart(req.header('member_id')));
 });
 
 //U

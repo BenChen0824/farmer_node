@@ -89,17 +89,6 @@ const getRecipeHandler = async (req, res) => {
 
 
 
-  // 分隔線，以下為C
-
-// router.get('/', async (req, res) => {
-// const sqlInsert = "INSERT INTO `recipe`(`recipes_sid`, `recipes_name`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_description`, `recipes_img`, `cooking_create_member_Id`, `recipes_collection`, `recipes_like`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
-// const [r1] = await db.query(sqlInsert, [req.body.recipes_sid ,req.body.recipes_name ,req.body.recipes_time_cost ,req.body.recipes_portion ,req.body.recipes_calories ,req.body.recipes_type ,req.body.recipes_cooking_degree ,req.body.recipes_ingredient ,req.body.recipes_cooking_method ,req.body.recipes_description ,req.body.recipes_img ,req.body.cooking_create_member_Id ,req.body.recipes_collection ,req.body.recipes_like ]);
-//   r1.forEach((el) => (el.recipes_sid = todateString(el.recipes_sid)));
-//   res.json(r1);
-// });
-
-
-
   // 分隔線，以下為R
 
 // router.post('/', async (req, res) => {
@@ -120,13 +109,7 @@ const getRecipeHandler = async (req, res) => {
 
 
 
-  // 分隔線，以下為D
 
-// router.delete('/', async (req, res) => {
-// const sqlDelete = "DELETE FROM `recipe` WHERE recipes_sid=?"
-//   const [r4] = await db.query(sql, [req.body.point, req.body.recipes_sid]);
-//   res.json('r4')
-// });
 
 
 
@@ -260,25 +243,52 @@ const getRecipeHandler = async (req, res) => {
 
   // 第53行 const [[{ totalRows }]] = await db.query(sql01) 的 await db.query意思
 
-  // 如何連接到前端
 
   // JWT_SECRET=aq5f8s5g9h4hd826sf1f
 
+
+
+  // 分隔線，以下為C
+
+  router.post('/createrecipe', async (req, res) => {
+    const sqlInsert = "INSERT INTO `recipe`(`recipes_sid`, `recipes_name`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_description`, `recipes_img`, `cooking_create_member_Id`, `recipes_collection`, `recipes_like`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())";
+    
+    const [recipescreate] = await db.query(sqlInsert, [req.body.recipes_sid ,req.body.recipes_name ,req.body.recipes_time_cost ,req.body.recipes_portion ,req.body.recipes_calories ,req.body.recipes_type ,req.body.recipes_cooking_degree ,req.body.recipes_ingredient ,req.body.recipes_cooking_method ,req.body.recipes_description ,req.body.recipes_img ,req.body.cooking_create_member_Id ,req.body.recipes_collection ,req.body.recipes_like ]);
+      
+    recipescreate.forEach((el) => (el.recipes_sid = todateString(el.recipes_sid)));
+        
+    res.json(recipescreate[0]);
+    });
+
+
+  // 分隔線，以下為R
+
   router.get('/recipe', async (req, res) => {
-  const output = {
-      success: false,
-      error: '',
-      code: 0,
-    };
+    const output = {
+        success: false,
+        error: '',
+        code: 0,
+      };
+      const sql = await db.query('SELECT * FROM `recipe` WHERE 1');
+      output.success=true;
+      res.json(sql[0])
+    })
+    
+    
+    router.get('/each/:recipes_sid', async (req, res) => {
+      if(!req.params.recipes_sid){
+        return
+      }
+      const sqleach = "SELECT * FROM `recipe` WHERE 1=1 and recipes_sid= " + req.params.recipes_sid;
+      const [recipesdata] = await db.query(sqleach);
+      res.json(recipesdata[0])
+      })
 
-    const sql = await db.query('SELECT * FROM `recipe` WHERE 1');
 
-    output.success=true;
 
-    res.json(sql[0])
-  })
+  // 分隔線，以下為U
 
-  router.get('/each/:recipes_sid', async (req, res) => {
+  router.post('/updaterecipe/:recipes_sid', async (req, res) => {
     if(!req.params.recipes_sid){
       return
     }
@@ -287,13 +297,14 @@ const getRecipeHandler = async (req, res) => {
     res.json(recipesdata[0])
     })
 
-    router.get('/updaterecipe/:recipes_sid', async (req, res) => {
-      if(!req.params.recipes_sid){
-        return
-      }
-      const sqleach = "SELECT * FROM `recipe` WHERE 1=1 and recipes_sid= " + req.params.recipes_sid;
-      const [recipesdata] = await db.query(sqleach);
-      res.json(recipesdata[0])
-      })
+
+  // 分隔線，以下為D
+
+router.delete('/', async (req, res) => {
+  const sqlDelete = "DELETE FROM `recipe` WHERE recipes_sid=?"
+  const [recipesdelete] = await db.query(sql, [req.body.point, req.body.recipes_sid]);
+  res.json(recipesdelete[0])
+});
+
   
   module.exports=router;
