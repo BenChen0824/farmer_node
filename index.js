@@ -17,9 +17,9 @@ const {
     findMessagesForUser,
     saveMessage,
 } = require('./src/xin/messageStorage');
-const fileUpload = require("express-fileupload");
-const { nanoid } = require("nanoid");
-const _ = require("lodash");
+const fileUpload = require('express-fileupload');
+const { nanoid } = require('nanoid');
+const _ = require('lodash');
 
 const io = new Server(httpServer, {
     cors: {
@@ -27,9 +27,6 @@ const io = new Server(httpServer, {
         methods: ['GET', 'POST'],
     },
 });
-
-
-
 
 const db = require(__dirname + '/modules/mysql-connect');
 
@@ -53,12 +50,12 @@ app.use((req, res, next) => {
 
 app.use(cors(corsOptions));
 
-app.use(
-    fileUpload({
-      createParentPath: true,
-      limits: { fileSize: 50 * 1024 * 1024 }
-    })
-  );
+// app.use(
+//     fileUpload({
+//       createParentPath: true,
+//       limits: { fileSize: 50 * 1024 * 1024 }
+//     })
+//   );
 
 app.use(express.urlencoded({ extends: false }));
 app.use(express.json());
@@ -73,48 +70,48 @@ app.use('/recipe', require(__dirname + '/routes/recipe'));
 app.use('/company', require(__dirname + '/routes/company'));
 
 //---- 上傳照片
-app.use("/uploads", express.static("uploads"));
-app.post("/upload-images", async (req, res) => {
-  try {
-    if (!req.files) {
-      res.json({
-        status: false,
-        message: "No file uploaded"
-      });
-    } else {
-      let data = [];
-      const extMap = {
-        "image/jpeg": ".jpg",
-        "image/png": ".png",
-        "image/gif": ".gif"
-      };
+app.use('/uploads', express.static('uploads'));
+app.post('/upload-images', async (req, res) => {
+    try {
+        if (!req.files) {
+            res.json({
+                status: false,
+                message: 'No file uploaded',
+            });
+        } else {
+            let data = [];
+            const extMap = {
+                'image/jpeg': '.jpg',
+                'image/png': '.png',
+                'image/gif': '.gif',
+            };
 
-      //loop all files
-      _.forEach(req.files, (image) => {
-        const newName = `${nanoid(10)}${extMap[image.mimetype]}`;
-        image.name = newName;
-        
-        //move photo to images directory
-        image.mv("./public/images/" + image.name);
-        //push file details
-        data.push({
-          name: image.name,
-          mimetype: image.mimetype,
-          size: image.size
-        });
-      });
+            //loop all files
+            _.forEach(req.files, (image) => {
+                const newName = `${nanoid(10)}${extMap[image.mimetype]}`;
+                image.name = newName;
 
-      //return response
-      res.json({
-        status: true,
-        message: "Files are uploaded",
-        data: data
-      });
+                //move photo to images directory
+                image.mv('./public/images/' + image.name);
+                //push file details
+                data.push({
+                    name: image.name,
+                    mimetype: image.mimetype,
+                    size: image.size,
+                });
+            });
+
+            //return response
+            res.json({
+                status: true,
+                message: 'Files are uploaded',
+                data: data,
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json(err);
     }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json(err);
-  }
 });
 //--------
 
@@ -189,13 +186,13 @@ io.use((socket, next) => {
             socket.username = session.username;
             return next();
         } else {
-            return next(new Error("Invalid session"));
+            return next(new Error('Invalid session'));
         }
     }
 
     const username = socket.handshake.auth.username;
     if (!username) {
-        return next(new Error("Invalid username"));
+        return next(new Error('Invalid username'));
     }
     socket.username = username;
     socket.userId = uuidv4();
@@ -217,7 +214,7 @@ function getMessagesForUser(userId) {
     return messagesPerUser;
 }
 
-io.on("connection", async (socket) => {
+io.on('connection', async (socket) => {
     saveSession(socket.sessionId, {
         userId: socket.userId,
         username: socket.username,
