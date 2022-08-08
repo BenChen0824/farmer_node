@@ -50,12 +50,6 @@ app.use((req, res, next) => {
 
 app.use(cors(corsOptions));
 
-// app.use(
-//     fileUpload({
-//       createParentPath: true,
-//       limits: { fileSize: 50 * 1024 * 1024 }
-//     })
-//   );
 
 app.use(express.urlencoded({ extends: false }));
 app.use(express.json());
@@ -71,7 +65,10 @@ app.use('/company', require(__dirname + '/routes/company'));
 
 //---- 上傳照片
 app.use('/uploads', express.static('uploads'));
-app.post('/upload-images', async (req, res) => {
+app.post('/upload-images',fileUpload({
+           createParentPath: true,
+         limits: { fileSize: 50 * 1024 * 1024 }
+     }), async (req, res) => {
     try {
         if (!req.files) {
             res.json({
