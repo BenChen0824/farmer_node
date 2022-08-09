@@ -293,4 +293,33 @@ router.route('/addtoorderlist').post(async (req, res) => {
     //sid qty
 });
 
+router.get('/getdiscount', async (req, res) => {
+    console.log(req.header('member_id'));
+    const sql = 'SELECT * FROM `coupon_01` WHERE change_memberid=?';
+    const [discountData] = await db.query(sql, [req.header('change_memberid')]);
+    res.json(discountData);
+});
+
+//折價券使用後將isused改成1
+router.put('/discountcouponused', async (req, res) => {
+    // body:sid,check
+
+    const output = {
+        success: false,
+        error: '',
+    };
+    // 判斷該商品是否已經加入購物車
+
+    const sql2 = 'UPDATE `coupon_01` SET `coupon_isused`=? WHERE sid=?';
+
+    const [r2] = await db.query(sql2, [1, req.body.sid]);
+    if (r2.affectedRows && r2.changedRows) {
+        output.success = true;
+    }
+    output.r2 = r2;
+
+    res.json(output);
+    //sid qty
+});
+
 module.exports = router;
