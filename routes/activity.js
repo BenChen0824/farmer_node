@@ -1,24 +1,25 @@
-//設定
-// require('dotenv').config();
-// 1.引入 express
 const express = require('express');
-//SQL連線模組放進去
 const db = require(__dirname + '/../modules/mysql-connect');
-// const bcrypt = require('bcryptjs');
-// const todateString = require(__dirname + '/../modules/date_format');
-// const upload = require(__dirname + '/../modules/upload_img');
-// const jwt = require('jsonwebtoken');
+const todateString = require(__dirname + '/../modules/date_format');  
 const router = express.Router();
 
 //讀出
 //company_id 寫在header
 router.get('/' , async (req,res)=>{
-    
     const sql = "SELECT * FROM `company_activity` WHERE company_id=?"
     const [data] = await db.query(sql,[req.header("company_id")]);
+    data.forEach((el) => (el.created_at = todateString(el.created_at)));
     // console.log(data)
     res.json(data)
 })
+router.get('/getdata' , async (req,res)=>{
+    const sql = "SELECT * FROM `company_activity` WHERE 1"
+    const [data] = await db.query(sql);
+    data.forEach((el) => (el.created_at = todateString(el.created_at)));
+    // console.log(data)
+    res.json(data)
+})
+
 
 
 //新增
