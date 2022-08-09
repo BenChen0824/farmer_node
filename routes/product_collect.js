@@ -4,18 +4,23 @@ const helper = require('../utils/helper');
 
 const router = express.Router();
 
-// const getProductCollect = async (member_id) => {
-//     const sql = `SELECT p.*, c.* FROM product_collect c JOIN product p ON c.product_id=p.sid WHERE c.member_id=${member_id} AND c.saved = 1`;
+const getProductCollect = async (member_id,product_id) => {
+    const pidSql = product_id ? `product_id=${product_id} ` : 1
+    const sql = `SELECT * FROM product_collect WHERE member_id=${member_id} AND ${pidSql} AND saved = 1`;
 
-//     console.log(sql);
+    // console.log(sql);
 
-//     const [r] = await db.query(sql, [member_id]);
-//     console.log(r);
+    const [r] = await db.query(sql, [member_id, product_id]);
+    // console.log(r);
 
-//     return r;
-// };
+    return r;
+};
 
-router.post('/', async (req, res) => {
+router.get('/',async(req,res)=>{
+    const output = await getProductCollect(req.query.user,req.query.sid);
+    res.json(output);
+})
+.post('/', async (req, res) => {
     console.log('collect')
     // body: member_id, product_id, saved
     const output = {

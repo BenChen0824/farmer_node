@@ -4,7 +4,7 @@ const router = express.Router();
 // const { toDateString, toDatetimeString } = require(__dirname +
 //   "/../modules/date-tool");
 
-const getListHandler = async (req, res) => {
+const getListHandler = async (req) => {
   let output = {
     perPage: 12,
     page: 1,
@@ -76,7 +76,7 @@ const getListHandler = async (req, res) => {
 
 
 router.route("/").get(async (req, res) => {
-  const output = await getListHandler(req, res);
+  const output = await getListHandler(req);
   res.json(output);
 }).post(async(req,res)=>{
   const output = {
