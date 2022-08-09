@@ -192,4 +192,24 @@ router.post('/editintro', async(req,res)=>{
   res.json([r9])
 })
 
+router.get('orders', async(req,res)=>{
+    const sql12 = `SELECT odt.*, odl.*, pro.* 
+    FROM order_details odt 
+    JOIN orderlist odl
+    JOIN product pro
+    ON odt.product_id=pro.sid
+    WHERE odt.order_no=odl.order_no && odl.customer_id=?
+    ORDER BY odl.created_time`;
+
+    const [r12] = await db.query(sql12, req.header('loginUser'))
+    res.json(r12)
+})
+
+router.get('orderlist', async(req,res)=>{
+    const sql13 = `SELECT * FROM orderlist WHERE customer_id=?`;
+    const [r13] = await db.query(sql13, req.header('loginUser'))
+    r13.forEach(el=> el.created_time = todateString(el.created_time));
+    res.json(r13)
+})
+
 module.exports = router;
