@@ -192,7 +192,7 @@ router.post('/editintro', async(req,res)=>{
   res.json([r9])
 })
 
-router.get('orders', async(req,res)=>{
+router.get('/orders', async(req,res)=>{
     const sql12 = `SELECT odt.*, odl.*, pro.* 
     FROM order_details odt 
     JOIN orderlist odl
@@ -205,7 +205,7 @@ router.get('orders', async(req,res)=>{
     res.json(r12)
 })
 
-router.get('orderlist', async(req,res)=>{
+router.get('/orderlist', async(req,res)=>{
     const sql13 = `SELECT * FROM orderlist WHERE customer_id=?`;
     const [r13] = await db.query(sql13, req.header('loginUser'))
     r13.forEach(el=> el.created_time = todateString(el.created_time));
