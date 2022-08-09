@@ -27,7 +27,7 @@ const getUserCart = async (member_id) => {
 };
 const getListHandler = async (req, res) => {
     let output = {
-        perPage: 20,
+        perPage: 100,
         page: 1,
         totalRows: 0,
         totalPages: 0,
