@@ -32,7 +32,7 @@ router.post('/', (req, res) => {
         html: `<body>
         <img style="width:300px" src="https://www.upload.ee/image/14320633/C_LOGO-1.jpg" border="0" alt="C_LOGO-1.jpg" />
         <h1>有機の小鱻肉</h1>
-        <div>您的訂單編號為${req.body.orderId}</div>
+        <div>您的訂單編號為Farmer${req.body.orderId}</div>
         <div>您使用的折價券金額為${req.body.discount}元</div>
         <div>您的訂單金額為${req.body.finalPrice}元</div>
         <p>您購買的生鮮商品如下<br></p>

@@ -235,9 +235,10 @@ router.route('/addtoorderlist').post(async (req, res) => {
     //req.body=={member_id:num,totalPrice:num,customerRemark:"...",freshItems:[...],customizedItems:[...]}
 
     const sqltotal =
-        'INSERT INTO `orderlist`( `customer_id`, `order_status`,`discount_value`, `product_amount_total`, `created_time`, `customer_remark`) VALUES (?,?,?,?,NOW(),?) ';
+        'INSERT INTO `orderlist`( `order_no`,`customer_id`, `order_status`,`discount_value`, `product_amount_total`, `created_time`, `customer_remark`) VALUES (?,?,?,?,?,NOW(),?) ';
 
     const [rTotal] = await db.query(sqltotal, [
+        req.body.order_id,
         req.body.member_id,
         '已完成付款',
         req.body.discount_value,
@@ -245,14 +246,14 @@ router.route('/addtoorderlist').post(async (req, res) => {
         req.body.customerRemark,
     ]);
     // console.log(rTotal);
-    const orderNo = rTotal.insertId;
+    // const orderNo = rTotal.insertId;
 
     const sql2 =
         'INSERT INTO `order_details`(`order_no`, `product_id`, `customized_id`, `order_type`, `product_price`, `product_count`, `subtotal`, `created_time`) VALUES (?,?,?,?,?,?,?,NOW()) ';
 
     for (let i of req.body.freshItems) {
         const [r2] = await db.query(sql2, [
-            orderNo,
+            req.body.order_id,
             i.product_id,
             0,
             1,
@@ -267,7 +268,7 @@ router.route('/addtoorderlist').post(async (req, res) => {
 
     for (let i of req.body.customizedItems) {
         const [r3] = await db.query(sql3, [
-            orderNo,
+            req.body.order_id,
             0,
             i.customized_id,
             2,
@@ -284,14 +285,14 @@ router.route('/addtoorderlist').post(async (req, res) => {
 
     const sqlChangeProductInventory =
         'UPDATE `product` SET `product_inventory`=? WHERE sid=?';
-
+        console.log(req.body);
     const newChangeInventoryArray = req.body.freshInventoryarray.map((v, i) => {
         return {
             count: v - req.body.freshItems[i].product_count,
             sid: req.body.freshItems[i].product_id,
         };
     });
-    console.log(newChangeInventoryArray);
+    // console.log(newChangeInventoryArray);
 
     for (let i of newChangeInventoryArray) {
         const [rInventory] = await db.query(sqlChangeProductInventory, [
