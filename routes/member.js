@@ -205,15 +205,24 @@ router.get('/orders', async(req,res)=>{
     JOIN orderlist odl
     JOIN product pro
     ON odt.product_id=pro.sid
-    WHERE odt.order_no=odl.order_no && odl.customer_id=?
-    ORDER BY odl.created_time`;
+    WHERE odt.order_no=odl.order_no && odl.customer_id=? && odt.order_type=1
+    ORDER BY odt.created_time DESC`;
+
+    const sql13 = `SELECT odt.*, odl.*, cust.* 
+    FROM order_details odt
+    JOIN orderlist odl 
+    JOIN customized_lunch cust
+    ON odt.customized_id=cust.sid
+    WHERE odt.order_no=odl.order_no && cust.member_id=? && odt.order_type=2
+    ORDER BY odt.created_time DESC`;
 
     const [r12] = await db.query(sql12, req.header('loginUser'))
-    res.json(r12)
+    const [r13] = await db.query(sql13, req.header('loginUser'))
+    res.json([...r12, ...r13])
 })
 
 router.get('/orderlist', async(req,res)=>{
-    const sql13 = `SELECT * FROM orderlist WHERE customer_id=?`;
+    const sql13 = `SELECT * FROM orderlist WHERE customer_id=? ORDER BY created_time DESC`;
     const [r13] = await db.query(sql13, req.header('loginUser'))
     r13.forEach(el=> el.created_time = todateString(el.created_time));
     res.json(r13)
