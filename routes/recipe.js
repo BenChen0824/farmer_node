@@ -184,7 +184,7 @@ const getRecipeHandler = async (req, res) => {
 
   // 分隔線，以下為D
 
-router.delete('/', async (req, res) => {
+router.delete('/delete/:recipes_sid', async (req, res) => {
   const sqlDelete = "DELETE FROM `recipe` WHERE recipes_sid=?"
   const [recipesdelete] = await db.query(sql, [req.body.point, req.body.recipes_sid]);
   res.json(recipesdelete[0])
