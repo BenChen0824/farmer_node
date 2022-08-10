@@ -144,16 +144,23 @@ router.put('/data', async (req, res) => {
 });
 
 router.get('/collections', async (req, res) => {
-    const sql04 = `SELECT * FROM customer_mycollections_product WHERE customer_id=? ORDER BY product_id DESC`;
+    const sql04 = `SELECT pcol.*, pro.* 
+    FROM product_collect pcol
+    JOIN product pro
+    JOIN product_type ptyp
+    ON ptyp.product_type_sid=pro.product_type
+    WHERE pcol.product_id=pro.sid && pcol.member_id=?
+    ORDER BY pcol.product_id`;
+
     const [r4] = await db.query(sql04, req.header('loginUser'));
     res.json(r4);
 });
 
 router.delete('/deleteproduct', async (req, res) => {
     const sql06 =
-        'DELETE FROM customer_mycollections_product WHERE customer_id=? AND product_id=?';
+        'DELETE FROM product_collect WHERE member_id=? AND product_id=?';
     const [r6] = await db.query(sql06, [
-        req.header('customer_id'),
+        req.header('member_id'),
         req.header('product_id'),
     ]);
     res.json(r6);
