@@ -220,6 +220,7 @@ router.delete('/delete', async (req, res) => {
     //進入購物車後要結帳
 });
 
+//商品加入od list od details 將tobut delete
 router.route('/addtoorderlist').post(async (req, res) => {
     const output = {
         success: false,
@@ -234,23 +235,25 @@ router.route('/addtoorderlist').post(async (req, res) => {
     //req.body=={member_id:num,totalPrice:num,customerRemark:"...",freshItems:[...],customizedItems:[...]}
 
     const sqltotal =
-        'INSERT INTO `orderlist`( `customer_id`, `order_status`, `product_amount_total`, `created_time`, `customer_remark`) VALUES (?,?,?,NOW(),?) ';
+        'INSERT INTO `orderlist`( `order_no`,`customer_id`, `order_status`,`discount_value`, `product_amount_total`, `created_time`, `customer_remark`) VALUES (?,?,?,?,?,NOW(),?) ';
 
     const [rTotal] = await db.query(sqltotal, [
+        req.body.order_id,
         req.body.member_id,
         '已完成付款',
+        req.body.discount_value,
         req.body.totalPrice,
         req.body.customerRemark,
     ]);
     // console.log(rTotal);
-    const orderNo = rTotal.insertId;
+    // const orderNo = rTotal.insertId;
 
     const sql2 =
         'INSERT INTO `order_details`(`order_no`, `product_id`, `customized_id`, `order_type`, `product_price`, `product_count`, `subtotal`, `created_time`) VALUES (?,?,?,?,?,?,?,NOW()) ';
 
     for (let i of req.body.freshItems) {
         const [r2] = await db.query(sql2, [
-            orderNo,
+            req.body.order_id,
             i.product_id,
             0,
             1,
@@ -265,7 +268,7 @@ router.route('/addtoorderlist').post(async (req, res) => {
 
     for (let i of req.body.customizedItems) {
         const [r3] = await db.query(sql3, [
-            orderNo,
+            req.body.order_id,
             0,
             i.customized_id,
             2,
@@ -280,6 +283,28 @@ router.route('/addtoorderlist').post(async (req, res) => {
         output.success = true;
     }
 
+    const sqlChangeProductInventory =
+        'UPDATE `product` SET `product_inventory`=? WHERE sid=?';
+        console.log(req.body);
+    const newChangeInventoryArray = req.body.freshInventoryarray.map((v, i) => {
+        return {
+            count: v - req.body.freshItems[i].product_count,
+            sid: req.body.freshItems[i].product_id,
+        };
+    });
+    // console.log(newChangeInventoryArray);
+
+    for (let i of newChangeInventoryArray) {
+        const [rInventory] = await db.query(sqlChangeProductInventory, [
+            i.count,
+            i.sid,
+        ]);
+    }
+
+    // if (rInventory.affectedRows) {
+    //     output.changeInventory = true;
+    // }
+
     const sqlDEL = 'DELETE FROM order_details_tobuy WHERE sid=?';
     for (let i of req.body.freshItems) {
         const [rDEL] = await db.query(sqlDEL, [i.sid]);
@@ -293,6 +318,7 @@ router.route('/addtoorderlist').post(async (req, res) => {
     //sid qty
 });
 
+//取得折價券資訊
 router.get('/getdiscount', async (req, res) => {
     console.log(req.header('member_id'));
     const sql = 'SELECT * FROM `coupon_01` WHERE change_memberid=?';
@@ -303,22 +329,29 @@ router.get('/getdiscount', async (req, res) => {
 //折價券使用後將isused改成1
 router.put('/discountcouponused', async (req, res) => {
     // body:sid,check
-
+    console.log(req.body);
     const output = {
         success: false,
         error: '',
     };
     // 判斷該商品是否已經加入購物車
 
-    const sql2 = 'UPDATE `coupon_01` SET `coupon_isused`=? WHERE sid=?';
+    if (+req.body.discountValue === 0) {
+        output.error = '沒有使用折價券';
+        console.log(output);
+        res.json(output);
+    } else {
+        const sql2 = 'UPDATE `coupon_01` SET `coupon_isused`=? WHERE sid=?';
 
-    const [r2] = await db.query(sql2, [1, req.body.sid]);
-    if (r2.affectedRows && r2.changedRows) {
-        output.success = true;
+        const [r2] = await db.query(sql2, [1, req.body.sid]);
+        if (r2.affectedRows && r2.changedRows) {
+            output.success = true;
+        }
+        output.r2 = r2;
+        console.log(output);
+        res.json(output);
     }
-    output.r2 = r2;
 
-    res.json(output);
     //sid qty
 });
 

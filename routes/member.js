@@ -144,16 +144,23 @@ router.put('/data', async (req, res) => {
 });
 
 router.get('/collections', async (req, res) => {
-    const sql04 = `SELECT * FROM customer_mycollections_product WHERE customer_id=? ORDER BY product_id DESC`;
+    const sql04 = `SELECT pcol.*, pro.* 
+    FROM product_collect pcol
+    JOIN product pro
+    JOIN product_type ptyp
+    ON ptyp.product_type_sid=pro.product_type
+    WHERE pcol.product_id=pro.sid && pcol.member_id=?
+    ORDER BY pcol.product_id`;
+
     const [r4] = await db.query(sql04, req.header('loginUser'));
     res.json(r4);
 });
 
 router.delete('/deleteproduct', async (req, res) => {
     const sql06 =
-        'DELETE FROM customer_mycollections_product WHERE customer_id=? AND product_id=?';
+        'DELETE FROM product_collect WHERE member_id=? AND product_id=?';
     const [r6] = await db.query(sql06, [
-        req.header('customer_id'),
+        req.header('member_id'),
         req.header('product_id'),
     ]);
     res.json(r6);
@@ -198,15 +205,24 @@ router.get('/orders', async(req,res)=>{
     JOIN orderlist odl
     JOIN product pro
     ON odt.product_id=pro.sid
-    WHERE odt.order_no=odl.order_no && odl.customer_id=?
-    ORDER BY odl.created_time`;
+    WHERE odt.order_no=odl.order_no && odl.customer_id=? && odt.order_type=1
+    ORDER BY odt.created_time DESC`;
+
+    const sql13 = `SELECT odt.*, odl.*, cust.* 
+    FROM order_details odt
+    JOIN orderlist odl 
+    JOIN customized_lunch cust
+    ON odt.customized_id=cust.sid
+    WHERE odt.order_no=odl.order_no && cust.member_id=? && odt.order_type=2
+    ORDER BY odt.created_time DESC`;
 
     const [r12] = await db.query(sql12, req.header('loginUser'))
-    res.json(r12)
+    const [r13] = await db.query(sql13, req.header('loginUser'))
+    res.json([...r12, ...r13])
 })
 
 router.get('/orderlist', async(req,res)=>{
-    const sql13 = `SELECT * FROM orderlist WHERE customer_id=?`;
+    const sql13 = `SELECT * FROM orderlist WHERE customer_id=? ORDER BY created_time DESC`;
     const [r13] = await db.query(sql13, req.header('loginUser'))
     r13.forEach(el=> el.created_time = todateString(el.created_time));
     res.json(r13)
