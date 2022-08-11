@@ -20,7 +20,9 @@ const {
 const fileUpload = require('express-fileupload');
 const { nanoid } = require('nanoid');
 const _ = require('lodash');
-const sche = require('./schedule')
+const sche = require('./schedule');
+const session = require('express-session');
+const db = require(__dirname + '/modules/mysql-connect');
 
 const io = new Server(httpServer, {
     cors: {
@@ -29,17 +31,22 @@ const io = new Server(httpServer, {
     },
 });
 
-const db = require(__dirname + '/modules/mysql-connect');
 
-const corsOptions = {
-    credentials: true,
-    origin: (origin, cb) => {
-        console.log({ origin });
-        cb(null, true);
-    },
-};
+app.use(
+    session({
+        saveUninitialized: false,
+        resave: false,
+        secret: process.env.SESSION_SECRET,
+        cookie: {
+            maxAge: 1500000,
+            httpOnly: true,
+        },
+    })
+);
 
 app.use((req, res, next) => {
+    res.locals.session = req.session; //每個頁面都可以傳session過去
+
     const auth = req.get('Authorization');
     res.locals.loginUser = null;
     if (auth && auth.indexOf('Bearer ') === 0) {
@@ -49,10 +56,17 @@ app.use((req, res, next) => {
     next();
 });
 
+const corsOptions = {
+    credentials: true,
+    withCredentials: true,
+    origin: (origin, cb) => {
+        console.log({ origin });
+        cb(null, true);
+    },
+};
+
 app.use(cors(corsOptions));
-
-
-app.use(express.urlencoded({ extends: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use('/product', require(__dirname + '/routes/product'));
@@ -68,51 +82,55 @@ app.use('/product_collect', require(__dirname + '/routes/product_collect'));
 
 //---- 上傳照片
 app.use('/uploads', express.static('uploads'));
-app.post('/upload-images',fileUpload({
-           createParentPath: true,
-         limits: { fileSize: 50 * 1024 * 1024 }
-     }), async (req, res) => {
-    try {
-        if (!req.files) {
-            res.json({
-                status: false,
-                message: 'No file uploaded',
-            });
-        } else {
-            let data = [];
-            const extMap = {
-                'image/jpeg': '.jpg',
-                'image/png': '.png',
-                'image/gif': '.gif',
-            };
-
-            //loop all files
-            _.forEach(req.files, (image) => {
-                const newName = `${nanoid(10)}${extMap[image.mimetype]}`;
-                image.name = newName;
-
-                //move photo to images directory
-                image.mv('./public/images/' + image.name);
-                //push file details
-                data.push({
-                    name: image.name,
-                    mimetype: image.mimetype,
-                    size: image.size,
+app.post(
+    '/upload-images',
+    fileUpload({
+        createParentPath: true,
+        limits: { fileSize: 50 * 1024 * 1024 },
+    }),
+    async (req, res) => {
+        try {
+            if (!req.files) {
+                res.json({
+                    status: false,
+                    message: 'No file uploaded',
                 });
-            });
+            } else {
+                let data = [];
+                const extMap = {
+                    'image/jpeg': '.jpg',
+                    'image/png': '.png',
+                    'image/gif': '.gif',
+                };
 
-            //return response
-            res.json({
-                status: true,
-                message: 'Files are uploaded',
-                data: data,
-            });
+                //loop all files
+                _.forEach(req.files, (image) => {
+                    const newName = `${nanoid(10)}${extMap[image.mimetype]}`;
+                    image.name = newName;
+
+                    //move photo to images directory
+                    image.mv('./public/images/' + image.name);
+                    //push file details
+                    data.push({
+                        name: image.name,
+                        mimetype: image.mimetype,
+                        size: image.size,
+                    });
+                });
+
+                //return response
+                res.json({
+                    status: true,
+                    message: 'Files are uploaded',
+                    data: data,
+                });
+            }
+        } catch (err) {
+            console.error(err);
+            res.status(500).json(err);
         }
-    } catch (err) {
-        console.error(err);
-        res.status(500).json(err);
     }
-});
+);
 //--------
 
 app.use('/customized_lunch', require(__dirname + '/routes/customized_lunch'));
@@ -302,3 +320,29 @@ function start() {
 
 module.exports = { start };
 // -------------阿鑫聊天室node-------------
+
+//------商品比較
+
+app.get('/compare-session', (req, res) => {
+    req.session.my_compare = _.filter(
+        req.session.my_compare,
+        (el) => !_.isNil(el)
+    );
+    res.json(req.session.my_compare);
+});
+app.put('/compare-session', (req, res) => {
+    // console.log(req.session.my_compare, req.sessionID);
+    const list = req.session.my_compare || [];
+    list.push(req.body.sid);
+    req.session.my_compare = list.filter((el) => !_.isNil(el));
+    res.json(list);
+});
+app.delete('/compare-session', (req, res) => {
+    const list = req.session.my_compare || [];
+    const sid = req.body.sid;
+    const newList = list.filter((el) => el !== sid);
+    req.session.my_compare = newList;
+    // console.log(req.session.my_compare);
+
+    res.json(newList);
+});
