@@ -38,24 +38,28 @@ router.post('/createrecipe', async (req, res) => {
 
 });
 
+// 以下為食譜修改
 
-router.post('/updaterecipe/${recipes_sid}', async (req, res) => {
+
+router.post('/updaterecipe', async (req, res) => {
   try {
       // console.log(req.body);
       // const { recipes_name, recipes_time_cost, recipes_portion, recipes_calories, recipes_type, recipes_cooking_degree, recipes_ingredient, recipes_cooking_method, recipes_description, recipes_img, cooking_create_member_Id } = req.body;
-      const sqlupdate = "UPDATE `recipe` SET `recipes_name`=? ,`recipes_description`=? `recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_cooking_method`=?  WHERE `recipes_sid?";
+
+      const sqlupdate = "UPDATE `recipe` SET `recipes_name`=? ,`recipes_description`=?, `recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_cooking_method`=?  WHERE recipes_sid=?";
       const sql = sqlstring.format(sqlupdate, [
-        req.body.recipesname ,
-        req.body.description ,
-        req.body.timecost ,
-        req.body.portion ,
-        req.body.calories ,
-        req.body.recipestype ,
-        req.body.recipesdegree ,
-        req.body.ingredient ,
-        req.body.step ,
-        req.body.recipes_img ,
-        req.body.cooking_create_member_Id])
+        req.body.updateRecipesname ,
+        req.body.updateDescription ,
+        req.body.updateTimecost ,
+        req.body.updatePortion ,
+        req.body.updateCalories ,
+        req.body.updateRecipestype ,
+        req.body.updateRecipesdegree ,
+        req.body.updateIngredient ,
+        req.body.updateStep ,
+        req.body.recipe_sid
+        ])
+        console.log("asdf:", req.body.recipe_sid)
       console.log(sql)
       const recipesupdate = await db.query(sql);
       // console.log(recipesupdate);
@@ -66,6 +70,20 @@ router.post('/updaterecipe/${recipes_sid}', async (req, res) => {
       return;
   }
 
+});
+
+// 以下為食譜刪除
+
+router.delete('/delete/:recipes_sid', async (req, res) => {
+  const sid = req.params.sid;
+  console.log(sid);
+  if (!sid) {
+      return res.json({ message: 'error', code: '400' });
+  }
+  const sqlDelete = "DELETE FROM `recipe` WHERE recipes_sid=?";
+  const recipesdelete = await db.query(sqlDelete);
+  console.log(recipesdelete);
+  return res.json(recipesdelete);
 });
 
 
@@ -239,18 +257,6 @@ const getRecipeHandler = async (req, res) => {
 //   res.json(recipesdelete[0])
 // });
 
-router.delete('/delete/:recipes_sid', async (req, res) => {
-  const sid = req.params.sid;
-  console.log(sid);
-  if (!sid) {
-      return res.json({ message: 'error', code: '400' });
-  }
-  const sqlDelete = "DELETE FROM `recipe` WHERE recipes_sid=?";
-  const recipesdelete = await db.query(sqlDelete);
-  console.log(recipesdelete);
-  return res.json(recipesdelete);
-});
-
 
   // 以下為新增食譜處理
 
@@ -273,13 +279,13 @@ router.post('/createrecipe', upload.single('file'), async (req, res) => {
 
 
 // 以下為圖片更新處理
-router.post('/updaterecipe/:recipes_sid', upload.single('file'), async (req, res) => {
-  const recipes_sid = req.header('recipes_sid')
-  const sqlupdateimg = 'UPDATE recipe SET recipes_img=? WHERE recipe.recipes_sid=?'
-  const data = await res.json(req.body);
-  const [updateimg] = await db.query(sqlupdateimg, [data.req.file.originalname, recipes_sid])
-  console.log(updateimg)
-});
+// router.post('/updaterecipe/:recipes_sid', upload.single('file'), async (req, res) => {
+//   const recipes_sid = req.header('recipes_sid')
+//   const sqlupdateimg = 'UPDATE recipe SET recipes_img=? WHERE recipe.recipes_sid=?'
+//   const data = await res.json(req.body);
+//   const [updateimg] = await db.query(sqlupdateimg, [data.req.file.originalname, recipes_sid])
+//   console.log(updateimg)
+// });
 
 
 
