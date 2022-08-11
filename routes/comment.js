@@ -48,6 +48,7 @@ router.get('/', async (req, res) => {
 // });
 
 //送資料到資料庫 (新增)
+//送資料到資料庫 (新增)
 router.post('/commentcreate', async (req, res) => {
     const sql =
         'INSERT INTO `comment`(`member_id`, `nickname`,`comment`, `avatar`, `rating`, `likes`, `product_sid`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())';

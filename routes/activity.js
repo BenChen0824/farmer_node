@@ -4,7 +4,7 @@ const todateString = require(__dirname + '/../modules/date_format');
 const router = express.Router();
 
 //讀出
-//company_id 寫在header
+//company_id 寫在header//取的不同廠商的活動資料
 router.get('/' , async (req,res)=>{
     const sql = "SELECT * FROM `company_activitydata` WHERE company_id=?"
     const [data] = await db.query(sql,[req.header("company_id")]);
@@ -12,6 +12,16 @@ router.get('/' , async (req,res)=>{
     // console.log(data)
     res.json(data)
 })
+
+//取得活動一筆資料
+router.get('/activitydata' , async (req,res)=>{
+    const sql = "SELECT * FROM `company_activitydata` WHERE sid=?"
+    const [data] = await db.query(sql,[req.header("sid")]);
+    // data.forEach((el) => (el.created_at = todateString(el.created_at)));
+    console.log(data)
+    res.json(data)
+})
+
 router.get('/getdata' , async (req,res)=>{
     const sql = "SELECT * FROM `company_activitydata` WHERE 1"
     const [data] = await db.query(sql);
