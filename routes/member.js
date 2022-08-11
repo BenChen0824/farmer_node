@@ -261,4 +261,11 @@ router.get('/orderlist', async(req,res)=>{
     res.json(r13)
 })
 
+router.get('/coupons', async(req,res)=>{
+    const sql16 = 'SELECT * FROM coupon_01 WHERE change_memberid=?'
+    const [r16] = await db.query(sql16, req.header('loginUser'));
+    r16.forEach(el=> el.change_time = todateString(el.change_time));
+    res.json(r16);
+});
+
 module.exports = router;
