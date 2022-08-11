@@ -7,6 +7,7 @@ const todateString = require(__dirname + '/../modules/date_format');
 const upload = require(__dirname + '/../modules/upload_img');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
+const nodemailer = require('nodemailer')
 
 const getUserCart = async (member_id) => {
     const sql = `SELECT p.*, odt.* 
@@ -93,6 +94,38 @@ router.post('/signup', async (req, res) => {
     if (result.affectedRows === 1) {
         output.success = true;
     }
+
+    let transporter = nodemailer.createTransport({
+        service: 'Gmail', // 使用了內建傳輸傳送郵件 檢視支援列表：https://nodemailer.com/smtp/well-known/
+        //   port: 465, // SMTP 埠
+        secureConnection: true, // 使用了 SSL
+        auth: {
+            user: 'mfee26farmer@gmail.com',
+            pass: 'tgqmecsedfnjqkwz', //授權碼，並非QQ密碼
+        },
+    });
+    let mailOptions = {
+        from: '"有機の小鱻肉" <mfee26farmer@gmail.com>', // 傳送地址
+        to: `${email}`, // 接收列表（可多個）
+        subject: '【有機の小鱻肉】會員註冊信箱驗證', // 主題
+        // 傳送text或者html格式（任選一個）
+        html: `<body>
+        <img style="width:300px" src="https://www.upload.ee/image/14320633/C_LOGO-1.jpg" border="0" alt="C_LOGO-1.jpg" />
+        <h1>有機の小鱻肉</h1>
+        <div>親愛的 ${username} 會員您好</div>
+        <h3>請點擊下方連結即可完成信箱驗證</h3>
+        <br>
+        <a href='http://localhost:3000/member/'>點我進入會員中心</a>
+        </body>`, // plain text body
+        //html:  fs.createReadStream(path.resolve(__dirname,'index.html'))
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        const ans = JSON.stringify(info);
+        res.send(ans);
+    });
 
     res.json(output);
 });
