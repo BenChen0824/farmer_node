@@ -79,7 +79,7 @@ router.get('/', async (req, res) => {
 
 });
 
-//抓全部資料.(product)
+//抓全部資料(product)
 // router.get('/', async (req, res) => {
 //     const sql1 = 'SELECT * FROM `product` WHERE 1';
 //     const [r1] = await db.query(sql1);
