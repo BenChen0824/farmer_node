@@ -268,4 +268,16 @@ router.get('/coupons', async(req,res)=>{
     res.json(r16);
 });
 
+router.get('/purchaseRecord', async(req, res)=>{
+    const sql17 = 'SELECT product_amount_total FROM orderlist WHERE customer_id=?'
+    const [r17] = await db.query(sql17, req.header('loginUser'))
+    res.json(r17)
+});
+
+router.get('/myPoints', async(req, res)=>{
+    const sql18 = 'SELECT daily_points FROM customer_data WHERE customer_id=?'
+    const [r18] = await db.query(sql18, req.header('loginUser'))
+    res.json(r18)
+});
+
 module.exports = router;
