@@ -33,6 +33,7 @@ router.post('/createrecipe',upload.single('file') , async (req, res) => {
       res.json(recipescreate);
       return
   } catch (error) {
+      console.log(error)
       res.send(error);
       return;
   }
@@ -48,7 +49,7 @@ router.post('/updaterecipe', async (req, res) => {
       // console.log(req.body);
       // const { recipes_name, recipes_time_cost, recipes_portion, recipes_calories, recipes_type, recipes_cooking_degree, recipes_ingredient, recipes_cooking_method, recipes_description, recipes_img, cooking_create_member_Id } = req.body;
 
-      const sqlupdate = "UPDATE `recipe` SET `recipes_name`=? ,`recipes_description`=?, `recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_cooking_method`=? ,`recipes_img=?` , `customer_id`=? WHERE recipes_sid=?";
+      const sqlupdate = "UPDATE `recipe` SET `recipes_name`=? ,`recipes_description`=?, `recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_cooking_method`=? ,`recipes_img`=?, `customer_id`=? WHERE recipes_sid=?";
       const sql = sqlstring.format(sqlupdate, [
         req.body.updateRecipesname ,
         req.body.updateDescription ,
@@ -60,7 +61,8 @@ router.post('/updaterecipe', async (req, res) => {
         req.body.updateIngredient ,
         req.body.updateStep ,
         req.body.recipes_img ,
-        req.body.customer_id
+        req.body.customer_id,
+        req.body.recipe_sid
         ])
         console.log("asdf:", req.body.recipe_sid)
       console.log(sql)
