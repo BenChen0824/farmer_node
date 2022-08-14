@@ -6,7 +6,7 @@ const router = express.Router();
 
 const getListHandler = async (req) => {
   let output = {
-    perPage: 12,
+    perPage: req.query.perPage || 12,
     page: 1,
     totalRows: 0,
     totalPage: 0,
@@ -197,6 +197,14 @@ router.route("/hot_sale").get(async (req, res) => {
 
   res.json(output);
 });
+
+router.route("/rating").get(async (req, res) => {
+
+  const sql = `SELECT rating FROM comment WHERE product_sid =? `;
+  const [data] = await db.query(sql,[req.query.sid]);
+  res.json(data);
+});
+
 
 module.exports = router;
 
