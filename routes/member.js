@@ -85,14 +85,17 @@ router.post('/signup', async (req, res) => {
         code: 0,
     };
 
+    const RandomNumber = Math.floor(Math.random()*(99999-10000+1))+10000
+
     const sql01 =
-        'INSERT INTO `customer_data`(`name`, `email`, `password`, `creat_at`) VALUES (?,?,?,NOW())';
+        'INSERT INTO `customer_data`(`name`, `email`, `password`, `verify_number`,`creat_at`) VALUES (?,?,?,?,NOW())';
     const { username, email, password } = req.body;
     const pass_hash = bcrypt.hashSync(`${password}`, 10);
-    const [result] = await db.query(sql01, [username, email, pass_hash]);
+    const [result] = await db.query(sql01, [username, email, pass_hash, RandomNumber]);
 
     if (result.affectedRows === 1) {
         output.success = true;
+        console.log(result)
     }
 
     let transporter = nodemailer.createTransport({
@@ -113,9 +116,9 @@ router.post('/signup', async (req, res) => {
         <img style="width:300px" src="https://www.upload.ee/image/14320633/C_LOGO-1.jpg" border="0" alt="C_LOGO-1.jpg" />
         <h1>有機の小鱻肉</h1>
         <div>親愛的 ${username} 會員您好</div>
-        <h3>請點擊下方連結即可完成信箱驗證</h3>
+        <div>請輸入下方驗證碼即可完成信箱驗證</div>
         <br>
-        <a href='http://localhost:3000/member/'>點我進入會員中心</a>
+        <h2>驗證碼【${RandomNumber}】</h2>
         </body>`, // plain text body
         //html:  fs.createReadStream(path.resolve(__dirname,'index.html'))
     };
@@ -279,5 +282,40 @@ router.get('/myPoints', async(req, res)=>{
     const [r18] = await db.query(sql18, req.header('loginUser'))
     res.json(r18)
 });
+
+router.post('/verify', async(req,res)=>{
+    const output = {
+        success: false,
+        error: '',
+        code: 0,
+    };
+
+    const sql19 = 'SELECT * FROM customer_data WHERE verify_number=?';
+    const [r19] = await db.query(sql19, [req.body.checkNumber]);
+
+    if (!r19.length) {
+        output.code = 401;
+        output.error = '帳號錯誤';
+        return res.json(output);
+    } else {
+        const token = jwt.sign(
+            {
+                customer_id: r19[0].customer_id,
+                email: r19[0].email,
+                username: r19[0].name,
+            },
+            process.env.JWT_SECRET
+        );
+        output.success = true
+        output.data = {
+            token,
+            customer_id: r19[0].customer_id,
+            username: r19[0].name,
+            email: r19[0].email,
+        };
+        output.cart = await getUserCart(r19[0].customer_id);
+    }
+    res.json(await output);
+})
 
 module.exports = router;
