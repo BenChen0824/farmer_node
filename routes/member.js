@@ -7,6 +7,7 @@ const todateString = require(__dirname + '/../modules/date_format');
 const upload = require(__dirname + '/../modules/upload_img');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
+const nodemailer = require('nodemailer')
 
 const getUserCart = async (member_id) => {
     const sql = `SELECT p.*, odt.* 
@@ -84,15 +85,50 @@ router.post('/signup', async (req, res) => {
         code: 0,
     };
 
+    const RandomNumber = Math.floor(Math.random()*(99999-10000+1))+10000
+
     const sql01 =
-        'INSERT INTO `customer_data`(`name`, `email`, `password`, `creat_at`) VALUES (?,?,?,NOW())';
+        'INSERT INTO `customer_data`(`name`, `email`, `password`, `verify_number`,`creat_at`) VALUES (?,?,?,?,NOW())';
     const { username, email, password } = req.body;
     const pass_hash = bcrypt.hashSync(`${password}`, 10);
-    const [result] = await db.query(sql01, [username, email, pass_hash]);
+    const [result] = await db.query(sql01, [username, email, pass_hash, RandomNumber]);
 
     if (result.affectedRows === 1) {
         output.success = true;
+        console.log(result)
     }
+
+    let transporter = nodemailer.createTransport({
+        service: 'Gmail', // 使用了內建傳輸傳送郵件 檢視支援列表：https://nodemailer.com/smtp/well-known/
+        //   port: 465, // SMTP 埠
+        secureConnection: true, // 使用了 SSL
+        auth: {
+            user: 'mfee26farmer@gmail.com',
+            pass: 'tgqmecsedfnjqkwz', //授權碼，並非QQ密碼
+        },
+    });
+    let mailOptions = {
+        from: '"有機の小鱻肉" <mfee26farmer@gmail.com>', // 傳送地址
+        to: `${email}`, // 接收列表（可多個）
+        subject: '【有機の小鱻肉】會員註冊信箱驗證', // 主題
+        // 傳送text或者html格式（任選一個）
+        html: `<body>
+        <img style="width:300px" src="https://www.upload.ee/image/14320633/C_LOGO-1.jpg" border="0" alt="C_LOGO-1.jpg" />
+        <h1>有機の小鱻肉</h1>
+        <div>親愛的 ${username} 會員您好</div>
+        <div>請輸入下方驗證碼即可完成信箱驗證</div>
+        <br>
+        <h2>驗證碼【${RandomNumber}】</h2>
+        </body>`, // plain text body
+        //html:  fs.createReadStream(path.resolve(__dirname,'index.html'))
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        const ans = JSON.stringify(info);
+        res.send(ans);
+    });
 
     res.json(output);
 });
@@ -226,6 +262,60 @@ router.get('/orderlist', async(req,res)=>{
     const [r13] = await db.query(sql13, req.header('loginUser'))
     r13.forEach(el=> el.created_time = todateString(el.created_time));
     res.json(r13)
+})
+
+router.get('/coupons', async(req,res)=>{
+    const sql16 = 'SELECT * FROM coupon_01 WHERE change_memberid=?'
+    const [r16] = await db.query(sql16, req.header('loginUser'));
+    r16.forEach(el=> el.change_time = todateString(el.change_time));
+    res.json(r16);
+});
+
+router.get('/purchaseRecord', async(req, res)=>{
+    const sql17 = 'SELECT product_amount_total FROM orderlist WHERE customer_id=?'
+    const [r17] = await db.query(sql17, req.header('loginUser'))
+    res.json(r17)
+});
+
+router.get('/myPoints', async(req, res)=>{
+    const sql18 = 'SELECT daily_points FROM customer_data WHERE customer_id=?'
+    const [r18] = await db.query(sql18, req.header('loginUser'))
+    res.json(r18)
+});
+
+router.post('/verify', async(req,res)=>{
+    const output = {
+        success: false,
+        error: '',
+        code: 0,
+    };
+
+    const sql19 = 'SELECT * FROM customer_data WHERE verify_number=?';
+    const [r19] = await db.query(sql19, [req.body.checkNumber]);
+
+    if (!r19.length) {
+        output.code = 401;
+        output.error = '帳號錯誤';
+        return res.json(output);
+    } else {
+        const token = jwt.sign(
+            {
+                customer_id: r19[0].customer_id,
+                email: r19[0].email,
+                username: r19[0].name,
+            },
+            process.env.JWT_SECRET
+        );
+        output.success = true
+        output.data = {
+            token,
+            customer_id: r19[0].customer_id,
+            username: r19[0].name,
+            email: r19[0].email,
+        };
+        output.cart = await getUserCart(r19[0].customer_id);
+    }
+    res.json(await output);
 })
 
 module.exports = router;

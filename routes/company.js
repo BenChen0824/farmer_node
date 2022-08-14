@@ -41,7 +41,6 @@ router.route('/login').post(async (req, res) => {
     console.log(req.body.company_password);
     console.log(r1[0].company_password);
     output.success = await bcrypt.compare(req.body.company_password, r1[0].company_password);
-    // console.log(await bcrypt.compare(req.body.company_password, r1[0].company_password));
     if (!output.success) {
         output.code = 402;
         output.error = '密碼錯誤';
