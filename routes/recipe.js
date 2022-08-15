@@ -9,11 +9,12 @@ const sqlstring = require("sqlstring");
 // 以下為食譜新增
 
 router.post('/createrecipe',upload.single('file') , async (req, res) => {
-  // console.log("body: ", req.body)
+  console.log("body: ", req.body)
   try {
       // console.log(req.body.recipes_sid);
       // const customer_id = req.header('customer_id')
-      const sqlcreate = "INSERT INTO `recipe`(`recipes_name`, `recipes_description`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_img`, `customer_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+      const sqlcreate = "INSERT INTO `recipe`(`recipes_name`, `recipes_description`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_ingredient1`, `recipes_ingredient2`, `recipes_ingredient3`, `recipes_ingredient4`, `recipes_ingredient5`, `recipes_ingredient6`, `recipes_ingredient7`, `recipes_ingredient8`, `recipes_ingredient9`, `recipes_step`, `recipes_img`, `customer_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      // const ingre = req.body.ingredient.toString()
       const sql = sqlstring.format(sqlcreate, [
         req.body.recipesname ,
         req.body.description ,
@@ -23,10 +24,28 @@ router.post('/createrecipe',upload.single('file') , async (req, res) => {
         req.body.recipestype ,
         req.body.recipesdegree ,
         req.body.ingredient ,
+        req.body.ingredient1 ,
+        req.body.ingredient2 ,
+        req.body.ingredient3 ,
+        req.body.ingredient4 ,
+        req.body.ingredient5 ,
+        req.body.ingredient6 ,
+        req.body.ingredient7 ,
+        req.body.ingredient8 ,
+        req.body.ingredient9 ,
         req.body.step ,
+        // req.body.step1 ,
+        // req.body.step2 ,
+        // req.body.step3 ,
+        // req.body.step4 ,
+        // req.body.step5 ,
+        // req.body.step6 ,
+        // req.body.step7 ,
+        // req.body.step8 ,
+        // req.body.step9 ,
         req.body.recipes_img ,
         req.body.customer_id])
-        console.log(req.body.recipes_img)
+        console.log("asd:",req.body.ingredient)
       console.log(sql)
       const recipescreate = await db.query(sql);
       // console.log(recipescreate);
@@ -47,9 +66,9 @@ router.post('/createrecipe',upload.single('file') , async (req, res) => {
 router.post('/updaterecipe', async (req, res) => {
   try {
       // console.log(req.body);
-      // const { recipes_name, recipes_time_cost, recipes_portion, recipes_calories, recipes_type, recipes_cooking_degree, recipes_ingredient, recipes_cooking_method, recipes_description, recipes_img, cooking_create_member_Id } = req.body;
+      // const { recipes_name, recipes_time_cost, recipes_portion, recipes_calories, recipes_type, recipes_cooking_degree, recipes_ingredient, recipes_step, recipes_description, recipes_img, cooking_create_member_Id } = req.body;
 
-      const sqlupdate = "UPDATE `recipe` SET `recipes_name`=? ,`recipes_description`=?, `recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_cooking_method`=? ,`recipes_img`=?, `customer_id`=? WHERE recipes_sid=?";
+      const sqlupdate = "UPDATE `recipe` SET `recipes_name`=? ,`recipes_description`=?, `recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_step`=? ,`recipes_img`=?, `customer_id`=? WHERE recipes_sid=?";
       const sql = sqlstring.format(sqlupdate, [
         req.body.updateRecipesname ,
         req.body.updateDescription ,
@@ -178,29 +197,6 @@ const getRecipeHandler = async (req, res) => {
     const output = await getRecipeHandler(req, res);
     res.json(output);
   });
-
-
-
-
-
-//   const data = {
-//     recipes_sid: r1[0].recipes_sid,
-//     recipes_name: r1[0].recipes_name,
-//     recipes_time_cost: r1[0].recipes_time_cost,
-//     recipes_portion: r1[0].recipes_portion,
-//     recipes_calories: r1[0].recipes_calories,
-//     recipes_type: r1[0].recipes_type,
-//     recipes_cooking_degree: r1[0].recipes_cooking_degree,
-//     recipes_ingredient: r1[0].recipes_ingredient,
-//     recipes_cooking_method: r1[0].recipes_cooking_method,
-//     recipes_description: r1[0].recipes_description,
-//     recipes_img: r1[0].recipes_img,
-//     cooking_create_member_Id: r1[0].cooking_create_member_Id,
-//     recipes_collection:r1[0].recipes_collection
-//     recipes_like:r1[0].recipes_like
-//     created_at:r1[0].created_at
-//   };
-
 
 
   // 分隔線，以下為R
