@@ -13,7 +13,7 @@ router.post('/createrecipe',upload.single('file') , async (req, res) => {
   try {
       // console.log(req.body.recipes_sid);
       // const customer_id = req.header('customer_id')
-      const sqlcreate = "INSERT INTO `recipe`(`recipes_name`, `recipes_description`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_img`, `customer_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+      const sqlcreate = "INSERT INTO `recipe`(`recipes_name`, `recipes_description`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_img`, `recipe_creater`,customer_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
       const sql = sqlstring.format(sqlcreate, [
         req.body.recipesname ,
         req.body.description ,
@@ -25,6 +25,7 @@ router.post('/createrecipe',upload.single('file') , async (req, res) => {
         req.body.ingredient ,
         req.body.step ,
         req.body.recipes_img ,
+        req.body.recipe_creater ,
         req.body.customer_id])
         console.log(req.body.recipes_img)
       console.log(sql)
