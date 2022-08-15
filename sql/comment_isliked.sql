@@ -51,6 +51,7 @@ INSERT INTO `comment_isliked` (`sid`, `comment_sid`, `customer_id`, `isliked`) V
 (10, 60, 530, 0),
 (11, 68, 530, 1);
 
+
 --
 -- 已傾印資料表的索引
 --
