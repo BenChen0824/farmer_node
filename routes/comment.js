@@ -114,8 +114,8 @@ router.post('/islikedchange', async (req,res)=>{
 //抓全部資料.(comment) + 商品列表(product)的商品名稱(product_name)
 router.get('/', async (req, res) => {
     const sql = `SELECT c.*, p.product_name ,cus.profile_img,cus.account
-  FROM product p
-  JOIN comment c
+  FROM comment c
+  JOIN product p
   ON c.product_sid=p.sid
   JOIN customer_data cus
   ON cus.customer_id=c.member_id
@@ -130,7 +130,6 @@ router.get('/', async (req, res) => {
 
 // 抓商品的SID 有的話，再去對應評論的留言
 router.post('/getproductbyname', async (req, res) => {
-  console.log(req.body);
   const sql = `SELECT c.*, p.* 
 FROM comment c
 JOIN product p
@@ -139,7 +138,7 @@ WHERE p.product_name LIKE ?
 ORDER BY c.created_at DESC
 `;
 console.log(req.body);
-const [r] = await db.query(sql, [`%${req.body.product_name}`]);
+const [r] = await db.query(sql, [req.body.product_name]);
 res.json(r);
 
 });
