@@ -79,6 +79,7 @@ app.use('/recipe', require(__dirname + '/routes/recipe'));
 app.use('/company', require(__dirname + '/routes/company'));
 app.use('/activity', require(__dirname + '/routes/activity'));
 app.use('/product_collect', require(__dirname + '/routes/product_collect'));
+app.use('/recommend_recipe',require(__dirname + "/routes/recommend_recipe"))
 
 //---- 上傳照片
 app.use('/uploads', express.static('uploads'));
