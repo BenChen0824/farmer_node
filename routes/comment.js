@@ -62,12 +62,60 @@ const moment = require('moment-timezone');
 //     }
 
 
+//按讚改變
+router.post('/islikedchange', async (req,res)=>{
+
+
+  const output = {
+      success: false,
+      error: '',
+  };
+  if(!req.body.customer_id || !req.body.comment_sid){
+      output.error="缺少參數"
+      res.json(output)
+  }
+
+  const sql3 = `SELECT * FROM comment_isliked WHERE customer_id=? && comment_sid=?`;
+  const [ num ] = await db.query(sql3, [req.body.customer_id,req.body.comment_sid]);
+  if (num.length <= 0) {
+    // console.log(num);
+      const sqlInsert = "INSERT INTO `comment_isliked`(`comment_sid`, `customer_id`, `isliked`) VALUES (?,?,1)"
+      const [data] = await db.query(sqlInsert,[req.body.comment_sid,req.body.customer_id]);
+      res.json(data)
+  } 
+  else
+  {
+    // console.log(num);
+  const sqlChangeIsliked = "UPDATE `comment_isliked` SET `isliked`=? WHERE customer_id=? && comment_sid=?"
+  const [data] = await db.query(sqlChangeIsliked,[(num[0].isliked===1?0:1),req.body.customer_id,req.body.comment_sid]);
+  // console.log(data[0].isliked);
+  res.json(data)}
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //抓全部資料.(comment) + 商品列表(product)的商品名稱(product_name)
 router.get('/', async (req, res) => {
     const sql = `SELECT c.*, p.product_name ,cus.profile_img,cus.account
-  FROM product p
-  JOIN comment c
+  FROM comment c
+  JOIN product p
   ON c.product_sid=p.sid
   JOIN customer_data cus
   ON cus.customer_id=c.member_id

@@ -192,6 +192,18 @@ router.get('/collections', async (req, res) => {
     res.json(r4);
 });
 
+router.get('/myrecipes', async (req, res) => {
+    const sql22 = `SELECT rcol.*, reci.* 
+    FROM recipe_collection rcol
+    JOIN recipe reci
+    ON rcol.recipes_sid=reci.recipes_sid
+    WHERE rcol.customer_id=?
+    ORDER BY rcol.recipes_sid`;
+
+    const [r22] = await db.query(sql22, req.header('loginUser'));
+    res.json(r22);
+});
+
 router.delete('/deleteproduct', async (req, res) => {
     const sql06 =
         'DELETE FROM product_collect WHERE member_id=? AND product_id=?';
@@ -200,6 +212,16 @@ router.delete('/deleteproduct', async (req, res) => {
         req.header('product_id'),
     ]);
     res.json(r6);
+});
+
+router.delete('/deleterecipes', async (req, res) => {
+    const sql23 =
+        'DELETE FROM recipe_collection WHERE customer_id=? AND recipes_sid=?';
+    const [r23] = await db.query(sql23, [
+        req.header('customer_id'),
+        req.header('recipes_sid'),
+    ]);
+    res.json(r23);
 });
 
 router.post('/profile', upload.single('file'), async (req, res) => {
@@ -234,6 +256,12 @@ router.post('/editintro', async(req,res)=>{
 
   res.json([r9])
 })
+
+router.get('/postrecipe', async (req, res) => {
+    const sql21 = 'SELECT * FROM recipe WHERE customer_id=?';
+    const [r21] = await db.query(sql21, req.header('loginUser'));
+    res.json(r21);
+});
 
 router.get('/orders', async(req,res)=>{
     const sql12 = `SELECT odt.*, odl.*, pro.* 
@@ -281,6 +309,18 @@ router.get('/myPoints', async(req, res)=>{
     const sql18 = 'SELECT daily_points FROM customer_data WHERE customer_id=?'
     const [r18] = await db.query(sql18, req.header('loginUser'))
     res.json(r18)
+});
+
+router.get('/myevents', async (req, res) => {
+    const sql23 = `SELECT aliked.*, activ.* 
+    FROM activity_isliked aliked
+    JOIN company_activitydata activ
+    ON aliked.activity_sid=activ.sid
+    WHERE aliked.customer_id=?
+    ORDER BY aliked.activity_sid`;
+
+    const [r23] = await db.query(sql23, req.header('loginUser'));
+    res.json(r23);
 });
 
 router.post('/verify', async(req,res)=>{
