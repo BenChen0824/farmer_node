@@ -108,15 +108,21 @@ router.post('/add', async (req, res) => {
     if (r2.affectedRows) {
         output.success = true;
     }
-
     output.activity = await r2;
     res.json(output);
     //sid qty
 });
 
-
-
-
+//刪除
+router.delete('/deleteactivity', async (req, res) => {
+    const sql06 =
+        'DELETE FROM company_activitydata WHERE company_id=? AND sid=?';
+    const [r6] = await db.query(sql06, [
+        req.header('company_id'),
+        req.header('sid'),
+    ]);
+    res.json(r6);
+});
 
 
 
