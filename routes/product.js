@@ -1,4 +1,5 @@
 const express = require("express");
+const _ = require('lodash')
 const db = require(__dirname + "/../modules/mysql-connect");
 const router = express.Router();
 // const { toDateString, toDatetimeString } = require(__dirname +
@@ -80,15 +81,19 @@ router.route("/").get(async (req, res) => {
   res.json(output);
 }).post(async(req,res)=>{
   const output = {
-    success: false,
+    success: "資料新增失敗",
     error: ""
   };
   const fields = [
     'name', 'type', 'photo', 'price', 'unit','details', 'expire', 'inventory', 'supplier','status', 'hashtag','time'
   ]
 
-  if (fields.some(k => !req.body[k]))  {
-    output.error = "參數不足"; 
+  const fieldCkeck = [
+    'name', 'type', 'photo', 'price', 'unit','details', 'expire', 'inventory', 'supplier','status', 'hashtag'
+  ]
+  if (fieldCkeck.some(k => _.isNil(req.body[k]) ))  {
+    const invalid = fieldCkeck.filter(k => _.isNil(req.body[k])).join(', ')
+    output.error = `參數不足 ${invalid}`; 
     return res.json(output);
   }
 
@@ -106,12 +111,12 @@ router.route("/").get(async (req, res) => {
     ...values,
   ]);
   if (r1.affectedRows) {
-    output.success = true;
+    output.success = "資料新增成功";
   }
   res.json(output); 
 }).put(async(req,res)=>{
   const output = {
-    success: false,
+    success: "資料修改失敗",
     error: ""
   };
   // const fields = [
@@ -151,8 +156,8 @@ router.route("/").get(async (req, res) => {
   ]);
   output.r1 = r1;
 
-  if (r1.affectedRows && r1.changedRows) {
-    output.success = true;
+  if (r1.affectedRows || r1.changedRows) {
+    output.success = "資料修改成功";
   }
 
   res.json(output);  
