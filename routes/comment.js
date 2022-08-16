@@ -62,6 +62,8 @@ const moment = require('moment-timezone');
 //     }
 
 
+
+
 //按讚改變
 router.post('/islikedchange', async (req,res)=>{
 
@@ -77,19 +79,30 @@ router.post('/islikedchange', async (req,res)=>{
 
   const sql3 = `SELECT * FROM comment_isliked WHERE customer_id=? && comment_sid=?`;
   const [ num ] = await db.query(sql3, [req.body.customer_id,req.body.comment_sid]);
+  let data=[];
   if (num.length <= 0) {
     // console.log(num);
-      const sqlInsert = "INSERT INTO `comment_isliked`(`comment_sid`, `customer_id`, `isliked`) VALUES (?,?,1)"
-      const [data] = await db.query(sqlInsert,[req.body.comment_sid,req.body.customer_id]);
-      res.json(data)
+      const sqlInsert = "INSERT INTO `comment_isliked`(`comment_sid`, `customer_id`) VALUES (?,?)"
+       data = await db.query(sqlInsert,[req.body.comment_sid,req.body.customer_id]);
   } 
   else
   {
     // console.log(num);
-  const sqlChangeIsliked = "UPDATE `comment_isliked` SET `isliked`=? WHERE customer_id=? && comment_sid=?"
-  const [data] = await db.query(sqlChangeIsliked,[(num[0].isliked===1?0:1),req.body.customer_id,req.body.comment_sid]);
+  const sqlChangeIsliked = "DELETE FROM `comment_isliked`  WHERE customer_id=? && comment_sid=?"
+   data = await db.query(sqlChangeIsliked,[req.body.customer_id,req.body.comment_sid]);
   // console.log(data[0].isliked);
-  res.json(data)}
+ }
+
+ const sqlSearch = `SELECT COUNT(1) num FROM comment_isliked WHERE comment_sid=?`
+ const [sqlSearchcount] = await db.query(sqlSearch,[req.body.comment_sid]);
+ console.log(sqlSearchcount[0].num);
+
+
+const changeCommentLikeSQL ="UPDATE `comment` SET `likes`=? WHERE comment_sid=?" 
+const [totalData] = await db.query(changeCommentLikeSQL,[sqlSearchcount[0].num,req.body.comment_sid]);
+
+
+ res.json(totalData)
 })
 
 
