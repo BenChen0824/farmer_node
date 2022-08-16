@@ -97,8 +97,6 @@ res.json(r);
 
 
 
-
-
 //送資料到資料庫 (新增)
 router.post('/createcomment', async (req, res) => {
     const sql =
