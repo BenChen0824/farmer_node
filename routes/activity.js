@@ -69,44 +69,51 @@ router.post('/islikedchange', async (req,res)=>{
     res.json(data)}
 })
 
-//新增
-// router.post('/add', async (req, res) => {
-//     const output = {
-//         success: false,
-//         error: '',
-//     };
-//     if (!req.body.company_id ) {
-//         output.error = '參數不足';
-//         return res.json(output); 
-//     }
+// 新增
+router.post('/add', async (req, res) => {
+    const output = {
+        success: false,
+        error: '',
+    };
+    if (!req.body.company_id ) {
+        output.error = '參數不足';
+        return res.json(output); 
+    }
  
 
-//     const sql2 =
-//         'INSERT INTO `company_activity`(`activity_img`, `company_id`, `activity_info`, `activity_schedule`, `activity_mon`, `activity_tue`, `activity_wen`, `activity_thu`, `activity_fri`, `activity_sat`, `activity_sun`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,NOW())';
 
-//     const [r2] = await db.query(sql2, [
-//         req.body.activity_img,
-//         req.body.company_id,
-//         req.body.activity_info,
-//         req.body.activity_schedule,
-//         req.body.activity_mon,
-//         req.body.activity_tue,
-//         req.body.activity_wen,
-//         req.body.activity_thu,
-//         req.body.activity_fri,
-//         req.body.activity_sat,
-//         req.body.activity_sun,
-//     ]);
+    const sqlActivityUpdate =
+        'INSERT INTO `company_activitydata`(`company_id`, `card_img`, `company_infoImg`, `address`, `phone`, `fax`, `card_area`, `card_city`, `card_info`, `card_info1`, `card_a`, `card_b`, `card_c`, `card_d`, `card_e`, `Map_a`, `Map_b`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())';
 
-//     // console.log(r2.affectedRows);
-//     if (r2.affectedRows) {
-//         output.success = true;
-//     }
+    const [r2] = await db.query(sqlActivityUpdate, [
+        req.body.company_id,
+        req.body.card_img,
+        req.body.company_infoImg,
+        req.body.address,
+        req.body.phone,
+        req.body.fax,
+        req.body.card_area,
+        req.body.card_city,
+        req.body.card_info,
+        req.body.card_info1,
+        req.body.card_a,
+        req.body.card_b,
+        req.body.card_c,
+        req.body.card_d,
+        req.body.card_e,
+        req.body.Map_a,
+        req.body.Map_b,
+    ]);
 
-//     output.activity = await r2;
-//     res.json(output);
-//     //sid qty
-// });
+    // console.log(r2.affectedRows);
+    if (r2.affectedRows) {
+        output.success = true;
+    }
+
+    output.activity = await r2;
+    res.json(output);
+    //sid qty
+});
 
 
 
