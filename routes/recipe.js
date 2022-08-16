@@ -217,12 +217,11 @@ const getRecipeHandler = async (req, res) => {
       if(!req.params.recipes_sid){
         return
       }
-      const sqleach = "SELECT * FROM `recipe` WHERE 1=1 and recipes_sid= " + req.params.recipes_sid;
+      const sqleach = "SELECT * FROM `recipe` WHERE recipes_sid= " 
+      + req.params.recipes_sid;
       const [recipesdata] = await db.query(sqleach);
       res.json(recipesdata[0])
       })
-
-
 
 
 
