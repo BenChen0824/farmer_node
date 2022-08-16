@@ -63,6 +63,67 @@ const moment = require('moment-timezone');
 
 
 
+
+//按讚改變
+router.post('/islikedchange', async (req,res)=>{
+
+
+  const output = {
+      success: false,
+      error: '',
+  };
+  if(!req.body.customer_id || !req.body.comment_sid){
+      output.error="缺少參數"
+      res.json(output)
+  }
+
+  const sql3 = `SELECT * FROM comment_isliked WHERE customer_id=? && comment_sid=?`;
+  const [ num ] = await db.query(sql3, [req.body.customer_id,req.body.comment_sid]);
+  let data=[];
+  if (num.length <= 0) {
+    // console.log(num);
+      const sqlInsert = "INSERT INTO `comment_isliked`(`comment_sid`, `customer_id`) VALUES (?,?)"
+       data = await db.query(sqlInsert,[req.body.comment_sid,req.body.customer_id]);
+  } 
+  else
+  {
+    // console.log(num);
+  const sqlChangeIsliked = "DELETE FROM `comment_isliked`  WHERE customer_id=? && comment_sid=?"
+   data = await db.query(sqlChangeIsliked,[req.body.customer_id,req.body.comment_sid]);
+  // console.log(data[0].isliked);
+ }
+
+ const sqlSearch = `SELECT COUNT(1) num FROM comment_isliked WHERE comment_sid=?`
+ const [sqlSearchcount] = await db.query(sqlSearch,[req.body.comment_sid]);
+ console.log(sqlSearchcount[0].num);
+
+
+const changeCommentLikeSQL ="UPDATE `comment` SET `likes`=? WHERE comment_sid=?" 
+const [totalData] = await db.query(changeCommentLikeSQL,[sqlSearchcount[0].num,req.body.comment_sid]);
+
+
+ res.json(totalData)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //抓全部資料.(comment) + 商品列表(product)的商品名稱(product_name)
 router.get('/', async (req, res) => {
     const sql = `SELECT c.*, p.product_name ,cus.profile_img,cus.account
@@ -79,12 +140,24 @@ router.get('/', async (req, res) => {
 
 });
 
-//抓全部資料(product)
-// router.get('/', async (req, res) => {
-//     const sql1 = 'SELECT * FROM `product` WHERE 1';
-//     const [r1] = await db.query(sql1);
-//     res.json(await r1);
-// });
+
+// 抓商品的SID 有的話，再去對應評論的留言
+router.post('/getproductbyname', async (req, res) => {
+  const sql = `SELECT c.*, p.* 
+FROM comment c
+JOIN product p
+ON c.product_sid=p.sid
+WHERE p.product_name LIKE ?
+ORDER BY c.created_at DESC
+`;
+console.log(req.body);
+const [r] = await db.query(sql, [req.body.product_name]);
+res.json(r);
+
+});
+
+
+
 
 
 

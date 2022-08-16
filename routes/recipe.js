@@ -9,11 +9,12 @@ const sqlstring = require("sqlstring");
 // 以下為食譜新增
 
 router.post('/createrecipe',upload.single('file') , async (req, res) => {
-  // console.log("body: ", req.body)
+  console.log("body: ", req.body)
   try {
       // console.log(req.body.recipes_sid);
       // const customer_id = req.header('customer_id')
-      const sqlcreate = "INSERT INTO `recipe`(`recipes_name`, `recipes_description`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_cooking_method`, `recipes_img`, `customer_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+      const sqlcreate = "INSERT INTO `recipe`(`recipes_name`, `recipes_description`, `recipes_time_cost`, `recipes_portion`, `recipes_calories`, `recipes_type`, `recipes_cooking_degree`, `recipes_ingredient`, `recipes_ingredient1`, `recipes_ingredient2`, `recipes_ingredient3`, `recipes_ingredient4`, `recipes_ingredient5`, `recipes_ingredient6`, `recipes_ingredient7`, `recipes_ingredient8`, `recipes_ingredient9`, `recipes_step`, `recipes_step1`, `recipes_step2`, `recipes_step3`, `recipes_step4`, `recipes_step5`, `recipes_step6`, `recipes_step7`, `recipes_step8`, `recipes_step9`,  `recipes_img`,`recipe_creater`, `customer_id`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      // const ingre = req.body.ingredient.toString()
       const sql = sqlstring.format(sqlcreate, [
         req.body.recipesname ,
         req.body.description ,
@@ -23,10 +24,28 @@ router.post('/createrecipe',upload.single('file') , async (req, res) => {
         req.body.recipestype ,
         req.body.recipesdegree ,
         req.body.ingredient ,
+        req.body.ingredient1 ,
+        req.body.ingredient2 ,
+        req.body.ingredient3 ,
+        req.body.ingredient4 ,
+        req.body.ingredient5 ,
+        req.body.ingredient6 ,
+        req.body.ingredient7 ,
+        req.body.ingredient8 ,
+        req.body.ingredient9 ,
         req.body.step ,
+        req.body.step1 ,
+        req.body.step2 ,
+        req.body.step3 ,
+        req.body.step4 ,
+        req.body.step5 ,
+        req.body.step6 ,
+        req.body.step7 ,
+        req.body.step8 ,
+        req.body.step9 ,
         req.body.recipes_img ,
+        req.body.recipe_creater ,
         req.body.customer_id])
-        console.log(req.body.recipes_img)
       console.log(sql)
       const recipescreate = await db.query(sql);
       // console.log(recipescreate);
@@ -47,9 +66,9 @@ router.post('/createrecipe',upload.single('file') , async (req, res) => {
 router.post('/updaterecipe', async (req, res) => {
   try {
       // console.log(req.body);
-      // const { recipes_name, recipes_time_cost, recipes_portion, recipes_calories, recipes_type, recipes_cooking_degree, recipes_ingredient, recipes_cooking_method, recipes_description, recipes_img, cooking_create_member_Id } = req.body;
+      // const { recipes_name, recipes_time_cost, recipes_portion, recipes_calories, recipes_type, recipes_cooking_degree, recipes_ingredient, recipes_step, recipes_description, recipes_img, cooking_create_member_Id } = req.body;
 
-      const sqlupdate = "UPDATE `recipe` SET `recipes_name`=? ,`recipes_description`=?, `recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_cooking_method`=? ,`recipes_img`=?, `customer_id`=? WHERE recipes_sid=?";
+      const sqlupdate = "UPDATE `recipe` SET `recipes_name`=? ,`recipes_description`=?, `recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_step`=? ,`recipes_img`=?, `customer_id`=? WHERE recipes_sid=?";
       const sql = sqlstring.format(sqlupdate, [
         req.body.updateRecipesname ,
         req.body.updateDescription ,
@@ -77,17 +96,6 @@ router.post('/updaterecipe', async (req, res) => {
 
 });
 
-// 以下為圖片上傳處理
-// router.post('/uploadimg', upload.single('file'), async (req, res) => {
-//   const customer_id = req.header('customer_id')
-//   const aqluploadimg = 'INSERT INTO `recipe`(`recipes_img`, `customer_id`) VALUES (?, ?)';
-//   //抓會員Id，
-//   const data = await res.json(req.body);
-//   const [r11] = await db.query(aqluploadimg, [data.req.file.originalname, customer_id])
-//   // data.req.file.originalname，僅保留照片名稱的字串
-//   console.log(r11)
-    
-// })
 
 
 // 以下為食譜刪除
@@ -103,6 +111,17 @@ router.delete('/delete', async (req, res) => {
   console.log(recipesdelete);
   res.json(recipesdelete);
 });
+
+
+// 按讚數
+
+// router.all( , async (req, res) => {
+
+// })
+
+
+
+
 
 // 分隔線
 
@@ -180,29 +199,6 @@ const getRecipeHandler = async (req, res) => {
   });
 
 
-
-
-
-//   const data = {
-//     recipes_sid: r1[0].recipes_sid,
-//     recipes_name: r1[0].recipes_name,
-//     recipes_time_cost: r1[0].recipes_time_cost,
-//     recipes_portion: r1[0].recipes_portion,
-//     recipes_calories: r1[0].recipes_calories,
-//     recipes_type: r1[0].recipes_type,
-//     recipes_cooking_degree: r1[0].recipes_cooking_degree,
-//     recipes_ingredient: r1[0].recipes_ingredient,
-//     recipes_cooking_method: r1[0].recipes_cooking_method,
-//     recipes_description: r1[0].recipes_description,
-//     recipes_img: r1[0].recipes_img,
-//     cooking_create_member_Id: r1[0].cooking_create_member_Id,
-//     recipes_collection:r1[0].recipes_collection
-//     recipes_like:r1[0].recipes_like
-//     created_at:r1[0].created_at
-//   };
-
-
-
   // 分隔線，以下為R
 
   router.get('/recipe', async (req, res) => {
@@ -221,12 +217,11 @@ const getRecipeHandler = async (req, res) => {
       if(!req.params.recipes_sid){
         return
       }
-      const sqleach = "SELECT * FROM `recipe` WHERE 1=1 and recipes_sid= " + req.params.recipes_sid;
+      const sqleach = "SELECT * FROM `recipe` WHERE recipes_sid= " 
+      + req.params.recipes_sid;
       const [recipesdata] = await db.query(sqleach);
       res.json(recipesdata[0])
       })
-
-
 
 
 
