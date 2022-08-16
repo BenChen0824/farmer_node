@@ -115,10 +115,39 @@ router.delete('/delete', async (req, res) => {
 
 // 按讚數
 
-// router.all( , async (req, res) => {
+router.post('/recipelikes', async (req, res) => {
+  const output = {
+    success: false,
+    error: '',
+};
+if(!req.body.customer_id || !req.body.recipes_sid ){
+    output.error="缺少參數"
+    res.json(output)
+}
 
-// })
+const sql3 = `SELECT * FROM recipe_like WHERE customer_id=? && recipes_sid=?`;
+  const [ num ] = await db.query(sql3, [req.body.customer_id,req.body.recipes_sid]);
+  let data=[];
 
+  if (num.length <= 0) {
+      const sqlInsert = "INSERT INTO `recipe_like`(`customer_id`, `recipes_sid`) VALUES (?,?)"
+       data = await db.query(sqlInsert,[req.body.customer_id,req.body.recipes_sid]);
+  } 
+  else
+  {
+  const sqlChangeIsliked = "DELETE FROM `recipe_like`  WHERE customer_id=? && recipes_sid=?"
+    data = await db.query(sqlChangeIsliked,[req.body.customer_id,req.body.recipes_sid]);
+ }
+  // console.log(data);
+  const sqlSearch = `SELECT COUNT(1) num FROM recipe_like WHERE recipes_sid=?`
+  const [sqlSearchcount] = await db.query(sqlSearch,[req.body.recipes_sid]);
+  console.log(sqlSearchcount[0].num);
+
+
+ const changeCommentLikeSQL ="UPDATE `recipe` SET `recipes_like`=? WHERE recipes_sid=?"
+  const [totalData] = await db.query(changeCommentLikeSQL,[sqlSearchcount[0].num,req.body.recipes_sid ]);
+  res.json(totalData)
+})
 
 
 

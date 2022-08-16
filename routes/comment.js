@@ -73,7 +73,7 @@ router.get('/', async (req, res) => {
   ORDER BY c.created_at DESC
   `;
 
-  const [r] = await db.query(sql, req.header("comment_sid"));
+  const [r] = await db.query(sql);
   res.json(r);
 
 });
