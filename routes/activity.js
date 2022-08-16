@@ -75,9 +75,9 @@ router.post('/islikedchange', async (req,res)=>{
 //     };
 //     if (!req.body.company_id ) {
 //         output.error = '參數不足';
-//         return res.json(output);
+//         return res.json(output); 
 //     }
-
+ 
 
 //     const sql2 =
 //         'INSERT INTO `company_activity`(`activity_img`, `company_id`, `activity_info`, `activity_schedule`, `activity_mon`, `activity_tue`, `activity_wen`, `activity_thu`, `activity_fri`, `activity_sat`, `activity_sun`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,NOW())';
