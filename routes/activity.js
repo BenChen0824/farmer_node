@@ -15,10 +15,11 @@ router.get('/' , async (req,res)=>{
 
 //取得活動一筆資料
 router.get('/activitydata' , async (req,res)=>{
+    console.log(req.header('sid'))
     const sql = "SELECT * FROM `company_activitydata` WHERE sid=?"
     const [data] = await db.query(sql,[req.header("sid")]);
     // data.forEach((el) => (el.created_at = todateString(el.created_at)));
-    console.log(data)
+    // console.log(data)
     res.json(data)
 })
 
@@ -79,8 +80,6 @@ router.post('/add', async (req, res) => {
         output.error = '參數不足';
         return res.json(output); 
     }
- 
-
 
     const sqlActivityUpdate =
         'INSERT INTO `company_activitydata`(`company_id`, `card_img`, `company_infoImg`, `address`, `phone`, `fax`, `card_area`, `card_city`, `card_info`, `card_info1`, `card_a`, `card_b`, `card_c`, `card_d`, `card_e`, `Map_a`, `Map_b`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW())';
