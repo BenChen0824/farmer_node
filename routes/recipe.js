@@ -96,17 +96,6 @@ router.post('/updaterecipe', async (req, res) => {
 
 });
 
-// 以下為圖片上傳處理
-// router.post('/uploadimg', upload.single('file'), async (req, res) => {
-//   const customer_id = req.header('customer_id')
-//   const aqluploadimg = 'INSERT INTO `recipe`(`recipes_img`, `customer_id`) VALUES (?, ?)';
-//   //抓會員Id，
-//   const data = await res.json(req.body);
-//   const [r11] = await db.query(aqluploadimg, [data.req.file.originalname, customer_id])
-//   // data.req.file.originalname，僅保留照片名稱的字串
-//   console.log(r11)
-    
-// })
 
 
 // 以下為食譜刪除
@@ -122,6 +111,17 @@ router.delete('/delete', async (req, res) => {
   console.log(recipesdelete);
   res.json(recipesdelete);
 });
+
+
+// 按讚數
+
+// router.all( , async (req, res) => {
+
+// })
+
+
+
+
 
 // 分隔線
 
