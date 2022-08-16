@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require(__dirname + '/../modules/mysql-connect');
 const router = express.Router();
-const moment = require('moment-timezone');
+// const moment = require('moment-timezone');
 
 // const getCommentProductSid = async (comment_sid) => {
 //     const sql = `SELECT p.*, c.quantity
@@ -14,54 +14,6 @@ const moment = require('moment-timezone');
 //     const [r] = await db.query(sql, [comment_sid]);
 //     return r;
 // };
-
-
-// FROM comment c //被加入的表(我的)
-// JOIN product p  //哪張表要加進FROM後面的表(商品的)
-// ON odt.product_id=p.sid   #兩張表的哪幾個KEY要對應
-
-// const getProductItemName = async (comment_sid) => {
-//     const sql = `SELECT comment.*, product.* 
-//   FROM comment c
-//   JOIN product p
-//   ON c.product_sid=p.sid
-//   WHERE comment_sid=?
-//   ORDER BY comment.created_at`;
-  
-//     const [r] = await db.query(sql, [comment_sid]);
-//     console.log(r);
-
-//     return [...r];
-// };
-
-
-// 取得comment_sid
-//   router.get('/getcomment', async (req, res) => {
-
-
-    // const sql =
-    // 'INSERT INTO `comment`(`member_id`, `nickname`,`comment`, `avatar`, `rating`, `likes`, `product_sid`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())';
-    // const [r1] = await db.query(sql, [comment_sid]);
-    // res.json(r1);
-// });
-
-
-
-// router.route("/getproductsid").get(async (req, res) => {
-//     const output = await getProductItemName(req);
-//     res.json(output);
-//   }).post(async(req,res)=>{
-//     const output = {
-//       success: false,
-//       error: ""
-//     };
-//     const fields = [
-//         `member_id`, `nickname`,`comment`, `avatar`, `rating`, `likes`, `product_sid`, `created_at`
-//     ]
-
-//     }
-
-
 
 
 //按讚改變
@@ -104,20 +56,6 @@ const [totalData] = await db.query(changeCommentLikeSQL,[sqlSearchcount[0].num,r
 
  res.json(totalData)
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
