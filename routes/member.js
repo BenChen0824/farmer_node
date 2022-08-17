@@ -222,7 +222,7 @@ router.delete('/deleteproduct', async (req, res) => {
 
 router.delete('/deleterecipes', async (req, res) => {
     const sql23 =
-        'DELETE FROM recipe_collection WHERE customer_id=? AND recipes_sid=?';
+        'DELETE FROM recipe_collectionlist WHERE customer_id=? AND recipes_sid=?';
     const [r23] = await db.query(sql23, [
         req.header('customer_id'),
         req.header('recipes_sid'),
