@@ -32,17 +32,7 @@ const io = new Server(httpServer, {
 });
 
 
-app.use(
-    session({
-        saveUninitialized: false,
-        resave: false,
-        secret: process.env.SESSION_SECRET,
-        cookie: {
-            maxAge: 1500000,
-            httpOnly: true,
-        },
-    })
-);
+
 
 app.use((req, res, next) => {
     res.locals.session = req.session; //每個頁面都可以傳session過去
@@ -272,7 +262,7 @@ io.on('connection', async (socket) => {
         username: socket.username,
     });
     //私訊event
-    socket.on('private message', ({ content, to }) => {
+    socket.on('private message', ({ content, to,}) => {
         const message = {
             from: socket.userId,
             to,
@@ -280,6 +270,16 @@ io.on('connection', async (socket) => {
         };
         socket.to(to).emit('private message', message);
         saveMessage(message);
+    });
+
+    socket.on('image message', ({ content, to }) => {
+        const message = {
+            from: socket.userId,
+            to,
+            content,
+        };
+        socket.to(to).emit('image message', message);
+        // saveMessage(message);
     });
 
     socket.on('user messages', ({ userId, username }) => {
@@ -290,6 +290,8 @@ io.on('connection', async (socket) => {
             messages: userMessages.get(userId) || [],
         });
     });
+
+    
 
     socket.on('disconnect', async () => {
         const matchingSockets = await io.in(socket.userId).allSockets();
@@ -324,6 +326,17 @@ module.exports = { start };
 
 //------商品比較
 
+app.use(
+    session({
+        saveUninitialized: false,
+        resave: false,
+        secret: process.env.SESSION_SECRET,
+        cookie: {
+            maxAge: 1500000,
+            httpOnly: true,
+        },
+    })
+);
 app.get('/compare-session', (req, res) => {
     req.session.my_compare = _.filter(
         req.session.my_compare,
@@ -347,3 +360,4 @@ app.delete('/compare-session', (req, res) => {
 
     res.json(newList);
 });
+
