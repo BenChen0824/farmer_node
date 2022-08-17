@@ -7,7 +7,7 @@ const todateString = require(__dirname + '/../modules/date_format');
 const upload = require(__dirname + '/../modules/upload_img');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
 
 const getUserCart = async (member_id) => {
     const sql = `SELECT p.*, odt.* 
@@ -85,17 +85,23 @@ router.post('/signup', async (req, res) => {
         code: 0,
     };
 
-    const RandomNumber = Math.floor(Math.random()*(99999-10000+1))+10000
+    const RandomNumber =
+        Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
 
     const sql01 =
         'INSERT INTO `customer_data`(`name`, `email`, `password`, `verify_number`,`creat_at`) VALUES (?,?,?,?,NOW())';
     const { username, email, password } = req.body;
     const pass_hash = bcrypt.hashSync(`${password}`, 10);
-    const [result] = await db.query(sql01, [username, email, pass_hash, RandomNumber]);
+    const [result] = await db.query(sql01, [
+        username,
+        email,
+        pass_hash,
+        RandomNumber,
+    ]);
 
     if (result.affectedRows === 1) {
         output.success = true;
-        console.log(result)
+        console.log(result);
     }
 
     let transporter = nodemailer.createTransport({
@@ -194,7 +200,7 @@ router.get('/collections', async (req, res) => {
 
 router.get('/myrecipes', async (req, res) => {
     const sql22 = `SELECT rcol.*, reci.* 
-    FROM recipe_collection rcol
+    FROM recipe_collectionlist rcol
     JOIN recipe reci
     ON rcol.recipes_sid=reci.recipes_sid
     WHERE rcol.customer_id=?
@@ -225,37 +231,43 @@ router.delete('/deleterecipes', async (req, res) => {
 });
 
 router.post('/profile', upload.single('file'), async (req, res) => {
-    const customer_id = req.header('customer_id')
-    const sql11 = 'UPDATE customer_data SET profile_img=? WHERE customer_data.customer_id=?'
+    const customer_id = req.header('customer_id');
+    const sql11 =
+        'UPDATE customer_data SET profile_img=? WHERE customer_data.customer_id=?';
     const data = await res.json(req.body);
-    const [r11] = await db.query(sql11, [data.req.file.originalname, customer_id])
-    console.log(r11)
+    const [r11] = await db.query(sql11, [
+        data.req.file.originalname,
+        customer_id,
+    ]);
+    console.log(r11);
 });
 
-router.get('/getintro', async (req,res)=>{
-    const sql10 = "SELECT nickname, intro, profile_img FROM customer_data WHERE customer_id=?";
+router.get('/getintro', async (req, res) => {
+    const sql10 =
+        'SELECT nickname, intro, profile_img FROM customer_data WHERE customer_id=?';
     const [r10] = await db.query(sql10, req.header('loginUser'));
     res.json(r10);
-})
+});
 
-router.post('/editintro', async(req,res)=>{
-  const output = {
-    success: false,
-    error: '',
-    code:0
-  }
+router.post('/editintro', async (req, res) => {
+    const output = {
+        success: false,
+        error: '',
+        code: 0,
+    };
 
-  const {nickname, intro, customer_id} = req.body
+    const { nickname, intro, customer_id } = req.body;
 
-  const sql09 = 'UPDATE customer_data SET nickname=?, intro=? WHERE customer_data.customer_id=?'
-  const [r9] = await db.query(sql09, [nickname, intro, customer_id])
+    const sql09 =
+        'UPDATE customer_data SET nickname=?, intro=? WHERE customer_data.customer_id=?';
+    const [r9] = await db.query(sql09, [nickname, intro, customer_id]);
 
-  if(r9.affectedRows === 1){
-    output.success = true
-  }
+    if (r9.affectedRows === 1) {
+        output.success = true;
+    }
 
-  res.json([r9])
-})
+    res.json([r9]);
+});
 
 router.get('/postrecipe', async (req, res) => {
     const sql21 = 'SELECT * FROM recipe WHERE customer_id=?';
@@ -263,7 +275,7 @@ router.get('/postrecipe', async (req, res) => {
     res.json(r21);
 });
 
-router.get('/orders', async(req,res)=>{
+router.get('/orders', async (req, res) => {
     const sql12 = `SELECT odt.*, odl.*, pro.* 
     FROM order_details odt 
     JOIN orderlist odl
@@ -280,35 +292,36 @@ router.get('/orders', async(req,res)=>{
     WHERE odt.order_no=odl.order_no && cust.member_id=? && odt.order_type=2
     ORDER BY odt.created_time DESC`;
 
-    const [r12] = await db.query(sql12, req.header('loginUser'))
-    const [r13] = await db.query(sql13, req.header('loginUser'))
-    res.json([...r12, ...r13])
-})
+    const [r12] = await db.query(sql12, req.header('loginUser'));
+    const [r13] = await db.query(sql13, req.header('loginUser'));
+    res.json([...r12, ...r13]);
+});
 
-router.get('/orderlist', async(req,res)=>{
+router.get('/orderlist', async (req, res) => {
     const sql13 = `SELECT * FROM orderlist WHERE customer_id=? ORDER BY created_time DESC`;
-    const [r13] = await db.query(sql13, req.header('loginUser'))
-    r13.forEach(el=> el.created_time = todateString(el.created_time));
-    res.json(r13)
-})
+    const [r13] = await db.query(sql13, req.header('loginUser'));
+    r13.forEach((el) => (el.created_time = todateString(el.created_time)));
+    res.json(r13);
+});
 
-router.get('/coupons', async(req,res)=>{
-    const sql16 = 'SELECT * FROM coupon_01 WHERE change_memberid=?'
+router.get('/coupons', async (req, res) => {
+    const sql16 = 'SELECT * FROM coupon_01 WHERE change_memberid=?';
     const [r16] = await db.query(sql16, req.header('loginUser'));
-    r16.forEach(el=> el.change_time = todateString(el.change_time));
+    r16.forEach((el) => (el.change_time = todateString(el.change_time)));
     res.json(r16);
 });
 
-router.get('/purchaseRecord', async(req, res)=>{
-    const sql17 = 'SELECT product_amount_total FROM orderlist WHERE customer_id=?'
-    const [r17] = await db.query(sql17, req.header('loginUser'))
-    res.json(r17)
+router.get('/purchaseRecord', async (req, res) => {
+    const sql17 =
+        'SELECT product_amount_total FROM orderlist WHERE customer_id=?';
+    const [r17] = await db.query(sql17, req.header('loginUser'));
+    res.json(r17);
 });
 
-router.get('/myPoints', async(req, res)=>{
-    const sql18 = 'SELECT daily_points FROM customer_data WHERE customer_id=?'
-    const [r18] = await db.query(sql18, req.header('loginUser'))
-    res.json(r18)
+router.get('/myPoints', async (req, res) => {
+    const sql18 = 'SELECT daily_points FROM customer_data WHERE customer_id=?';
+    const [r18] = await db.query(sql18, req.header('loginUser'));
+    res.json(r18);
 });
 
 router.get('/myevents', async (req, res) => {
@@ -323,7 +336,7 @@ router.get('/myevents', async (req, res) => {
     res.json(r23);
 });
 
-router.post('/verify', async(req,res)=>{
+router.post('/verify', async (req, res) => {
     const output = {
         success: false,
         error: '',
@@ -346,7 +359,7 @@ router.post('/verify', async(req,res)=>{
             },
             process.env.JWT_SECRET
         );
-        output.success = true
+        output.success = true;
         output.data = {
             token,
             customer_id: r19[0].customer_id,
@@ -356,6 +369,6 @@ router.post('/verify', async(req,res)=>{
         output.cart = await getUserCart(r19[0].customer_id);
     }
     res.json(await output);
-})
+});
 
 module.exports = router;
