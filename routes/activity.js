@@ -116,10 +116,10 @@ router.post('/add', async (req, res) => {
 //刪除
 router.delete('/deleteactivity', async (req, res) => {
     const sql06 =
-        'DELETE FROM company_activitydata WHERE company_id=? AND sid=?';
+        'DELETE FROM company_activitydata WHERE sid=?';
+    
     const [r6] = await db.query(sql06, [
-        req.header('company_id'),
-        req.header('sid'),
+        req.body.sid
     ]);
     res.json(r6);
 });
