@@ -1,19 +1,29 @@
 const express = require("express");
-const _ = require('lodash')
 const db = require(__dirname + "/../modules/mysql-connect");
 const router = express.Router();
 // const { toDateString, toDatetimeString } = require(__dirname +
 //   "/../modules/date-tool");
 
+
+//這是下面的頁碼ㄉ東東(方法)
 const getListHandler = async (req) => {
   let output = {
-    perPage: req.query.perPage || 12,
+    perPage: 12,
     page: 1,
     totalRows: 0,
     totalPage: 0,
     code: 0,
     error: "",
     rows: []
+
+    // perPage: 10, //每頁總筆數
+    //       page: 1, //現在觀看頁數
+    //       totalRows: 0, //總筆數
+    //       totalPages: 0, //總頁數
+    //       code: 0,  // 辨識狀態
+    //       error: '',
+    //       query: {},
+    //       rows: [] //讀取的資料
   };
 
   let page = +req.query.page || 1;
@@ -31,12 +41,18 @@ const getListHandler = async (req) => {
     ? `product_hashtag LIKE '%${hashTagVal}%'`
     : "1";
 
+
+   // 搜尋使用的東西 
   const searchVal = req.query.search;
   const searchSql = searchVal ? `product_name LIKE '%${searchVal}%'` : "1";
+//
 
-  const orderBy = req.query.orderBy === "price" ? "product_price" : "sid";
+  //以下是資料新舊排序的內容
+  const orderBy = req.query.orderBy === "price" ? "product_price" : "sid"; //可能用不到   `created_at`
+ 
   const order = req.query.order === "ASC" ? "ASC" : "DESC"; // DESC || ASC
-  const orderSql = `ORDER BY ${orderBy} ${order}`;
+  const orderSql = `ORDER BY created_at ${order}`; //這邊去參考前端的檔案(API/COPY)
+  //
 
   const sidVal = Number(req.query.sid);
   const sidSql = sidVal ?  `sid = ${sidVal}` : "1";
@@ -44,6 +60,8 @@ const getListHandler = async (req) => {
   const supVal = Number(req.query.supplier);
   const supSql = supVal ?  `product_supplier = ${supVal}` : "1";
 
+
+  //把前端需要的資料先抓出來到一個變數，需要的時候再拿出來，沒用到沒關係(以備不時之需)
   const filterSql = `WHERE ${typeSql} AND ${searchSql} AND ${hashTagSql} AND ${sidSql} AND ${supSql}`;
   // const sql01 = `SELECT COUNT(1) totalRows FROM product WHERE ${typeSql} LIKE `  ;
   const sql01 = `SELECT COUNT(1) totalRows FROM product ${filterSql}`;
@@ -57,6 +75,8 @@ const getListHandler = async (req) => {
       return output;
     }
   }
+
+  //以下頁數的咚咚 (算總共有幾頁)
   const sql02 = `SELECT * FROM product ${filterSql} ${orderSql} LIMIT ${
     (page - 1) * output.perPage
   },${output.perPage}`;
@@ -74,6 +94,7 @@ const getListHandler = async (req) => {
 
   return output;
 };
+//以上頁數的咚咚 (算總共有幾頁)
 
 
 router.route("/").get(async (req, res) => {
@@ -81,24 +102,25 @@ router.route("/").get(async (req, res) => {
   res.json(output);
 }).post(async(req,res)=>{
   const output = {
-    success: "資料新增失敗",
+    success: false,
     error: ""
   };
   const fields = [
     'name', 'type', 'photo', 'price', 'unit','details', 'expire', 'inventory', 'supplier','status', 'hashtag','time'
   ]
 
-  const fieldCkeck = [
-    'name', 'type', 'photo', 'price', 'unit','details', 'expire', 'inventory', 'supplier','status', 'hashtag'
-  ]
-  if (fieldCkeck.some(k => _.isNil(req.body[k]) ))  {
-    const invalid = fieldCkeck.filter(k => _.isNil(req.body[k])).join(', ')
-    output.error = `參數不足 ${invalid}`; 
+  if (fields.some(k => !req.body[k]))  {
+    output.error = "參數不足"; 
     return res.json(output);
   }
 
-  const sql = "INSERT INTO `product`(`sid`, `product_name`, `product_type`, `product_img`, `product_price`, `product_unit`, `product_details`, `product_expire`, `product_inventory`, `product_supplier`, `hot_sale`, `product_status`, `product_hashtag`, `sale_time`, `created_at`) VALUES (null, ?, ?, ?, ?, ?, ?, ?,?, ?, 0,?,?,?, Now())"
+ // sid會自己建立，value後面可寫null
+ // 這邊的key要對應上方的fields
+  const sql =
+    'INSERT INTO `comment`(`member_id`, `nickname`,`comment`, `avatar`, `rating`, `likes`, `product_sid`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())';
 
+
+    // 這邊從fields取前端傳來的東東
   const values = fields.map((v,i)=> {
     const val = req.body[v]
     if (v === "photo" || v === "hashtag") {
@@ -110,19 +132,24 @@ router.route("/").get(async (req, res) => {
   const [r1] = await db.query(sql, [
     ...values,
   ]);
+  // 資料表如果有變動，有1就1有2就2，沒變動就是0筆(0=false) 往下跑
   if (r1.affectedRows) {
-    output.success = "資料新增成功";
+    output.success = true;
   }
   res.json(output); 
 }).put(async(req,res)=>{
   const output = {
-    success: "資料修改失敗",
+    success: false,
     error: ""
   };
+// put 是修改
+// 以下是修改資料ㄉ部分
+
   // const fields = [
   //   'product_name', 'product_type', 'product_img', 'product_price', 'product_unit','product_details', 'product_expire', 'product_inventory', 'product_supplier','product_status', 'product_hashtag'
   // ]
   
+  //跟上面一樣
   const fields = [
     'name', 'type', 'photo', 'price', 'unit','details', 'expire', 'inventory', 'supplier','status', 'hashtag','time'
   ]
@@ -156,8 +183,8 @@ router.route("/").get(async (req, res) => {
   ]);
   output.r1 = r1;
 
-  if (r1.affectedRows || r1.changedRows) {
-    output.success = "資料修改成功";
+  if (r1.affectedRows && r1.changedRows) {
+    output.success = true;
   }
 
   res.json(output);  
@@ -168,6 +195,8 @@ router.route("/").get(async (req, res) => {
     error: "",
     rows: []
   };
+
+  // 這邊是刪除資料
 
   const sql = "DELETE FROM product WHERE sid=? ";
   const [r1] =  await db.query(sql, [req.body.sid]);
@@ -180,12 +209,15 @@ router.route("/").get(async (req, res) => {
   res.json(output);
 })
 
+
+//不用看 沒熱銷
 router.route("/hot_sale").get(async (req, res) => {
   let output = {
     code: 0,
     error: "",
     rows: []
   };
+
 
   const sql = `SELECT * FROM product WHERE hot_sale = 1 LIMIT 10`;
   const [rows,fields] = await db.query(sql);
@@ -202,14 +234,7 @@ router.route("/hot_sale").get(async (req, res) => {
 
   res.json(output);
 });
-
-router.route("/rating").get(async (req, res) => {
-
-  const sql = `SELECT rating FROM comment WHERE product_sid =? `;
-  const [data] = await db.query(sql,[req.query.sid]);
-  res.json(data);
-});
-
+//不用看 沒熱銷
 
 module.exports = router;
 
