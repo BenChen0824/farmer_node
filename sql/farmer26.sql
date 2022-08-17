@@ -1821,7 +1821,7 @@ INSERT INTO `foodlist` (`id`, `name`, `category`, `image`, `price`) VALUES
 (19, '烤鯖魚', 3, 'images/friedfish.png', 30),
 (20, '炸豬排', 2, 'images/friedpork.png', 40),
 (21, '糙米飯', 1, 'images/brownrice.png', 10),
-(22, '荷包蛋', 4, 'images/egg.png', 15),
+(22, '荷包蛋', 4, 'images/xin-egg.png', 15),
 (23, '烤鰻魚', 3, 'images/eel.png', 65),
 (27, '唐揚雞塊', 2, 'images/Chickennuggets.png', 40);
 
