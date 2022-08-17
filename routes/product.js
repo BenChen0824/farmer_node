@@ -44,7 +44,10 @@ const getListHandler = async (req) => {
   const supVal = Number(req.query.supplier);
   const supSql = supVal ?  `product_supplier = ${supVal}` : "1";
 
-  const filterSql = `WHERE ${typeSql} AND ${searchSql} AND ${hashTagSql} AND ${sidSql} AND ${supSql}`;
+  const staVal = req.query.status
+  const staSql = staVal ? `product_status = ${staVal}` : "1"
+  
+  const filterSql = `WHERE ${typeSql} AND ${searchSql} AND ${hashTagSql} AND ${sidSql} AND ${supSql} AND ${staSql}`;
   // const sql01 = `SELECT COUNT(1) totalRows FROM product WHERE ${typeSql} LIKE `  ;
   const sql01 = `SELECT COUNT(1) totalRows FROM product ${filterSql}`;
   const [[{ totalRows }]] = await db.query(sql01);
@@ -60,6 +63,7 @@ const getListHandler = async (req) => {
   const sql02 = `SELECT * FROM product ${filterSql} ${orderSql} LIMIT ${
     (page - 1) * output.perPage
   },${output.perPage}`;
+  // console.log(sql02)
   const [r2] = await db.query(sql02);
   output.rows = r2.map((el) => {
     return {
