@@ -15,7 +15,7 @@ router.get('/' , async (req,res)=>{
 
 //取得活動一筆資料
 router.get('/activitydata' , async (req,res)=>{
-    console.log(req.header('sid'))
+    // console.log(req.header('sid'))
     const sql = "SELECT * FROM `company_activitydata` WHERE sid=?"
     const [data] = await db.query(sql,[req.header("sid")]);
     // data.forEach((el) => (el.created_at = todateString(el.created_at)));
@@ -111,6 +111,15 @@ router.post('/add', async (req, res) => {
     output.activity = await r2;
     res.json(output);
     //sid qty
+});
+router.put('/edit', async (req, res) => {
+    const output = {
+        success: false,
+        error: '',
+        code: 0,
+    };
+    // console.log(req.body)
+    res.json(output);
 });
 
 //刪除
