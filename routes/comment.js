@@ -139,7 +139,7 @@ router.post('/subscribe', async (req, res) => {
 
   let mailOptions = {
     from: '"有機の小鱻肉" <mfee26farmer@gmail.com>', // 傳送地址
-    to: `<mfee26farmer@gmail.com>`, // 接收列表（可多個）
+    to: `<kusakawa222@gmail.com>`, // 接收列表（可多個）
     subject: '【有機の小鱻肉】訂閱服務開啟通知', // 主題
     // 傳送text或者html格式（任選一個）
     html: `<body>
@@ -158,6 +158,7 @@ transporter.sendMail(mailOptions, (error, info) => {
     }
     const ans = JSON.stringify(info);
     res.send(ans);
+
    
 });
 output.success=true; //發送成功
