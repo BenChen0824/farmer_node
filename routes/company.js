@@ -96,6 +96,21 @@ router.post('/register', async (req, res) => {
 
     res.json(output);
 });
+router.get('/getproductdata', async (req, res) => {
+    const sql02 = 'SELECT COUNT(1) num FROM product WHERE product_supplier=?';
+    const [r2] = await db.query(sql02, req.header('loginUser'))
+    // console.log(r2[0].num);
+    // r2.forEach((el) => (el.creat_at = todateString(el.creat_at)));
+    res.json(r2);
+});
+
+router.get('/getactivitydata', async (req, res) => {
+    const sql02 = 'SELECT COUNT(1) num FROM company_activitydata WHERE company_id=?';
+    const [r2] = await db.query(sql02, req.header('loginUser'))
+    // console.log(r2[0].num);
+    // r2.forEach((el) => (el.creat_at = todateString(el.creat_at)));
+    res.json(r2);
+});
 
 router.get('/home', async (req, res) => {
     const sql02 = 'SELECT * FROM company WHERE company_id=?';
