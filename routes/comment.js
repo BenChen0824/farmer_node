@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require(__dirname + '/../modules/mysql-connect');
 const router = express.Router();
+const nodemailer = require('nodemailer');
 // const moment = require('moment-timezone');
 
 // const getCommentProductSid = async (comment_sid) => {
@@ -112,6 +113,55 @@ router.post('/createcomment', async (req, res) => {
     ]);
     // r.forEach((el) => (el.created_at = todateString(el.created_at)));
     res.json(r);
+});
+
+
+
+
+// subscribe
+//發送訂閱信
+router.post('/subscribe', async (req, res) => {
+
+  const output = {
+    success: false,
+    error:'',
+    code:0,
+  };
+  let transporter = nodemailer.createTransport({
+    service: 'Gmail', // 使用了內建傳輸傳送郵件 檢視支援列表：https://nodemailer.com/smtp/well-known/
+    //   port: 465, // SMTP 埠
+    secureConnection: true, // 使用了 SSL
+    auth: {
+        user: 'mfee26farmer@gmail.com',
+        pass: 'tgqmecsedfnjqkwz', //授權碼，並非QQ密碼
+    },
+});
+
+  let mailOptions = {
+    from: '"有機の小鱻肉" <mfee26farmer@gmail.com>', // 傳送地址
+    to: `<mfee26farmer@gmail.com>`, // 接收列表（可多個）
+    subject: '【有機の小鱻肉】訂閱服務開啟通知', // 主題
+    // 傳送text或者html格式（任選一個）
+    html: `<body>
+    <img style="width:300px" src="https://www.upload.ee/image/14320633/C_LOGO-1.jpg" border="0" alt="C_LOGO-1.jpg" />
+    <h1>有機の小鱻肉</h1>
+    <div>親愛的用戶您好</div>
+    <div>未來有最新活動資訊或優惠將會發布給您。</div>
+    <br>
+    <h2>【有機の小鱻肉團隊】 上</h2>
+    </body>`, // plain text body
+    //html:  fs.createReadStream(path.resolve(__dirname,'index.html'))
+};
+transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log(error);
+    }
+    const ans = JSON.stringify(info);
+    res.send(ans);
+   
+});
+output.success=true; //發送成功
+res.json(output);
 });
 
 
