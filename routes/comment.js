@@ -85,11 +85,12 @@ router.post('/getproductbyname', async (req, res) => {
 FROM comment c
 JOIN product p
 ON c.product_sid=p.sid
-WHERE p.product_name LIKE ?
+WHERE p.product_name LIKE '%${req.body.product_name}'
 ORDER BY c.created_at DESC
 `;
 console.log(req.body);
-const [r] = await db.query(sql, [req.body.product_name]);
+const [r] = await db.query(sql);
+console.log(r);
 res.json(r);
 
 });
