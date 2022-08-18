@@ -87,7 +87,7 @@ router.post('/updaterecipe', async (req, res) => {
         req.body.updateIngredient7 ,
         req.body.updateIngredient8 ,
         req.body.updateIngredient9 ,
-        req.body.updateStep ,
+        req.body.updateStep0 ,
         req.body.updateStep1 ,
         req.body.updateStep2 ,
         req.body.updateStep3 ,
