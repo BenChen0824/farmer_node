@@ -210,9 +210,9 @@ router.get('/myrecipes', async (req, res) => {
     res.json(r22);
 });
 
-router.delete('/deleteproduct', async (req, res) => {
+router.put('/deleteproduct', async (req, res) => {
     const sql06 =
-        'DELETE FROM product_collect WHERE member_id=? AND product_id=?';
+        'UPDATE product_collect SET saved=0 WHERE product_collect.member_id=? && product_id=?';
     const [r6] = await db.query(sql06, [
         req.header('member_id'),
         req.header('product_id'),
