@@ -279,7 +279,7 @@ io.on('connection', async (socket) => {
             content,
         };
         socket.to(to).emit('image message', message);
-        // saveMessage(message);
+        saveMessage(message);
     });
 
     socket.on('user messages', ({ userId, username }) => {
