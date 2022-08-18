@@ -68,7 +68,7 @@ router.post('/updaterecipe', async (req, res) => {
       // console.log(req.body);
       // const { recipes_name, recipes_time_cost, recipes_portion, recipes_calories, recipes_type, recipes_cooking_degree, recipes_ingredient, recipes_step, recipes_description, recipes_img, cooking_create_member_Id } = req.body;
 
-      const sqlupdate = "UPDATE `recipe` SET `recipes_name`=? ,`recipes_description`=?, `recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_step`=? ,`recipes_img`=?, `customer_id`=? WHERE recipes_sid=?";
+      const sqlupdate = "UPDATE `recipe` SET `recipes_name`=? ,`recipes_description`=?, `recipes_time_cost`=? ,`recipes_portion`=? ,`recipes_calories`=? ,`recipes_type`=? ,`recipes_cooking_degree`=? ,`recipes_ingredient`=? ,`recipes_ingredient1`=? ,`recipes_ingredient2`=? ,`recipes_ingredient3`=? ,`recipes_ingredient4`=? ,`recipes_ingredient5`=? ,`recipes_ingredient6`=? ,`recipes_ingredient7`=? ,`recipes_ingredient8`=? ,`recipes_ingredient9`=? ,`recipes_step`=? ,`recipes_step1`=? ,`recipes_step2`=? ,`recipes_step3`=? ,`recipes_step4`=? ,`recipes_step5`=? ,`recipes_step6`=? ,`recipes_step7`=? ,`recipes_step8`=? ,`recipes_step9`=? , `recipes_img`=?, `customer_id`=? WHERE recipes_sid=?";
       const sql = sqlstring.format(sqlupdate, [
         req.body.updateRecipesname ,
         req.body.updateDescription ,
@@ -78,7 +78,25 @@ router.post('/updaterecipe', async (req, res) => {
         req.body.updateRecipestype ,
         req.body.updateRecipesdegree ,
         req.body.updateIngredient ,
-        req.body.updateStep ,
+        req.body.updateIngredient1 ,
+        req.body.updateIngredient2 ,
+        req.body.updateIngredient3 ,
+        req.body.updateIngredient4 ,
+        req.body.updateIngredient5 ,
+        req.body.updateIngredient6 ,
+        req.body.updateIngredient7 ,
+        req.body.updateIngredient8 ,
+        req.body.updateIngredient9 ,
+        req.body.updateStep0 ,
+        req.body.updateStep1 ,
+        req.body.updateStep2 ,
+        req.body.updateStep3 ,
+        req.body.updateStep4 ,
+        req.body.updateStep5 ,
+        req.body.updateStep6 ,
+        req.body.updateStep7 ,
+        req.body.updateStep8 ,
+        req.body.updateStep9 ,
         req.body.recipes_img ,
         req.body.customer_id,
         req.body.recipe_sid
