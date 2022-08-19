@@ -127,7 +127,7 @@ router.put('/home', async (req, res) => {
     };
 
     const sql03 =
-    'UPDATE company SET farm_type=?, farm_name=?,farm_tax_id=?, company_name=?, company_id_number=?, company_phone=?, farm_tel=?, farm_fax=?, farm_address=?, company_email=?, company_password=?, creat_at=? WHERE company.company_id=?';
+    'UPDATE company SET farm_type=?, farm_name=?,farm_tax_id=?, company_name=?, company_id_number=?, company_phone=?, farm_tel=?, farm_fax=?, farm_address=?, company_email=?, company_password=? WHERE company.company_id=?';
 
 
     const {
@@ -142,7 +142,6 @@ router.put('/home', async (req, res) => {
         farm_address,
         company_email,
         company_password,
-        creat_at,
         company_id,
     } = req.body;
 
@@ -159,7 +158,6 @@ router.put('/home', async (req, res) => {
         farm_address,
         company_email,
         pass_hash,
-        creat_at,
         company_id,
     ]);
 
