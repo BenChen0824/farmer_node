@@ -139,6 +139,59 @@ router.post('/signup', async (req, res) => {
     res.json(output);
 });
 
+router.put('/verifyresend', async (req, res) => {
+    const output = {
+        send: false,
+        error: '',
+        code: 0,
+    };
+
+    const RandomNumber =
+        Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
+
+    const sql25 =
+        'UPDATE customer_data SET verify_number=? WHERE customer_data.email="mfee26farmer@gmail.com"';
+    const [r25] = await db.query(sql25, [RandomNumber]);
+
+    if (r25.affectedRows === 1) {
+        console.log(r25);
+    }
+
+    let transporter = nodemailer.createTransport({
+        service: 'Yahoo', // 使用了內建傳輸傳送郵件 檢視支援列表：https://nodemailer.com/smtp/well-known/
+        //   port: 465, // SMTP 埠
+        secureConnection: true, // 使用了 SSL
+        auth: {
+            user: 'bob19901224@yahoo.com.tw',
+            pass: 'exaeouulngdztqhu', //授權碼，並非QQ密碼
+        },
+    });
+    let mailOptions = {
+        from: '"有機の小鱻肉" <bob19901224@yahoo.com.tw>', // 傳送地址
+        to: `mfee26farmer@gmail.com, bob19901224@yahoo.com.tw`, // 接收列表（可多個）
+        subject: '【有機の小鱻肉】會員註冊信箱驗證', // 主題
+        // 傳送text或者html格式（任選一個）
+        html: `<body>
+        <img style="width:300px" src="https://www.upload.ee/image/14320633/C_LOGO-1.jpg" border="0" alt="C_LOGO-1.jpg" />
+        <h1>有機の小鱻肉</h1>
+        <div>親愛的 farmer 會員您好</div>
+        <div>請輸入下方驗證碼即可完成信箱驗證</div>
+        <br>
+        <h2>驗證碼【${RandomNumber}】</h2>
+        </body>`, // plain text body
+        //html:  fs.createReadStream(path.resolve(__dirname,'index.html'))
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        const ans = JSON.stringify(info);
+        res.send(ans);
+    });
+    output.send = true;
+    res.json(output);
+});
+
 router.get('/data', async (req, res) => {
     const sql02 = 'SELECT * FROM customer_data WHERE customer_id=?';
     const [r2] = await db.query(sql02, req.header('loginUser'));
