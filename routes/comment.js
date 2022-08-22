@@ -62,8 +62,7 @@ const [totalData] = await db.query(changeCommentLikeSQL,[sqlSearchcount[0].num,r
 
 
 
-
-//抓全部資料.(comment) + 商品列表(product)的商品名稱(product_name)
+// //抓全部資料.(comment) + 商品列表(product)的商品名稱(product_name)
 router.get('/', async (req, res) => {
     const sql = `SELECT c.*, p.product_name ,cus.profile_img,cus.account
   FROM comment c
@@ -79,19 +78,21 @@ router.get('/', async (req, res) => {
 
 });
 
-
-// 抓商品的SID 有的話，再去對應評論的留言
+//搜尋
+// 抓商品的SID 如果有找到的話，再去對應評論的留言、頭像、帳號
 router.post('/getproductbyname', async (req, res) => {
-  const sql = `SELECT c.*, p.* 
+  const sql = `SELECT c.*, p.* ,cus.profile_img ,cus.account
 FROM comment c
 JOIN product p
 ON c.product_sid=p.sid
+JOIN customer_data cus
+ON cus.customer_id=c.member_id
 WHERE p.product_name LIKE '%${req.body.product_name}'
 ORDER BY c.created_at DESC
 `;
 console.log(req.body);
 const [r] = await db.query(sql);
-console.log(r);
+console.log("r", r);
 res.json(r);
 
 });
