@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2022-08-19 15:34:17
+-- 產生時間： 2022-08-22 14:44:41
 -- 伺服器版本： 10.4.24-MariaDB
 -- PHP 版本： 7.4.29
 
@@ -1015,7 +1015,7 @@ ALTER TABLE `recipe_collectionlist`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `recipe_collectionlist`
 --
 ALTER TABLE `recipe_collectionlist`
-  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1031;
+  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1022;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

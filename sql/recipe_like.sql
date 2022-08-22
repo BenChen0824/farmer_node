@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2022-08-19 15:33:45
+-- 產生時間： 2022-08-22 14:44:50
 -- 伺服器版本： 10.4.24-MariaDB
 -- PHP 版本： 7.4.29
 
@@ -594,7 +594,7 @@ INSERT INTO `recipe_like` (`sid`, `customer_id`, `recipes_sid`) VALUES
 (602, 529, 7),
 (603, 529, 6),
 (604, 529, 1),
-(609, 530, 4);
+(605, 530, 2);
 
 --
 -- 已傾印資料表的索引
@@ -614,7 +614,7 @@ ALTER TABLE `recipe_like`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `recipe_like`
 --
 ALTER TABLE `recipe_like`
-  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=610;
+  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=606;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
