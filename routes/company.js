@@ -88,7 +88,7 @@ router.post('/register', async (req, res) => {
         'INSERT INTO `company`(`farm_name`, `company_name`,`company_id_number`,`company_phone`,`company_email`,`company_password` ,`creat_at`) VALUES (?,?,?,?,?,?,NOW())';
     const { farm_name, company_name, company_id_number, company_phone, company_email, company_password } = req.body;
     const pass_hash = bcrypt.hashSync(`${company_password}`, 10);
-    const [result] = await db.query(sql01, [farm_name, company_name, company_phone, company_id_number, company_email, pass_hash]);
+    const [result] = await db.query(sql01, [farm_name, company_name,company_id_number, company_phone , company_email, pass_hash]);
 
     if (result.affectedRows === 1) {
         output.success = true;
