@@ -143,12 +143,12 @@ router.post('/subscribe', async (req, res) => {
     subject: '【有機の小鱻肉】訂閱服務開啟通知', // 主題
     // 傳送text或者html格式（任選一個）
     html: `<body>
-    <img style="width:300px" src="https://www.upload.ee/image/14320633/C_LOGO-1.jpg" border="0" alt="C_LOGO-1.jpg" />
+    <img style="width:300px" src="https://i.imgur.com/1sau5zj.jpg" border="0" alt="C_LOGO-1.jpg" />
     <h1>有機の小鱻肉</h1>
-    <div>親愛的用戶您好</div>
-    <div>未來有最新活動資訊或優惠將會發布給您。</div>
+    <h4>親愛的用戶您好</h4>
+    <h4>未來有最新活動資訊或優惠將會發布給您。</h4>
     <br>
-    <h2>【有機の小鱻肉團隊】 上</h2>
+    <div>【有機の小鱻肉團隊】 上</div>
     </body>`, // plain text body
     //html:  fs.createReadStream(path.resolve(__dirname,'index.html'))
 };
