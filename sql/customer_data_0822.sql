@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.3
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2022-08-22 08:40:39
+-- 產生時間： 2022-08-22 11:19:26
 -- 伺服器版本： 10.4.24-MariaDB
 -- PHP 版本： 7.4.29
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- 資料庫: `farmer26`
+-- 資料庫： `comment0824all`
 --
 
 -- --------------------------------------------------------
@@ -49,36 +49,36 @@ CREATE TABLE `customer_data` (
 --
 
 INSERT INTO `customer_data` (`customer_id`, `name`, `mobile`, `email`, `birthday`, `address`, `account`, `password`, `verify_number`, `daily_points`, `nickname`, `intro`, `profile_img`, `creat_at`) VALUES
-(1, '朱小紅', '0936731701', 'rogers19990729@yahoo.com', '1999-07-29', '', 'rogers80363', '$2y$10$HVF/UPJ9xCSWRVbffUA3E.920OmwAkTq7FUIEtCFeIaH1r0Sx2dZm', NULL, 0, NULL, NULL, 'user.png', '2019-03-24 00:00:00'),
-(2, '謝小綠', '0936762837', 'stark19970903@hotmail.com', '1997-09-03', '', 'stark29054', '$2y$10$nkSBLLn/UUgfTkuT.411GO6J4ECikBvKzrJASK6vDSykddlitUBBO', NULL, 0, NULL, NULL, 'user.png', '2019-03-08 00:00:00'),
-(3, '陳小藍', '0936199223', 'wonda19950512@yahoo.com', '1995-05-12', '', 'wonda28264', '$2y$10$DwkuWkmKRFOlJIY.P2ZE8ufFd7vKJZdEWSfjuHH4JpHMjlixCunzy', NULL, 0, NULL, NULL, 'user.png', '2019-07-10 00:00:00'),
-(4, '林小綠', '0936241737', 'stark19921019@yahoo.com', '1992-10-19', '', 'stark43472', '$2y$10$mNm.NsY2CwXvHbwmsAEqZOUJf6xf0kgIXltXagp43UcQvRYgUFv7i', NULL, 0, NULL, NULL, 'user.png', '2020-11-05 00:00:00'),
-(5, '李小白', '0936749650', 'wonda19830414@gmail.com', '1983-04-14', '', 'wonda58112', '$2y$10$jk5VzxpvLCV2JveE9kAuf.nuJeQYHXIaDSBUuNX4zA1b/DtHQDHU6', NULL, 0, NULL, NULL, 'user.png', '2022-05-26 00:00:00'),
-(6, '邱小白', '0936965405', 'wonda19860820@gmail.com', '1986-08-20', '', 'wonda58408', '$2y$10$WOb7/9JTlWGYt.V/3v9ce.OF/zJY2p58SOr1iYd9ohGke.F06D1va', NULL, 0, NULL, NULL, 'user.png', '2015-08-07 00:00:00'),
-(7, '高小白', '0936956774', 'strange20001024@yahoo.com', '2000-10-24', '', 'strange82269', '$2y$10$XwPbg5X4XMTIOvE6C9HRx./i4tgEFiNKXDPeUQWmmwCpCqShet8Gy', NULL, 0, NULL, NULL, 'user.png', '2019-03-22 00:00:00'),
-(8, '李小藍', '0936433197', 'jane19970108@gmail.com', '1997-01-08', '', 'jane75656', '$2y$10$Vi8CmloyIthT/YrNRjtYgOb/LDqC98Rn6biyulYfWgGGymh8cu/0a', NULL, 0, NULL, NULL, 'user.png', '2016-07-07 00:00:00'),
-(9, '陳小白', '0936779309', 'thor19951228@hinet.com', '1995-12-28', '', 'thor69758', '$2y$10$NQbgDOyCfbWWaRJOL60QgO5b.qi.uUN.baR1HFmDdr2SM/4sc5QEa', NULL, 0, NULL, NULL, 'user.png', '2022-05-13 00:00:00'),
-(10, '朱小黑', '0936493104', 'rogers19820509@gmail.com', '1982-05-09', '', 'rogers41206', '$2y$10$QvNjrD1QPq95/F6grw8tzOv3U76AR1p23iYplqrwYp1gwGhlEMzTa', NULL, 0, NULL, NULL, 'user.png', '2015-04-08 00:00:00'),
-(11, '王小綠', '0936999184', 'rogers19821022@yahoo.com', '1982-10-22', '', 'rogers65174', '$2y$10$fM2WhvL/cY6Xw31ETHEz4.K73C9/iWRlCXJJm3sjot2R5K8U7U.wG', NULL, 0, NULL, NULL, 'user.png', '2016-09-05 00:00:00'),
-(12, '高小紅', '0936305031', 'thor19961208@yahoo.com', '1996-12-08', '', 'thor53988', '$2y$10$IckvVdz9/aiTH7KI2JC8keDVLP8mbvwPxIGJTMP4u3QCKV1eh7RUe', NULL, 0, NULL, NULL, 'user.png', '2016-03-05 00:00:00'),
-(13, '朱小黑', '0936385717', 'thor19930427@gmail.com', '1993-04-27', '', 'thor32440', '$2y$10$bLSuRNC/VrJ60x4Od/UeSOGxDKeBWFKHbxI2LR8hUkB2hpPQP73.6', NULL, 0, NULL, NULL, 'user.png', '2018-08-11 00:00:00'),
-(14, '李小藍', '0936540059', 'thor19820219@gmail.com', '1982-02-19', '', 'thor88163', '$2y$10$cyfSj6isup4zPO9RggJC6.gf/GwPuMnuTHR4HWg/4Nzi5GrVC5ece', NULL, 0, NULL, NULL, 'user.png', '2020-07-04 00:00:00'),
-(15, '謝小藍', '0936371241', 'jane19860324@hinet.com', '1986-03-24', '', 'jane73773', '$2y$10$T2d5pwp.ogRYxZtJGmb4WeVcwHMpqtf8FhzoQH7TllyqNxE/urtye', NULL, 0, NULL, NULL, 'user.png', '2015-06-12 00:00:00'),
-(16, '邱小白', '0936340316', 'strange19941220@hinet.com', '1994-12-20', '', 'strange28368', '$2y$10$kL8blZxtT7KY3kbxz74Z9eOqQcmgAfKUibH89UsQ7flqf93UGKpIy', NULL, 0, NULL, NULL, 'user.png', '2017-02-19 00:00:00'),
-(17, '王小白', '0936369066', 'loki19820108@hinet.com', '1982-01-08', '', 'loki92008', '$2y$10$tRXrGRFce.WJuuJeau7SQejn6WE21Jpp1wrY8SjcW0yu.YhpxuaF6', NULL, 0, NULL, NULL, 'user.png', '2019-06-01 00:00:00'),
-(18, '李小藍', '0936264052', 'stark20040129@gmail.com', '2004-01-29', '', 'stark58076', '$2y$10$o3zgj4BwcdGh1PKLJhaH8O6STLjrVBCnmVxjxG1MbhK7qkwIh4l8u', NULL, 0, NULL, NULL, 'user.png', '2019-07-31 00:00:00'),
-(19, '黃小紅', '0936771092', 'rogers19820316@yahoo.com', '1982-03-16', '', 'rogers30711', '$2y$10$fmI40K0ROkkvqw5g/0D/WedzE50b0q.sgsvrkxZHpfxmwCtU04CjK', NULL, 0, NULL, NULL, 'user.png', '2017-05-03 00:00:00'),
-(20, '李白', '0936111222', 'denvers19920829@hotmail.com', '1992-08-29', '台北市大安區和平東路二段', 'denvers76282', '$2y$10$pGoXV7mT30QBPifPLVLrmebo/4SILahxNc5PN42ViPEx3PEAUjbKC', NULL, 0, NULL, NULL, 'user.png', '2020-08-28 00:00:00'),
-(21, '黃小紅', '0936192453', 'jane19990410@gmail.com', '1999-04-10', '', 'jane78267', '$2y$10$IRYf6.wYkJl3OHLRIpRzPuLpssYw8KT72c373gOLcCfVB1IOeCwoC', NULL, 0, NULL, NULL, 'user.png', '2020-08-27 00:00:00'),
-(22, '王小白', '0936395646', 'strange19880226@yahoo.com', '1988-02-26', '', 'strange57718', '$2y$10$RNHtufD3glGBKvH3NGxAXOiwU6xQa9t5zRImDKc/D85yOjcEE3ahK', NULL, 0, NULL, NULL, 'user.png', '2017-06-15 00:00:00'),
-(23, '邱小藍', '0936906723', 'jane19931022@gmail.com', '1993-10-22', '', 'jane11580', '$2y$10$f1k4C6uuLL0drt4JMVW7ceWlwYLRbpnoavMG5MH6HHmuFx0yGpvyO', NULL, 0, NULL, NULL, 'user.png', '2019-05-16 00:00:00'),
-(24, '李小黑', '0936432846', 'thor20040403@hinet.com', '2004-04-03', '', 'thor88054', '$2y$10$emNrYCI62WfWlGB7DTstjOmr84aU3ZzeCNaf/NGqIp3VFm48yg2RO', NULL, 0, NULL, NULL, 'user.png', '2017-08-11 00:00:00'),
-(25, '朱小黑', '0936933228', 'rogers20020405@gmail.com', '2002-04-05', '', 'rogers14043', '$2y$10$HD9OC6pt4aUt52qNo0LXlOlLnPk20tBXQmBsRuq2Vu0/sQz3OPu.K', NULL, 0, NULL, NULL, 'user.png', '2021-08-28 00:00:00'),
-(26, '黃小黑', '0936208796', 'loki20020903@yahoo.com', '2002-09-03', '', 'loki69085', '$2y$10$oFPRFQQqUPbQsbNE95pf5eTz1/LfGSoFIGX2VuC2PTOMqegaW7.w.', NULL, 0, NULL, NULL, 'user.png', '2019-07-29 00:00:00'),
-(27, '邱小白', '0936999054', 'jane19890715@hotmail.com', '1989-07-15', '', 'jane50506', '$2y$10$NwEdR1urmsJWMNtpaooTuu/QOnM2box5M2h6YfJgn2vDzrObmVvaW', NULL, 0, NULL, NULL, 'user.png', '2020-12-05 00:00:00'),
-(28, '邱小藍', '0936368764', 'jane19991028@yahoo.com', '1999-10-28', '', 'jane74422', '$2y$10$SgytvgtKRCFXYKKjbVMDxuFW2uK3U/zwrD05c.DgR5/AFmRh959oW', NULL, 0, NULL, NULL, 'user.png', '2017-07-25 00:00:00'),
-(29, '朱小黑', '0936528795', 'wonda19941220@gmail.com', '1994-12-20', '', 'wonda90219', '$2y$10$GOx/lmh3SemcJSMA8d1IPuWsvviaq/EOJ/38.J4gBBjRxtW66W1TK', NULL, 0, NULL, NULL, 'user.png', '2021-11-01 00:00:00'),
-(30, '王小藍', '0936407226', 'strange19950114@hotmail.com', '1995-01-14', '', 'strange52197', '$2y$10$.6I8eB03T0aLl5444bUcPePnnAs4GNwdUitgcvd2V6Q.N74MMCGqa', NULL, 0, NULL, NULL, 'user.png', '2020-11-19 00:00:00'),
+(1, '朱小紅', '0936731701', 'rogers19990729@yahoo.com', '1999-07-29', '', 'rogers80363', '$2y$10$HVF/UPJ9xCSWRVbffUA3E.920OmwAkTq7FUIEtCFeIaH1r0Sx2dZm', NULL, 0, NULL, NULL, 'user1.jpg', '2019-03-24 00:00:00'),
+(2, '謝小綠', '0936762837', 'stark19970903@hotmail.com', '1997-09-03', '', 'stark29054', '$2y$10$nkSBLLn/UUgfTkuT.411GO6J4ECikBvKzrJASK6vDSykddlitUBBO', NULL, 0, NULL, NULL, 'user2.jpg', '2019-03-08 00:00:00'),
+(3, '陳小藍', '0936199223', 'wonda19950512@yahoo.com', '1995-05-12', '', 'wonda28264', '$2y$10$DwkuWkmKRFOlJIY.P2ZE8ufFd7vKJZdEWSfjuHH4JpHMjlixCunzy', NULL, 0, NULL, NULL, 'user3.jpg', '2019-07-10 00:00:00'),
+(4, '林小綠', '0936241737', 'stark19921019@yahoo.com', '1992-10-19', '', 'stark43472', '$2y$10$mNm.NsY2CwXvHbwmsAEqZOUJf6xf0kgIXltXagp43UcQvRYgUFv7i', NULL, 0, NULL, NULL, 'user4.jpg', '2020-11-05 00:00:00'),
+(5, '李小白', '0936749650', 'wonda19830414@gmail.com', '1983-04-14', '', 'wonda58112', '$2y$10$jk5VzxpvLCV2JveE9kAuf.nuJeQYHXIaDSBUuNX4zA1b/DtHQDHU6', NULL, 0, NULL, NULL, 'user5.jpg', '2022-05-26 00:00:00'),
+(6, '邱小白', '0936965405', 'wonda19860820@gmail.com', '1986-08-20', '', 'wonda58408', '$2y$10$WOb7/9JTlWGYt.V/3v9ce.OF/zJY2p58SOr1iYd9ohGke.F06D1va', NULL, 0, NULL, NULL, 'user6.jpg', '2015-08-07 00:00:00'),
+(7, '高小白', '0936956774', 'strange20001024@yahoo.com', '2000-10-24', '', 'strange82269', '$2y$10$XwPbg5X4XMTIOvE6C9HRx./i4tgEFiNKXDPeUQWmmwCpCqShet8Gy', NULL, 0, NULL, NULL, 'user7.jpg', '2019-03-22 00:00:00'),
+(8, '李小藍', '0936433197', 'jane19970108@gmail.com', '1997-01-08', '', 'jane75656', '$2y$10$Vi8CmloyIthT/YrNRjtYgOb/LDqC98Rn6biyulYfWgGGymh8cu/0a', NULL, 0, NULL, NULL, 'user8.jpg', '2016-07-07 00:00:00'),
+(9, '陳小白', '0936779309', 'thor19951228@hinet.com', '1995-12-28', '', 'thor69758', '$2y$10$NQbgDOyCfbWWaRJOL60QgO5b.qi.uUN.baR1HFmDdr2SM/4sc5QEa', NULL, 0, NULL, NULL, 'user9.jpg', '2022-05-13 00:00:00'),
+(10, '朱小黑', '0936493104', 'rogers19820509@gmail.com', '1982-05-09', '', 'rogers41206', '$2y$10$QvNjrD1QPq95/F6grw8tzOv3U76AR1p23iYplqrwYp1gwGhlEMzTa', NULL, 0, NULL, NULL, 'user10.jpg', '2015-04-08 00:00:00'),
+(11, '王小綠', '0936999184', 'rogers19821022@yahoo.com', '1982-10-22', '', 'rogers65174', '$2y$10$fM2WhvL/cY6Xw31ETHEz4.K73C9/iWRlCXJJm3sjot2R5K8U7U.wG', NULL, 0, NULL, NULL, 'user11.jpg', '2016-09-05 00:00:00'),
+(12, '高小紅', '0936305031', 'thor19961208@yahoo.com', '1996-12-08', '', 'thor53988', '$2y$10$IckvVdz9/aiTH7KI2JC8keDVLP8mbvwPxIGJTMP4u3QCKV1eh7RUe', NULL, 0, NULL, NULL, 'user12.jpg', '2016-03-05 00:00:00'),
+(13, '朱小黑', '0936385717', 'thor19930427@gmail.com', '1993-04-27', '', 'thor32440', '$2y$10$bLSuRNC/VrJ60x4Od/UeSOGxDKeBWFKHbxI2LR8hUkB2hpPQP73.6', NULL, 0, NULL, NULL, 'user13.jpg', '2018-08-11 00:00:00'),
+(14, '李小藍', '0936540059', 'thor19820219@gmail.com', '1982-02-19', '', 'thor88163', '$2y$10$cyfSj6isup4zPO9RggJC6.gf/GwPuMnuTHR4HWg/4Nzi5GrVC5ece', NULL, 0, NULL, NULL, 'user14.jpg', '2020-07-04 00:00:00'),
+(15, '謝小藍', '0936371241', 'jane19860324@hinet.com', '1986-03-24', '', 'jane73773', '$2y$10$T2d5pwp.ogRYxZtJGmb4WeVcwHMpqtf8FhzoQH7TllyqNxE/urtye', NULL, 0, NULL, NULL, 'user15.jpg', '2015-06-12 00:00:00'),
+(16, '邱小白', '0936340316', 'strange19941220@hinet.com', '1994-12-20', '', 'strange28368', '$2y$10$kL8blZxtT7KY3kbxz74Z9eOqQcmgAfKUibH89UsQ7flqf93UGKpIy', NULL, 0, NULL, NULL, 'user16.jpg', '2017-02-19 00:00:00'),
+(17, '王小白', '0936369066', 'loki19820108@hinet.com', '1982-01-08', '', 'loki92008', '$2y$10$tRXrGRFce.WJuuJeau7SQejn6WE21Jpp1wrY8SjcW0yu.YhpxuaF6', NULL, 0, NULL, NULL, 'user17.jpg', '2019-06-01 00:00:00'),
+(18, '李小藍', '0936264052', 'stark20040129@gmail.com', '2004-01-29', '', 'stark58076', '$2y$10$o3zgj4BwcdGh1PKLJhaH8O6STLjrVBCnmVxjxG1MbhK7qkwIh4l8u', NULL, 0, NULL, NULL, 'user18.jpg', '2019-07-31 00:00:00'),
+(19, '黃小紅', '0936771092', 'rogers19820316@yahoo.com', '1982-03-16', '', 'rogers30711', '$2y$10$fmI40K0ROkkvqw5g/0D/WedzE50b0q.sgsvrkxZHpfxmwCtU04CjK', NULL, 0, NULL, NULL, 'user19.jpg', '2017-05-03 00:00:00'),
+(20, '李白', '0936111222', 'denvers19920829@hotmail.com', '1992-08-29', '台北市大安區和平東路二段', 'denvers76282', '$2y$10$pGoXV7mT30QBPifPLVLrmebo/4SILahxNc5PN42ViPEx3PEAUjbKC', NULL, 0, NULL, NULL, 'user20.jpg', '2020-08-28 00:00:00'),
+(21, '黃小紅', '0936192453', 'jane19990410@gmail.com', '1999-04-10', '', 'jane78267', '$2y$10$IRYf6.wYkJl3OHLRIpRzPuLpssYw8KT72c373gOLcCfVB1IOeCwoC', NULL, 0, NULL, NULL, 'user21.jpg', '2020-08-27 00:00:00'),
+(22, '王小白', '0936395646', 'strange19880226@yahoo.com', '1988-02-26', '', 'strange57718', '$2y$10$RNHtufD3glGBKvH3NGxAXOiwU6xQa9t5zRImDKc/D85yOjcEE3ahK', NULL, 0, NULL, NULL, 'user22.jpg', '2017-06-15 00:00:00'),
+(23, '邱小藍', '0936906723', 'jane19931022@gmail.com', '1993-10-22', '', 'jane11580', '$2y$10$f1k4C6uuLL0drt4JMVW7ceWlwYLRbpnoavMG5MH6HHmuFx0yGpvyO', NULL, 0, NULL, NULL, 'user23.jpg', '2019-05-16 00:00:00'),
+(24, '李小黑', '0936432846', 'thor20040403@hinet.com', '2004-04-03', '', 'thor88054', '$2y$10$emNrYCI62WfWlGB7DTstjOmr84aU3ZzeCNaf/NGqIp3VFm48yg2RO', NULL, 0, NULL, NULL, 'user24.jpg', '2017-08-11 00:00:00'),
+(25, '朱小黑', '0936933228', 'rogers20020405@gmail.com', '2002-04-05', '', 'rogers14043', '$2y$10$HD9OC6pt4aUt52qNo0LXlOlLnPk20tBXQmBsRuq2Vu0/sQz3OPu.K', NULL, 0, NULL, NULL, 'user25.jpg', '2021-08-28 00:00:00'),
+(26, '黃小黑', '0936208796', 'loki20020903@yahoo.com', '2002-09-03', '', 'loki69085', '$2y$10$oFPRFQQqUPbQsbNE95pf5eTz1/LfGSoFIGX2VuC2PTOMqegaW7.w.', NULL, 0, NULL, NULL, 'user26.jpg', '2019-07-29 00:00:00'),
+(27, '邱小白', '0936999054', 'jane19890715@hotmail.com', '1989-07-15', '', 'jane50506', '$2y$10$NwEdR1urmsJWMNtpaooTuu/QOnM2box5M2h6YfJgn2vDzrObmVvaW', NULL, 0, NULL, NULL, 'user27.jpg', '2020-12-05 00:00:00'),
+(28, '邱小藍', '0936368764', 'jane19991028@yahoo.com', '1999-10-28', '', 'jane74422', '$2y$10$SgytvgtKRCFXYKKjbVMDxuFW2uK3U/zwrD05c.DgR5/AFmRh959oW', NULL, 0, NULL, NULL, 'user28.jpg', '2017-07-25 00:00:00'),
+(29, '朱小黑', '0936528795', 'wonda19941220@gmail.com', '1994-12-20', '', 'wonda90219', '$2y$10$GOx/lmh3SemcJSMA8d1IPuWsvviaq/EOJ/38.J4gBBjRxtW66W1TK', NULL, 0, NULL, NULL, 'user29.jpg', '2021-11-01 00:00:00'),
+(30, '王小藍', '0936407226', 'strange19950114@hotmail.com', '1995-01-14', '', 'strange52197', '$2y$10$.6I8eB03T0aLl5444bUcPePnnAs4GNwdUitgcvd2V6Q.N74MMCGqa', NULL, 0, NULL, NULL, 'user30.jpg', '2020-11-19 00:00:00'),
 (31, '高小紅', '0936559985', 'wonda19820805@hotmail.com', '1982-08-05', '', 'wonda94965', '$2y$10$FCPbyFpo6d7gJljsF01PF.rHy414t6u4ecVrSUiSuHM5uuOTA.2ka', NULL, 0, NULL, NULL, 'user.png', '2019-05-15 00:00:00'),
 (32, '王小紅', '0936288713', 'loki19890522@hinet.com', '1989-05-22', '', 'loki72500', '$2y$10$2wJTvIghcQhHRl4k7jlk1eSjqXzGLLZf/qGEKkP7QILM6voo8wbbC', NULL, 0, NULL, NULL, 'user.png', '2021-08-23 00:00:00'),
 (33, '王小藍', '0936328427', 'loki19870609@hinet.com', '1987-06-09', '', 'loki15222', '$2y$10$slt9ynvsHlyCtI0SbJdmTe8GskHpKIZrmqI/0HyoDALCWTIiAwVFW', NULL, 0, NULL, NULL, 'user.png', '2015-06-09 00:00:00'),
@@ -289,9 +289,9 @@ INSERT INTO `customer_data` (`customer_id`, `name`, `mobile`, `email`, `birthday
 (238, '王小黑', '0936527576', 'strange19890319@gmail.com', '1989-03-19', '', 'strange82858', '$2y$10$v2YkFkH2N.hf7LBYz1Oz3OpW8EvFW0Km0S4qk9is3ElOGQvYMwqyW', NULL, 0, NULL, NULL, 'user.png', '2020-01-24 00:00:00'),
 (239, '高小綠', '0936377986', 'wonda19920227@hinet.com', '1992-02-27', '', 'wonda14965', '$2y$10$w0HVeGUt5oq1350EcO2xCuYWQDggTPVblzyGMOoHaBAQHVNRaDNV2', NULL, 0, NULL, NULL, 'user.png', '2015-08-09 00:00:00'),
 (240, '高小綠', '0936551934', 'rogers19800710@hinet.com', '1980-07-10', '', 'rogers60961', '$2y$10$nul4cUxpYmsCBtZJsFBLsOZ.auDTbTICRSshOPY8feL7oLYPXT8jW', NULL, 0, NULL, NULL, 'user.png', '2018-07-18 00:00:00'),
-(241, '陳小藍', '0936750612', 'rogers19980118@yahoo.com', '1998-01-18', '', 'rogers88718', '$2y$10$bo9IsAcqOYiPTmWI5ZPXz.X/DJqgvyEmVmcEX0aP3y0A7rOMIpyU.', NULL, 0, NULL, NULL, 'user.png', '2016-08-31 00:00:00'),
-(242, '李小白', '0936363501', 'wonda19911214@yahoo.com', '1991-12-14', '', 'wonda67688', '$2y$10$DuLI55VNJ1kJ44Q45JRLJOdMh.VObOhW1.ZHvySTz9zZ9DKbmjkAu', NULL, 0, NULL, NULL, 'user.png', '2017-09-18 00:00:00');
+(241, '陳小藍', '0936750612', 'rogers19980118@yahoo.com', '1998-01-18', '', 'rogers88718', '$2y$10$bo9IsAcqOYiPTmWI5ZPXz.X/DJqgvyEmVmcEX0aP3y0A7rOMIpyU.', NULL, 0, NULL, NULL, 'user.png', '2016-08-31 00:00:00');
 INSERT INTO `customer_data` (`customer_id`, `name`, `mobile`, `email`, `birthday`, `address`, `account`, `password`, `verify_number`, `daily_points`, `nickname`, `intro`, `profile_img`, `creat_at`) VALUES
+(242, '李小白', '0936363501', 'wonda19911214@yahoo.com', '1991-12-14', '', 'wonda67688', '$2y$10$DuLI55VNJ1kJ44Q45JRLJOdMh.VObOhW1.ZHvySTz9zZ9DKbmjkAu', NULL, 0, NULL, NULL, 'user.png', '2017-09-18 00:00:00'),
 (243, '邱小紅', '0936160235', 'denvers20010302@hotmail.com', '2001-03-02', '', 'denvers15013', '$2y$10$vCx1XqhW9q1T196ljECS.epAbWmDw5ROF/tZutZLmf42QJl9i6Yv2', NULL, 0, NULL, NULL, 'user.png', '2021-07-28 00:00:00'),
 (244, '陳小黑', '0936390651', 'denvers19891101@hinet.com', '1989-11-01', '', 'denvers72872', '$2y$10$vtAxNXMAJ0pA17IeSwUX4O7k9h9NXQfRHtZM8hMSTuP.L98BWwRle', NULL, 0, NULL, NULL, 'user.png', '2015-06-25 00:00:00'),
 (245, '林小綠', '0936199133', 'jane19901218@hinet.com', '1990-12-18', '', 'jane64652', '$2y$10$AiLEfW7o9rHETbKN7T1QmOBjNyVgLe1Jz5kk1ROmicRrVm3CBYzsi', NULL, 0, NULL, NULL, 'user.png', '2018-08-31 00:00:00'),
@@ -531,9 +531,9 @@ INSERT INTO `customer_data` (`customer_id`, `name`, `mobile`, `email`, `birthday
 (479, '黃小紅', '0936499764', 'jane20010715@hinet.com', '2001-07-15', '', 'jane24545', '$2y$10$GMsifNTo0r8/VOjIFKoLJewP5mYTewJv4q.xP/v4CGcvnpQSylrny', NULL, 0, NULL, NULL, 'user.png', '2016-05-17 00:00:00'),
 (480, '黃小綠', '0936304677', 'strange19800110@hinet.com', '1980-01-10', '', 'strange44432', '$2y$10$Zogxlkvnyp1aPhJnAqorRuJpNtntz3OWmlh0qBTeJ7h2XLNaTSlwi', NULL, 0, NULL, NULL, 'user.png', '2019-01-03 00:00:00'),
 (481, '李小白', '0936795138', 'stark19960813@yahoo.com', '1996-08-13', '', 'stark53137', '$2y$10$B3ReltipIQEVFMMYOPqemOCSKsQCxWQrtr43TsDxhPTTSjSxlx9hq', NULL, 0, NULL, NULL, 'user.png', '2016-09-20 00:00:00'),
-(482, '高小藍', '0936731584', 'jane19890113@gmail.com', '1989-01-13', '', 'jane61353', '$2y$10$OOJiLeCTHkLY/P128o5rIOetknuz5.c9q1gTxSYUywWpIIWXRdlqm', NULL, 0, NULL, NULL, 'user.png', '2016-06-22 00:00:00'),
-(483, '朱小綠', '0936989901', 'wonda20020201@yahoo.com', '2002-02-01', '', 'wonda74705', '$2y$10$Reid2ebD3jJIr5UKtRlcl.dn3yVUOYhk/PrPRCwtG3yo.k189Emdi', NULL, 0, NULL, NULL, 'user.png', '2015-07-22 00:00:00');
+(482, '高小藍', '0936731584', 'jane19890113@gmail.com', '1989-01-13', '', 'jane61353', '$2y$10$OOJiLeCTHkLY/P128o5rIOetknuz5.c9q1gTxSYUywWpIIWXRdlqm', NULL, 0, NULL, NULL, 'user.png', '2016-06-22 00:00:00');
 INSERT INTO `customer_data` (`customer_id`, `name`, `mobile`, `email`, `birthday`, `address`, `account`, `password`, `verify_number`, `daily_points`, `nickname`, `intro`, `profile_img`, `creat_at`) VALUES
+(483, '朱小綠', '0936989901', 'wonda20020201@yahoo.com', '2002-02-01', '', 'wonda74705', '$2y$10$Reid2ebD3jJIr5UKtRlcl.dn3yVUOYhk/PrPRCwtG3yo.k189Emdi', NULL, 0, NULL, NULL, 'user.png', '2015-07-22 00:00:00'),
 (484, '邱小紅', '0936600983', 'wonda19930206@gmail.com', '1993-02-06', '', 'wonda21655', '$2y$10$lJZRhZi1aa7MYryv8fNNa.48S0utMDLhA4iDYC3/x/fGq.9fJ36QK', NULL, 0, NULL, NULL, 'user.png', '2017-07-20 00:00:00'),
 (485, '黃小黑', '0936132696', 'strange19860725@hinet.com', '1986-07-25', '', 'strange56186', '$2y$10$x89SFCdTlSWPhdzKbMnJ2eyCJtnc3/TnbDVRUfOjEFjcg71x5C//m', NULL, 0, NULL, NULL, 'user.png', '2020-06-05 00:00:00'),
 (486, '黃小綠', '0936134453', 'stark20000627@hotmail.com', '2000-06-27', '', 'stark10803', '$2y$10$LExCV79S1KdOA9yKttamNubVghaev7s4wZiyu2wmhMwHgfTCVp.eW', NULL, 0, NULL, NULL, 'user.png', '2017-09-15 00:00:00'),
@@ -578,7 +578,7 @@ INSERT INTO `customer_data` (`customer_id`, `name`, `mobile`, `email`, `birthday
 (527, NULL, NULL, 'farmer072103@test.com', NULL, NULL, NULL, '$2a$10$tUfcf4wecHtuYehv/zhDwuZCAmQ7WEZN04ddjOiqgqWuuaIbjHzc6', NULL, 0, NULL, NULL, 'user.png', '2022-07-21 15:11:09'),
 (528, NULL, NULL, 'farmer072104@test.com', NULL, NULL, NULL, '$2a$10$KHHw9flADaGCy691rVuIKOg45DCQf6fSqKpnKy3FK7BBn4u5F3jN.', NULL, 0, NULL, NULL, 'user.png', '2022-07-21 15:45:43'),
 (529, 'curry', NULL, 'test072201@test.com', NULL, NULL, NULL, '$2a$10$0Jy9fT1mxrlfyvhLcxSXnecXcBVg8FCSP8OAxkANKAMYQccWsIP.O', NULL, 0, NULL, NULL, 'user.png', '2022-07-22 17:09:00'),
-(530, 'curry', '0911222328', 'test0801@test.com', '1990-01-01', '台北市大安區信義路二段6號', '123456', '$2a$10$wBKPQlN7d/w.Z/8SqOJ/i.LokEZQP2Nj.6BR.X5XqPjpAoOLK1PIu', NULL, 45, 'wiggins30', 'no.2233', 'farmer_member.jpg', '2022-08-01 10:05:10'),
+(530, 'curry', '0911222328', 'test0801@test.com', '1990-01-01', '台北市大安區信義路二段7號', '123456', '$2a$10$XxBtugoEhhyL1wOgxb9UhuS/GnUUFPhxt6bIklSaoezt6mh6wqa1y', NULL, 171, 'wiggin22', 'no.2233', 'baby_member.jpg', '2022-08-01 10:05:10'),
 (531, 'curry', NULL, 'test080102@test.com', NULL, NULL, NULL, '$2a$10$1yymSUsyzvmk4UfrVmrAfOKLWfZetXnltwz2hplh2MD87FAlZdyr2', NULL, 0, NULL, NULL, 'user.png', '2022-08-01 10:22:02'),
 (532, 'curry', NULL, 'test080103@test.com', NULL, NULL, NULL, '$2a$10$mOQXjMnknsDApex5/9HbWeVnO6ZkE0AV9Zi0ALAP/ikisZut7fZmy', NULL, 0, NULL, NULL, 'user.png', '2022-08-01 11:25:13'),
 (533, 'curry', NULL, 'test0802@test.com', NULL, NULL, NULL, '$2a$10$AZvHe.uJBN9EUC3MuKHwOOgr0L2D6KJDyTKcL2vx5CLjjmw8ntdLK', NULL, 0, NULL, NULL, 'user.png', '2022-08-02 10:54:36'),
@@ -586,7 +586,11 @@ INSERT INTO `customer_data` (`customer_id`, `name`, `mobile`, `email`, `birthday
 (535, '123', NULL, 'test0806@test.com', NULL, NULL, NULL, '$2a$10$iJix.Q407S2/8DFN73mgKu2LV78OBm/epBABK6Vq49G3VJSrlfdUG', NULL, 0, 'hhhh', '6666', '278290946_10160564997727526_8400477990985691855_n.jpg', '2022-08-06 02:45:39'),
 (536, 'farmer', NULL, 'test080601@test.com', NULL, NULL, NULL, '$2a$10$EaMJ0RQ6lqaDJ.d6m8l5YezdAdcPllVDkp28wATCrHrhOx5UIzLF.', NULL, 0, 'farmer mfee26', 'best farmer ever', 'jamie-oliver-kitchen.jpg', '2022-08-06 14:59:50'),
 (548, 'curry', NULL, 'garylin0969@gmail.com', NULL, NULL, NULL, '$2a$10$nT1Ewq2K/yMqXIVkEyih3OeU9Swib/SUOaP7smY8WH9FIMDVYTRUi', NULL, 0, NULL, NULL, 'user.png', '2022-08-12 16:36:58'),
-(571, 'farmer', NULL, 'mfee26farmer@gmail.com', NULL, NULL, NULL, '$2a$10$uHMax8oLqKvjeN/x/3NomOIzuTQhXaR1GkRHHM0hz0xD8a2IT4byi', '53086', 0, NULL, NULL, 'user.png', '2022-08-19 18:15:39');
+(555, 'bob', NULL, 'bob791224@gmail.com', NULL, NULL, NULL, '$2a$10$L4epiAh.rIRMyJPhZ9QNcusSBtBjPr8YVtv56P7GOUyw/aV1iJPrm', '71053', 0, NULL, NULL, 'user.png', '2022-08-17 09:34:31'),
+(556, 'bob', NULL, 'bob791224@gmail.com', NULL, NULL, NULL, '$2a$10$jWn5CnzXj1o1k7Y7B33iZ.1PbQoQDcGiSXC17Vq03nD7VTjU4kDI6', '49367', 0, NULL, NULL, 'user.png', '2022-08-17 10:46:45'),
+(557, 'bob', NULL, 'bob791224@gmail.com', NULL, NULL, NULL, '$2a$10$ccqGW7d/9u9Sd6RtNubo8.vi9SV5jEW4E6KL2BNjC9Y9/5RN2LKKe', '41410', 0, NULL, NULL, 'user.png', '2022-08-17 12:20:32'),
+(558, 'bob', NULL, 'bob791224@gmail.com', NULL, NULL, NULL, '$2a$10$LDwsMdpVnKUIqv91Igq4huo.vwGxYyuDUB2ygPK30GQzhf3mCTBf6', '30133', 0, NULL, NULL, 'user.png', '2022-08-17 12:32:46'),
+(559, 'farmer', NULL, 'bob791224@gmail.com', NULL, NULL, NULL, '$2a$10$jIaJwSMrgWFf8J.Yw4r44eaKPSYub1CKQ3cIFEPaF2QVf549fa9gG', '16784', 0, NULL, NULL, 'user.png', '2022-08-22 17:18:50');
 
 --
 -- 已傾印資料表的索引
@@ -606,7 +610,7 @@ ALTER TABLE `customer_data`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `customer_data`
 --
 ALTER TABLE `customer_data`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=574;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=560;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
