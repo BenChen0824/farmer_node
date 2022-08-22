@@ -118,9 +118,53 @@ router.put('/edit', async (req, res) => {
         error: '',
         code: 0,
     };
+
+    const sql03 =
+        'UPDATE company_activitydata SET card_area=?, card_img=?, company_infoImg=?, address=?, fax=?, card_city=?, card_info=?, card_info1=?, card_a=?, card_b=?, card_c=?, card_d=?, card_e=?, Map_a=?, Map_b=? WHERE sid=?';
+    
+    const {
+        card_area,
+        card_img,
+        company_infoImg,
+        address,
+        fax,
+        card_city,
+        card_info,
+        card_info1,
+        card_a,
+        card_b,
+        card_c,
+        card_d,
+        card_e,
+        Map_a,
+        Map_b,
+        company_activity_id
+    }=req.body;
+    const [activityedit] = await db.query(sql03,[
+        card_area,
+        card_img,
+        company_infoImg,
+        address,
+        fax,
+        card_city,
+        card_info,
+        card_info1,
+        card_a,
+        card_b,
+        card_c,
+        card_d,
+        card_e,
+        Map_a,
+        Map_b,
+        company_activity_id
+    ])
+    if(activityedit.affectedRows === 1){
+        output.success = true
+    }
     // console.log(req.body)
     res.json(output);
 });
+
 
 //刪除
 router.delete('/deleteactivity', async (req, res) => {
