@@ -262,7 +262,7 @@ io.on('connection', async (socket) => {
         username: socket.username,
     });
     //私訊event
-    socket.on('private message', ({ content, to,}) => {
+    socket.on('private message', ({ content, to }) => {
         const message = {
             from: socket.userId,
             to,
@@ -290,8 +290,6 @@ io.on('connection', async (socket) => {
             messages: userMessages.get(userId) || [],
         });
     });
-
-    
 
     socket.on('disconnect', async () => {
         const matchingSockets = await io.in(socket.userId).allSockets();
