@@ -148,8 +148,8 @@ const sql3 = `SELECT * FROM recipe_like WHERE customer_id=? && recipes_sid=?`;
   let data=[];
 
   if (num.length <= 0) {
-      const sqlInsert = "INSERT INTO `recipe_like`(`customer_id`, `recipes_sid`) VALUES (?,?)"
-       data = await db.query(sqlInsert,[req.body.customer_id,req.body.recipes_sid]);
+    const sqlInsert = "INSERT INTO `recipe_like`(`customer_id`, `recipes_sid`) VALUES (?,?)"
+    data = await db.query(sqlInsert,[req.body.customer_id,req.body.recipes_sid]);
   } 
   else
   {
